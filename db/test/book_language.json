@@ -1,0 +1,10 @@
+[{
+        "bookLangID": "lang1",
+        "bookLangName": "Tiếng việt"
+    },
+    {
+        "bookLangID": "lang2",
+        "bookLangName": "Nước ngoài"
+    }
+
+]

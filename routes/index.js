@@ -3,11 +3,21 @@ var router = express.Router();
 var Book_controller = require("../controller/book_controller");
 var Cart_controller = require("../controller/cart_controller");
 var Cart = require("../controller/cart");
+let date = require("date-and-time");
 var AWS = require("aws-sdk");
+var renameModule = require("../controller/edit_name");
+// var upload_controller = require("../controller/upload_controller")
 
+const UUID = require("uuid/v4");
+var multer = require("multer");
+var multerS3 = require("multer-s3");
+var path = require("path");
+const mime = require("mime");
+var region = "us-west-2";
 let awsConfig = {
-  region: "us-west-2",
-  endpoint: "http://localhost:8000"
+  region: region,
+  accessKeyId: "AKIAJFRGV5MEQS4DR77Q",
+  secretAccessKey: "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"
 };
 AWS.config.update(awsConfig);
 let docClient = new AWS.DynamoDB.DocumentClient();
@@ -25,5 +35,95 @@ router.get("/cart", Cart_controller.get_items_cart);
 router.post("/updatecart", Cart_controller.update_cart);
 
 router.get("/deletecart/:id", Cart_controller.delete_cart_item);
+
+router.get("/admin", Book_controller.get_all_book2);
+
+router.post("/add_detail_to_cart/:id", Cart_controller.add_to_cart2);
+
+var keyImgUpload = "";
+var s3 = new AWS.S3();
+var upload = multer({
+  limits: {
+    fileSize: 3 * 1024 * 1024
+  },
+  fileFilter: function (res, file, cb) {
+    var filetypes = /jpeg|jpg|png|gif|bmp/;
+    var mimetype = filetypes.test(file.mimetype);
+    var extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(
+      "Error: File upload only supports the following filetypes - " + filetypes + "!! GO BACK !"
+    );
+  },
+  storage: multerS3({
+    s3: s3,
+    bucket: "da2-book",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    acl: "public-read",
+    key: function (req, file, cb) {
+      console.log(file);
+      keyImgUpload = renameModule.editName(req.body.newTieuDe) + "-" + UUID() + "." + mime.getExtension(file.mimetype);
+      console.log(keyImgUpload);
+      cb(null, keyImgUpload);
+    }
+  })
+});
+router.post("/addNewBook", upload.single("newImgUpload"),
+  function (req, res, next) {
+    var table = "DA2Book";
+    var buket = "da2-book";
+    var now = date.format(new Date(), "DD/MM/YYYY");
+    var url =
+      "https://" + buket + ".s3." + region + ".amazonaws.com/" + keyImgUpload;
+    var params = {
+      TableName: table,
+      Item: {
+        _bookID: UUID(),
+        tieude: req.body.newTieuDe,
+        theloai: [req.body.newTheLoai],
+        tacgia: [req.body.newTacGia],
+        sotrang: req.body.newSoTrang,
+        SKU: req.body.newSKU,
+        ngayxuatban: req.body.newNgayXuatBan,
+        nhaxuatban: req.body.newNhaXuatBan,
+        kichthuoc: req.body.newKichThuoc,
+        mota: req.body.newMoTa,
+        dichgia: req.body.newDichGia,
+        danhgia: " ",
+        tinhtrang: " ",
+        ngaythem: now,
+        danhdau: [req.body.newDanhDau],
+        danhgiasao: " ",
+        linkseo: renameModule.editName(req.body.newTieuDe),
+        sotrang: req.body.newSoTrang,
+        gia: req.body.newGia,
+        hinhanh: [url]
+      }
+    };
+    console.log(params);
+    docClient.put(params, function (err, data) {
+      if (err) {
+        var params = {
+          Bucket: buket,
+          Delete: {
+            Objects: [{
+              Key: keyImgUpload
+            }],
+          },
+        };
+        s3.deleteObjects(params, function (err, data) {
+          if (err) console.log(err, err.stack);
+          else {
+            console.log(data);
+            res.send(JSON.stringify(err));
+          }
+        });
+      } else {
+        res.redirect("/admin");
+      }
+    });
+  });
 
 module.exports = router;

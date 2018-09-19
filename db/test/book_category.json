@@ -1,0 +1,24 @@
+[{
+        "categoryID": "cat1",
+        "categoryName": "Truyện ngắn"
+    }, {
+        "categoryID": "cat2",
+        "categoryName": "Truyện tranh"
+    },
+    {
+        "categoryID": "cat3",
+        "categoryName": "Sách giáo khoa"
+    },
+    {
+        "categoryID": "cat4",
+        "categoryName": "Sách văn học"
+    },
+    {
+        "categoryID": "cat5",
+        "categoryName": "Sách khoa học"
+    },
+    {
+        "categoryID": "cat6",
+        "categoryName": "Thể loại khác"
+    }
+]

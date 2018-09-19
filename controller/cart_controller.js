@@ -2,14 +2,20 @@ var AWS = require("aws-sdk");
 var Cart = require("./cart");
 let awsConfig = {
   region: "us-west-2",
-  endpoint: "http://localhost:8000"
+  accessKeyId: "AKIAJFRGV5MEQS4DR77Q",
+  secretAccessKey: "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"
 };
 AWS.config.update(awsConfig);
 let docClient = new AWS.DynamoDB.DocumentClient();
 
 //Module thêm vào shopping cart
-exports.add_to_cart = function(req, res, next) {
+exports.add_to_cart = function (req, res, next) {
   var sachID = req.params.id;
+  var soluong = 1;
+  if (req.params.quantity) {
+    soluong = req.params.quantity;
+  }
+  console.log("______sl:" + soluong)
   //kiểm tra session ,khởi tạo Cart,
   var cart = new Cart(req.session.cart ? req.session.cart : {});
   var params = {
@@ -22,23 +28,50 @@ exports.add_to_cart = function(req, res, next) {
       ":id": sachID
     }
   };
-  docClient.query(params, function(err, data) {
+  docClient.query(params, function (err, data) {
     if (err) {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
-      data.Items.forEach(function(it) {
-        console.log(it._bookID);
+      data.Items.forEach(function (it) {
         cart.add(it, it._bookID);
       });
       req.session.cart = cart;
-      console.log("cart" + cart);
       res.redirect("/");
     }
   });
 };
 
+exports.add_to_cart2 = function (req, res, next) {
+  var sachID = req.params.id;
+  var soluong = req.body.abasdjuwas;
+  console.log("______sl:" + soluong)
+  //kiểm tra session ,khởi tạo Cart,
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+  var params = {
+    TableName: "DA2Book",
+    KeyConditionExpression: "#ma = :id",
+    ExpressionAttributeNames: {
+      "#ma": "_bookID"
+    },
+    ExpressionAttributeValues: {
+      ":id": sachID
+    }
+  };
+  docClient.query(params, function (err, data) {
+    if (err) {
+      console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+      data.Items.forEach(function (it) {
+        cart.add2(it, it._bookID, soluong);
+      });
+      req.session.cart = cart;
+      res.redirect("/cart");
+    }
+  });
+};
+
 //Module get các item trong cart
-exports.get_items_cart = function(req, res, next) {
+exports.get_items_cart = function (req, res, next) {
   if (!req.session.cart) {
     return res.render("../views/site/page/cart", {
       products: [],
@@ -47,14 +80,13 @@ exports.get_items_cart = function(req, res, next) {
     });
   }
   var cart = new Cart(req.session.cart);
-  console.log(cart);
   res.render("../views/site/page/cart", {
     products: cart.generateArray(),
     totalPrice: cart.totalPrice,
     totalQty: cart.totalQty
   });
 };
-exports.update_cart = function(req, res, next) {
+exports.update_cart = function (req, res, next) {
   if (!req.session.cart) {
     return res.render("../views/site/page/cart", {
       products: [],
@@ -64,18 +96,16 @@ exports.update_cart = function(req, res, next) {
   }
   //var qty = req.body.qty;
   var cart = new Cart(req.session.cart);
-  cart.generateArray().forEach(function(ct) {
+  cart.generateArray().forEach(function (ct) {
     var nameqty = ct.item._bookID;
-    console.log("NAME__" + nameqty);
     var qtyItem = req.body[nameqty];
-    console.log("BODY__" + qtyItem);
     cart.update(ct.item._bookID, qtyItem);
     req.session.cart = cart;
   });
   res.redirect("/cart");
 };
 
-exports.delete_cart_item = function(req, res, next) {
+exports.delete_cart_item = function (req, res, next) {
   var productId = req.params.id;
   var cart = new Cart(req.session.cart ? req.session.cart : {});
   cart.removeItem(productId);

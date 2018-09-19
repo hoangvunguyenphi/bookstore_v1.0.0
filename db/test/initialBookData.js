@@ -10,11 +10,12 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 console.log("Importing users into DynamoDB. Please wait.");
 
 var allBooks = JSON.parse(fs.readFileSync("bookdata.json", "utf8"));
-allBooks.forEach(function(book) {
+allBooks.forEach(function (book) {
   var params = {
     TableName: "DA2Book",
     Item: {
       _bookID: book._bookID,
+      tacgia: book.tacgia,
       tieude: book.tieude,
       theloai: book.theloai,
       sotrang: book.sotrang,
@@ -36,7 +37,7 @@ allBooks.forEach(function(book) {
     }
   };
 
-  docClient.put(params, function(err, data) {
+  docClient.put(params, function (err, data) {
     if (err) {
       console.error(
         "Unable to add book",
