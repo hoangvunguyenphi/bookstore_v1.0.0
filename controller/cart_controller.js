@@ -2,8 +2,7 @@ var AWS = require("aws-sdk");
 var Cart = require("./cart");
 let awsConfig = {
   region: "us-west-2",
-  accessKeyId: "AKIAJFRGV5MEQS4DR77Q",
-  secretAccessKey: "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"
+  endpoint: "http://localhost:8000"
 };
 AWS.config.update(awsConfig);
 let docClient = new AWS.DynamoDB.DocumentClient();

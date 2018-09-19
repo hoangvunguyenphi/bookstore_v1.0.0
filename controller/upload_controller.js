@@ -7,8 +7,7 @@ var AWS = require("aws-sdk");
 
 var keyImgUpload = "";
 var s3 = new AWS.S3({
-    accessKeyId: "AKIAJFRGV5MEQS4DR77Q",
-    secretAccessKey: "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"
+    endpoint: "http://localhost:8000/s3"
 });
 exports.upload_image = function (req, res, next) {
     var upload = multer({
