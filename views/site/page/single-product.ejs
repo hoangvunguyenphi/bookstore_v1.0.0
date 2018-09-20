@@ -25,7 +25,21 @@
     <div id="page" class="hfeed site">
         <% include ../slayout/headerhome %>
         <div id="content" class="site-content" tabindex="-1">
-            <% sachDetail.forEach(function (item){
+            <% 
+            rename=  function(str) {
+                str = str.toLowerCase();
+                str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+                str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+                str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+                str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+                str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+                str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+                str = str.replace(/đ/g, "d");
+                str = str.replace(/ /g, "-");
+                str = str.replace(/\./g, "-");
+                return str;
+            }
+            sachDetail.forEach(function (item){
                     %>
 
 
@@ -36,16 +50,22 @@
                         <span class="delimiter">
                             <i class="tm tm-breadcrumbs-arrow-right"></i>
                         </span><a href="product-category.html">
-                            <%=item.theloai[0] %></a>
+                            <%=item.ngonngu %></a>
+                        <% item.theloai.forEach(function(tl){
+                            %>
                         <span class="delimiter">
                             <i class="tm tm-breadcrumbs-arrow-right"></i>
                         </span><a href="product-category.html">
-                            <%=item.theloai[1] %></a>
+                            <%=tl %></a>
+                        <%
+                                })
+                        %>
                         <span class="delimiter">
                             <i class="tm tm-breadcrumbs-arrow-right"></i>
                         </span>
                         <%=item.tieude %>
                     </nav>
+
                     <!-- .woocommerce-breadcrumb -->
                     <div id="primary" class="content-area">
                         <main id="main" class="site-main">
@@ -641,7 +661,6 @@
         </footer>
         <!-- .site-footer -->
     </div>
-
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/tether.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>

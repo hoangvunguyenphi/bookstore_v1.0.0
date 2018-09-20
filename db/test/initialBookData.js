@@ -25,13 +25,11 @@ allBooks.forEach(function (book) {
       kichthuoc: book.kichthuoc,
       mota: book.mota,
       dichgia: book.dichgia,
-      danhgia: book.danhgia,
+      ngonngu: book.ngonngu,
       tinhtrang: book.tinhtrang,
       ngaythem: book.ngaythem,
       danhdau: book.danhdau,
-      danhgiasao: book.danhgiasao,
       linkseo: book.linkseo,
-      sotrang: book.sotrang,
       gia: book.gia,
       hinhanh: book.hinhanh
     }

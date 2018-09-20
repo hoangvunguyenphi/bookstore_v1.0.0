@@ -42,7 +42,7 @@ exports.add_to_cart = function (req, res, next) {
 
 exports.add_to_cart2 = function (req, res, next) {
   var sachID = req.params.id;
-  var soluong = req.body.abasdjuwas;
+  var soluong = parseInt(req.body.abasdjuwas);
   console.log("______sl:" + soluong)
   //kiểm tra session ,khởi tạo Cart,
   var cart = new Cart(req.session.cart ? req.session.cart : {});

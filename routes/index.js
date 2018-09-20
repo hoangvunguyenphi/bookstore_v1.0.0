@@ -39,6 +39,13 @@ router.get("/admin", Book_controller.get_all_book2);
 
 router.post("/add_detail_to_cart/:id", Cart_controller.add_to_cart2);
 
+router.post("/editBook/:id", Book_controller.edit_book);
+
+router.get("/deleteBook/:id", Book_controller.delete_book)
+
+
+router.post("/aSearchBook", Book_controller.admin_search_book);
+
 var keyImgUpload = "";
 var s3 = new AWS.S3();
 var upload = multer({
@@ -81,24 +88,22 @@ router.post("/addNewBook", upload.single("newImgUpload"),
       Item: {
         _bookID: UUID(),
         tieude: req.body.newTieuDe,
-        theloai: [req.body.newTheLoai],
-        tacgia: [req.body.newTacGia],
-        sotrang: req.body.newSoTrang,
+        theloai: renameModule.splitList(req.body.newTheLoai),
+        tacgia: renameModule.splitList(req.body.newTacGia),
+        sotrang: parseInt(req.body.newSoTrang),
         SKU: req.body.newSKU,
         ngayxuatban: req.body.newNgayXuatBan,
         nhaxuatban: req.body.newNhaXuatBan,
         kichthuoc: req.body.newKichThuoc,
         mota: req.body.newMoTa,
-        dichgia: req.body.newDichGia,
-        danhgia: " ",
+        ngonngu: req.body.newNgonNgu,
+        dichgia: renameModule.splitList(req.body.newDichGia),
         tinhtrang: " ",
         ngaythem: now,
-        danhdau: [req.body.newDanhDau],
-        danhgiasao: " ",
+        danhdau: renameModule.splitList(req.body.newDanhDau),
         linkseo: renameModule.editName(req.body.newTieuDe),
-        sotrang: req.body.newSoTrang,
-        gia: req.body.newGia,
-        hinhanh: [url]
+        gia: parseFloat(req.body.newGia),
+        hinhanh: renameModule.splitList(url)
       }
     };
     console.log(params);

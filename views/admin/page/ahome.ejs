@@ -8,7 +8,7 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-                        <a href="\" style="color:white">
+                        <a href="/admin" style="color:white">
                             <h2>Manage <b>Books</b></h2>
                         </a>
                     </div>
@@ -20,16 +20,16 @@
                                 <span>Delete</span></a>  -->
                     </div>
 
-                    <form class="col-sm-6" action="/searchEmpl" method="POST">
+                    <form class="col-sm-6" action="/aSearchBook" method="POST">
                         <br />
-                        <input type="text" class="form-control" name="txtSearch" aria-describedby="helpId" value=""
+                        <input type="text" class="form-control" name="txtSearch123123" aria-describedby="helpId" value=""
                             required placeholder="Input Employee name or id ..">
                         <small id="helpId" style="color:gainsboro" class="form-text text-muted">Seach Book by name
                             or id
                         </small>
                         <button type="submit" class="btn btn-success" style="margin-top:2px"><i class="material-icons">search</i>
                             <span>Search</span></button>
-                        <a href="/" class="btn btn-success" style="margin-top:2px"><i class="material-icons">refresh</i>
+                        <a href="/admin" class="btn btn-success" style="margin-top:2px"><i class="material-icons">refresh</i>
                             <span>Reset</span></a>
                     </form>
                 </div>
@@ -94,7 +94,139 @@
                 </tbody>
 
             </table>
+            <% allBooks.forEach(function(b){
+                %>
+            <div id="deleteEmployeeModal<%=b._bookID%>" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="/deleteBook/<%=b._bookID %> ">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Delete Book ID:
+                                    <%=b._bookID %>
+                                </h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete these Records?</p>
+                                <p class="text-warning"><small>This action cannot be undone.</small></p>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-danger" value="Delete">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Edit Modal HTML -->
+            <div id="editEmployeeModal<%=b._bookID%>" class="modal fade">
+                <div class="modal-dialog" style="max-width:auto">
+                    <div class="modal-content" style="width:700px">
+                        <form action="/editBook/<%=b._bookID %>" method="POST">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Book</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>_bookID</label>
+                                    <input type="text" name="edit_bookID" value="<%= b._bookID %>" class="form-control"
+                                        readonly="true">
+                                </div>
+                                <div class="form-group">
+                                    <label>SKU</label>
+                                    <input type="text" name="editSKU" value="<%=b.SKU%>" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tiêu đề</label>
+                                    <input type="text" name="editTieuDe" value="<%=b.tieude%>" class="form-control"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tác giả</label>
+                                    <input type="text" name="editTacGia" value="<%=b.tacgia%>" class="form-control"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Dịch giả</label>
+                                    <input type="text" name="editDichGia" value="<%=b.dichgia%>" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Thể loại</label>
+                                    <input type="text" name="editTheLoai" value="<%=b.theloai%>" class="form-control"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tình trạng</label>
+                                    <input type="text" name="editTinhTrang" value="<%=b.tinhtrang%>" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày thêm</label>
+                                    <input type="text" name="editNgayThem" value="<%=b.ngaythem%>" class="form-control"
+                                        readonly="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Ngôn ngữ</label>
+                                    <input type="text" name="editNgonNgu" value="<%=b.ngonngu%>" class="form-control"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Thời gian xuất bản</label>
+                                    <input type="text" class="form-control" name="editNgayXuatBan" value="<%=b.ngayxuatban%>"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nhà xuất bản</label>
+                                    <input type="text" class="form-control" name="editNhaXuatBan" value="<%=b.nhaxuatban%>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Số trang</label>
+                                    <input type="text" class="form-control" name="editSoTrang" value="<%=b.sotrang%>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Kích thước</label>
+                                    <input type="text" class="form-control" name="editKichThuoc" value="<%=b.kichthuoc%>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mô tả</label>
+                                    <textarea class="form-control" name="editMoTa" style="min-height: 100px; max-height: 300px"
+                                        required><%=b.mota%></textarea>
+                                </div>
+                                <div class="
+                                        form-group">
+                                    <label>Đánh dấu</label>
+                                    <input type="text" class="form-control" name="editDanhDau" value="<%=b.danhdau%>">
+                                </div>
+                                <div class="form-group">
+                                    <label>PATH SEO</label>
+                                    <input type="text" name="editLinkSeo" value="<%=b.linkseo%>" class="form-control"
+                                        readonly="true">
+                                </div>
+                                <div class="form-group">
+                                    <label>Giá</label>
+                                    <input type="text" class="form-control" name="editGia" value="<%=b.gia%>" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Hình ảnh</label>
+                                    <div class="form-group">
+                                        <img class="thumbnail rounded-circle|" alt="" src="<%=b.hinhanh[0]%>" width="100%">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="reset" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-info" value="Save">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <%
+                });
+                %>
             <script type="text/javascript">
                 function ValidateExtension() {
                     var allowedFiles = [".jpg", ".jpeg", ".png", ".gif", ".bmp"];

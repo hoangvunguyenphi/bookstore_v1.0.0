@@ -7,7 +7,7 @@ var renameModule = require("../controller/edit_name");
 var region = "us-west-2";
 let awsConfig = {
   region: region,
-  endpoint:"http://localhost:8000"
+  endpoint: "http://localhost:8000"
 };
 AWS.config.update(awsConfig);
 let docClient = new AWS.DynamoDB.DocumentClient();
@@ -115,6 +115,126 @@ exports.get_detail_product = function (req, res, next) {
   });
 };
 
+exports.edit_book = function (req, res, next) {
+  var bookid = req.params.id;
+  console.log(req.body.editTinhTrang);
+  var editBook = {
+    tacgia: renameModule.splitList(req.body.editTacGia),
+    tieude: req.body.editTieuDe,
+    theloai: renameModule.splitList(req.body.editTheLoai),
+    SKU: req.body.editSKU,
+    ngayxuatban: req.body.editNgayXuatBan,
+    nhaxuatban: req.body.editNhaXuatBan,
+    kichthuoc: req.body.editKichThuoc,
+    mota: req.body.editMoTa,
+    dichgia: renameModule.splitList(req.body.editDichGia),
+    ngonngu: req.body.editNgonNgu,
+    tinhtrang: renameModule.splitList(req.body.editTinhTrang) || [],
+    danhdau: renameModule.splitList(req.body.editDanhDau) || [],
+    linkseo: req.body.editLinkSeo,
+    sotrang: parseInt(req.body.editSoTrang),
+    gia: parseFloat(req.body.editGia)
+  };
+  console.log(editBook);
+  var params = {
+    TableName: "DA2Book",
+    Key: {
+      _bookID: bookid
+    },
+    UpdateExpression: "set #sku=:sk, #tieude=:td, #tacgia=:tg, #dichgia=:dg, #theloai=:tl,#tinhtrang=:tt,#ngonngu=:nn,#ngayxuatban=:txb,#nhaxuatban=:nxb,#sotrang=:st,#mota=:mt,#danhdau=:dd,#gia=:g",
+    ExpressionAttributeValues: {
+      ":sk": editBook.SKU,
+      ":td": editBook.tieude,
+      ":tg": editBook.tacgia,
+      ":dg": editBook.dichgia,
+      ":tl": editBook.theloai,
+      ":tt": editBook.tinhtrang,
+      ":nn": editBook.ngonngu,
+      ":txb": editBook.ngayxuatban,
+      ":nxb": editBook.nhaxuatban,
+      ":st": editBook.sotrang,
+      ":mt": editBook.mota,
+      ":dd": editBook.danhdau,
+      ":g": editBook.gia
+    },
+    ExpressionAttributeNames: {
+      "#sku": "SKU",
+      "#tieude": "tieude",
+      "#tacgia": "tacgia",
+      "#dichgia": "dichgia",
+      "#theloai": "theloai",
+      "#tinhtrang": "tinhtrang",
+      "#ngonngu": "ngonngu",
+      "#ngayxuatban": "ngayxuatban",
+      "#nhaxuatban": "nhaxuatban",
+      "#sotrang": "sotrang",
+      "#mota": "mota",
+      "#danhdau": "danhdau",
+      "#gia": "gia"
+    },
+    ReturnValues: "UPDATED_NEW"
+  };
+  docClient.update(params, function (err, data) {
+    if (err) {
+      console.log("users::update::error - " + JSON.stringify(err, null, 2));
+    } else {
+      console.log("users::update::success " + JSON.stringify(data));
+      res.redirect("/admin");
+    }
+  });
+};
+
+exports.delete_book = function (req, res, next) {
+  var bookID = req.params.id;
+  console.log("\nRemoved book ID: " + bookID);
+  var params = {
+    TableName: "DA2Book",
+    Key: {
+      _bookID: bookID
+    }
+  };
+  docClient.delete(params, function (err, data) {
+    if (err) {
+      console.log("users::delete::error - " + JSON.stringify(err, null, 2));
+    } else {
+      console.log("users::delete::success");
+      res.redirect("/admin");
+    }
+  });
+}
+
+exports.admin_search_book = function (req, res, next) {
+  var keySearch = req.body.txtSearch123123;
+  console.log("__" + keySearch);
+  if (keySearch.length != 0) {
+    var params = {
+      TableName: "DA2Book",
+      FilterExpression: "contains(#id, :i) or contains(#tieude, :n) ",
+      ExpressionAttributeValues: {
+        ":i": keySearch,
+        ":n": keySearch
+      },
+      ExpressionAttributeNames: {
+        "#tieude": "tieude",
+        "#id": "_bookID"
+      }
+    };
+
+    docClient.scan(params, function (err, data) {
+      if (err) {
+        console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+      } else {
+        console.log("Query succeeded.");
+        console.log(data.Items);
+        res.render("../views/admin/page/ahome.ejs", {
+          allBooks: data.Items
+        });
+      }
+    });
+  } else {
+    res.redirect("/admin");
+  }
+}
 // var multer = require("multer");
 // var multerS3 = require("multer-s3");
 // var path = require("path");

@@ -11,3 +11,25 @@ exports.editName = function (str) {
         str = str.replace(/\./g, "-");
         return str;
 }
+
+exports.splitList = function (str) {
+        if (str == null || str == "" || typeof (str) == 'undefined') {
+                return [];
+        } else {
+                str = String(str);
+                var arr = str.split(",");
+                arr = arr.map(function (val) {
+                        val = val.trim();
+                        return val;
+                });
+                return arr;
+        }
+
+}
+// var str = "Paulo Coelho"
+// var arr = str.split(",");
+// arr = arr.map(function (val) {
+//         val = val.trim();
+//         return val;
+// });
+// console.log(arr);
