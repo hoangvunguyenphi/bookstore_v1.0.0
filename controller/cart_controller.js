@@ -111,3 +111,22 @@ exports.delete_cart_item = function (req, res, next) {
   req.session.cart = cart;
   res.redirect("/cart");
 };
+
+
+
+//Module get các item trong cart
+exports.check_out = function (req, res, next) {
+  if (!req.session.cart) {
+    return res.render("../views/site/page/cart", {
+      products: [],
+      totalPrice: 0,
+      totalQty: 0
+    });
+  }
+  var cart = new Cart(req.session.cart);
+  res.render("../views/site/page/checkout", {
+    products: cart.generateArray(),
+    totalPrice: cart.totalPrice,
+    totalQty: cart.totalQty
+  });
+};

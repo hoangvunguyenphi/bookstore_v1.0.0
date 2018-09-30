@@ -87,7 +87,7 @@
                                             <li class="woocommerce-mini-cart-item mini_cart_item">
                                                 <a href="/deletecart/<%=itc.item._bookID%>" class="remove" aria-label="Remove this item"
                                                     data-product_id="65" data-product_sku="">×</a>
-                                                <a href="single-product-sidebar.html">
+                                                <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
                                                     <img src="<%=itc.item.hinhanh[0]%>" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image"
                                                         alt="">
                                                     <%=itc.item.tieude%>
@@ -108,7 +108,7 @@
                                         </p>
                                         <p class="woocommerce-mini-cart__buttons buttons">
                                             <a href="/cart" class="button wc-forward">Xem giỏ hàng</a>
-                                            <a href="checkout.html" class="button checkout wc-forward">Đặt hàng</a>
+                                            <a href="/check_out" class="button checkout wc-forward">Đặt hàng</a>
                                         </p>
                                     </div>
                                     <!-- .widget_shopping_cart_content -->

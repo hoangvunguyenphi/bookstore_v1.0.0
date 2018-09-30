@@ -44,6 +44,9 @@ router.post("/editBook/:id", Book_controller.edit_book);
 router.get("/deleteBook/:id", Book_controller.delete_book)
 
 
+router.get("/check_out", Cart_controller.check_out)
+
+
 router.post("/aSearchBook", Book_controller.admin_search_book);
 
 var keyImgUpload = "";
