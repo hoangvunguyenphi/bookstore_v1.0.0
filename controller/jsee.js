@@ -1,9 +1,14 @@
-var aws = require("aws-sdk");
-var ses = new aws.SES({
-    accessKeyId: "id",
-    secretAccessKey: "keyhere",
-    "region": "us-west-2"
+var AWS = require("aws-sdk");
+const awsconfig = require("../aws-config.json");
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+const region = awsconfig.AWS.region;
+AWS.config.update({
+    accessKeyId,
+    secretAccessKey,
+    region
 });
+var ses = new AWS.SES();
 var eparam = {
     Destination: {
         ToAddresses: ["vitconse@gmail.com"]

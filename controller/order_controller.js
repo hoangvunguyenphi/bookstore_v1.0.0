@@ -4,19 +4,20 @@ var Cart = require("./cart");
 const UUID = require("uuid/v4");
 let date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
-var region = "us-west-2";
-let awsConfig = {
-  region: region,
-  // endpoint: "http://localhost:8000",
-  accessKeyId: "id",
-  secretAccessKey: "keyhere"
-};
-AWS.config.update(awsConfig);
+const awsconfig = require("../aws-config.json");
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+const region = awsconfig.AWS.region;
+AWS.config.update({
+  accessKeyId,
+  secretAccessKey,
+  region
+});
 
 var ses = new AWS.SES();
 let docClient = new AWS.DynamoDB.DocumentClient();
 
-exports.add_order = function(req, res, next) {
+exports.add_order = function (req, res, next) {
   if (!req.session.cart) {
     return res.render("../views/site/page/cart", {
       products: [],
@@ -26,11 +27,6 @@ exports.add_order = function(req, res, next) {
   }
   var cart = new Cart(req.session.cart);
   var now = date.format(new Date(), "DD/MM/YYYY");
-  // res.render("../views/site/page/cart", {
-  //     products: cart.generateArray(),
-  //     totalPrice: cart.totalPrice,
-  //     totalQty: cart.totalQty
-  // });
   var params = {
     TableName: "DA2Order",
     Item: {
@@ -40,18 +36,44 @@ exports.add_order = function(req, res, next) {
       sodienthoai: req.body.sodienthoai,
       email: req.body.diachiemail,
       diachi: req.body.diachichitiet,
-      ghichu: req.body.ghichu,
+      ghichu: req.body.ghichu || " ",
       tienship: 1111,
       items: cart.generateArray(),
       tongtienthanhtoan: cart.totalPrice,
       tinhtrang: "Chưa xác nhận",
       ngaythanhtoan: " ",
       codeDef: UUID(),
-      ipClient: req.body.ipClient //check ip customer để tránh spam, thêm condition Expression limit đơn đặt hàng trong 1 khoảng time
+      ipClient: req.body.ipClient // có thể sẽ check ip customer để tránh spam, thêm condition Expression limit đơn đặt hàng trong 1 khoảng time// chưa làm
     }
   };
   console.log(params.Item);
-  docClient.put(params, function(err, data) {
+  var bodymail = `<table border="1"  style="width:100%;border-collapse: collapse;"><tr>
+  <th>Sản phẩm</th>
+  <th>Giá</th>
+  <th>Số lượng</th>
+  <th>Thành tiền</th>
+</tr>`;
+
+  params.Item.items.forEach(function (it) {
+    bodymail += `<tr>
+  <td>
+    ` + it.item.tieude + `
+  </td>
+  <td>
+  ` + it.item.gia + `
+  </td>
+  <td>
+    ` + it.qty + `
+  </td>
+  <td>
+    ` + it.price + `
+  </td>
+</tr>`;
+
+  });
+  bodymail += "</table> ";
+  console.log(bodymail)
+  docClient.put(params, function (err, data) {
     if (err) {
       console.error(
         "Unable to add book",
@@ -67,21 +89,29 @@ exports.add_order = function(req, res, next) {
         Message: {
           Body: {
             Html: {
-              Data:
-                "<p>Chào bạn" +
-                params.Item.tennguoinhan +
-                '! Đây là email xác nhận đơn hàng bạn vừa đặt </p> <a href="localhost:3000/xacNhanOrder/"' +
-                params.Item.codeDef +
-                ">Nhấn vào đây để xác nhận đơn đặt hàng</a>"
+              Data: `<h2> Chào bạn ` +
+                params.Item.tennguoinhan + `!</h2> <p>
+                Đây là email với mục đích xác nhận đơn hàng bạn vừa đặt, vui lòng kiểm tra thông tin bên dưới và sau đó ` + `<b><a style="font-size:25px" href="http://localhost:3000/xacNhanOrder/` + params.Item.codeDef + `
+                ">nhấn vào đây ✔✔</a> </b> để xác nhận đơn hàng !</p>` +
+                `<p><b>Thông tin người nhận</b></p><table  border="1"  style="width:100%;border-collapse: collapse;"><tr>
+                <td>Mã đơn hàng</td><td>` + params.Item._orderID + `</td>
+                </tr>
+                <tr>
+                  <td>Tên người nhận:</td><td>` + params.Item.tennguoinhan + `</td>
+                </tr>
+                <tr>
+                  <td>Địa chỉ nhận</td><td>` + params.Item.diachi + `</td>
+                </tr>
+                <tr>
+                  <td>Số điện thoại nhận hàng</td><td>` + params.Item.sodienthoai + `</td>
+                </tr>
+                </table>
+                <p><b>Thông tin đơn hàng</b></p>
+                ` + bodymail
             },
             Text: {
-              Data:
-                "Mã đơn hàng:" +
-                params.Item._orderID +
-                "\n Tổng tiền:" +
-                params.Item.tongtienthanhtoan +
-                "Link xác nhận: localhost:3000/xacNhanOrder/" +
-                params.Item.codeDef
+              Data: "Mã đơn hàng:" +
+                params.Item._orderID
             }
           },
           Subject: {
@@ -92,7 +122,7 @@ exports.add_order = function(req, res, next) {
         ReplyToAddresses: ["vitconse@gmail.com"],
         ReturnPath: "vitconse@gmail.com"
       };
-      ses.sendEmail(eparam, function(err, data) {
+      ses.sendEmail(eparam, function (err, data) {
         if (err) console.log(err);
         else {
           console.log(data);
@@ -108,7 +138,7 @@ exports.add_order = function(req, res, next) {
     }
   });
 };
-exports.xacNhanOrder = function(req, res) {
+exports.xacNhanOrder = function (req, res) {
   var codeDef = req.params.codeDef;
   console.log(codeDef);
   var sparams = {
@@ -121,12 +151,12 @@ exports.xacNhanOrder = function(req, res) {
       "#code": "codeDef"
     }
   };
-  docClient.scan(sparams, function(err, data) {
+  docClient.scan(sparams, function (err, data) {
     if (err) {
       res.send("Đơn đặt hàng đã hết hạn!");
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
-      data.Items.forEach(function(tt) {
+      data.Items.forEach(function (tt) {
         console.log(tt.tinhtrang);
         var params = {
           TableName: "DA2Order",
@@ -142,11 +172,11 @@ exports.xacNhanOrder = function(req, res) {
           },
           ReturnValues: "UPDATED_NEW"
         };
-        docClient.update(params, function(err, data) {
+        docClient.update(params, function (err, data) {
           if (err) {
             console.log(
               "order - tinhtrang ::update::error - " +
-                JSON.stringify(err, null, 2)
+              JSON.stringify(err, null, 2)
             );
           } else {
             console.log(

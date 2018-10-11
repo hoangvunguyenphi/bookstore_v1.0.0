@@ -1,13 +1,14 @@
-var AWS = require("aws-sdk");
-var Cart = require("./cart");
-let awsConfig = {
-  region: "us-west-2",
-  // endpoint: "http://localhost:8000",
-  accessKeyId: "id",
-  secretAccessKey: "keyhere",
-  "region": "us-west-2"
-};
-AWS.config.update(awsConfig);
+const AWS = require("aws-sdk");
+const Cart = require("./cart");
+const awsconfig = require("../aws-config.json");
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+const region = awsconfig.AWS.region;
+AWS.config.update({
+  accessKeyId,
+  secretAccessKey,
+  region
+});
 let docClient = new AWS.DynamoDB.DocumentClient();
 
 //Module thêm vào shopping cart

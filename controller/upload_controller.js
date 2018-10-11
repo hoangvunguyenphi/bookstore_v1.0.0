@@ -6,12 +6,16 @@ const mime = require("mime");
 var AWS = require("aws-sdk");
 
 var keyImgUpload = "";
-var s3 = new AWS.S3({
-    // endpoint: "http://localhost:8000/s3",
-    accessKeyId: "id",
-    secretAccessKey: "keyhere",
-    "region": "us-west-2"
+const awsconfig = require("../aws-config.json");
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+const region = awsconfig.AWS.region;
+AWS.config.update({
+    accessKeyId,
+    secretAccessKey,
+    region
 });
+var s3 = new AWS.S3();
 exports.upload_image = function (req, res, next) {
     var upload = multer({
         limits: {
