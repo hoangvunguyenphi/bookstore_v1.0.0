@@ -7,13 +7,16 @@ var renameModule = require("../controller/edit_name");
 var region = "us-west-2";
 let awsConfig = {
   region: region,
-  endpoint: "http://localhost:8000"
+  // endpoint: "http://localhost:8000",
+  accessKeyId: "id",
+  secretAccessKey: "keyhere",
+  region: "us-west-2"
 };
 AWS.config.update(awsConfig);
 let docClient = new AWS.DynamoDB.DocumentClient();
 
 //GET ALL BOOK
-exports.get_all_book = function (req, res, next) {
+exports.get_all_book = function(req, res, next) {
   var params = {
     TableName: "DA2Book"
   };
@@ -28,7 +31,7 @@ exports.get_all_book = function (req, res, next) {
       );
       res.render("error");
     } else {
-      data.Items.forEach(function (book) {
+      data.Items.forEach(function(book) {
         console.log("INITIAL=" + book._bookID);
       });
       //nếu session rỗng
@@ -52,7 +55,7 @@ exports.get_all_book = function (req, res, next) {
   }
 };
 //GET ALL BOOK ADMIN
-exports.get_all_book2 = function (req, res, next) {
+exports.get_all_book2 = function(req, res, next) {
   var params = {
     TableName: "DA2Book"
   };
@@ -74,7 +77,7 @@ exports.get_all_book2 = function (req, res, next) {
 };
 
 //GET CHI TIET SP
-exports.get_detail_product = function (req, res, next) {
+exports.get_detail_product = function(req, res, next) {
   var sachID = req.params.id;
   console.log("\n_________" + sachID);
 
@@ -89,11 +92,10 @@ exports.get_detail_product = function (req, res, next) {
     }
   };
   //Thực hiện query object theo id lấy từ req.params
-  docClient.query(params, function (err, data) {
+  docClient.query(params, function(err, data) {
     if (err) {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
-
       console.log(data);
       if (!req.session.cart) {
         return res.render("../views/site/page/single-product", {
@@ -115,7 +117,7 @@ exports.get_detail_product = function (req, res, next) {
   });
 };
 
-exports.edit_book = function (req, res, next) {
+exports.edit_book = function(req, res, next) {
   var bookid = req.params.id;
   console.log(req.body.editTinhTrang);
   var editBook = {
@@ -141,7 +143,8 @@ exports.edit_book = function (req, res, next) {
     Key: {
       _bookID: bookid
     },
-    UpdateExpression: "set #sku=:sk, #tieude=:td, #tacgia=:tg, #dichgia=:dg, #theloai=:tl,#tinhtrang=:tt,#ngonngu=:nn,#ngayxuatban=:txb,#nhaxuatban=:nxb,#sotrang=:st,#mota=:mt,#danhdau=:dd,#gia=:g",
+    UpdateExpression:
+      "set #sku=:sk, #tieude=:td, #tacgia=:tg, #dichgia=:dg, #theloai=:tl,#tinhtrang=:tt,#ngonngu=:nn,#ngayxuatban=:txb,#nhaxuatban=:nxb,#sotrang=:st,#mota=:mt,#danhdau=:dd,#gia=:g",
     ExpressionAttributeValues: {
       ":sk": editBook.SKU,
       ":td": editBook.tieude,
@@ -174,7 +177,7 @@ exports.edit_book = function (req, res, next) {
     },
     ReturnValues: "UPDATED_NEW"
   };
-  docClient.update(params, function (err, data) {
+  docClient.update(params, function(err, data) {
     if (err) {
       console.log("users::update::error - " + JSON.stringify(err, null, 2));
     } else {
@@ -184,7 +187,7 @@ exports.edit_book = function (req, res, next) {
   });
 };
 
-exports.delete_book = function (req, res, next) {
+exports.delete_book = function(req, res, next) {
   var bookID = req.params.id;
   console.log("\nRemoved book ID: " + bookID);
   var params = {
@@ -193,7 +196,7 @@ exports.delete_book = function (req, res, next) {
       _bookID: bookID
     }
   };
-  docClient.delete(params, function (err, data) {
+  docClient.delete(params, function(err, data) {
     if (err) {
       console.log("users::delete::error - " + JSON.stringify(err, null, 2));
     } else {
@@ -201,9 +204,9 @@ exports.delete_book = function (req, res, next) {
       res.redirect("/admin");
     }
   });
-}
+};
 
-exports.admin_search_book = function (req, res, next) {
+exports.admin_search_book = function(req, res, next) {
   var keySearch = req.body.txtSearch123123;
   console.log("__" + keySearch);
   if (keySearch.length != 0) {
@@ -220,7 +223,7 @@ exports.admin_search_book = function (req, res, next) {
       }
     };
 
-    docClient.scan(params, function (err, data) {
+    docClient.scan(params, function(err, data) {
       if (err) {
         console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
       } else {
@@ -234,7 +237,7 @@ exports.admin_search_book = function (req, res, next) {
   } else {
     res.redirect("/admin");
   }
-}
+};
 // var multer = require("multer");
 // var multerS3 = require("multer-s3");
 // var path = require("path");

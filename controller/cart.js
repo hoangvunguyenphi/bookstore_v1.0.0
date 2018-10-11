@@ -16,6 +16,7 @@ module.exports = function Cart(oldCart) {
     }
     storedItem.qty++;
     storedItem.price = parseFloat(storedItem.item.gia * storedItem.qty);
+    console.log("Add price:" + storedItem.price)
     this.calculateTotal();
   };
 
@@ -68,7 +69,8 @@ module.exports = function Cart(oldCart) {
   //update
   this.update = function (id, qtyy) {
     this.items[id].qty = parseInt(qtyy);
-    this.items[id].price = parseFloat(qtyy * this.items[id].item.price);
+    this.items[id].price = parseFloat(qtyy * this.items[id].item.gia);
+    console.log("update:" + this.items[id].price);
     //Nếu nhập số lượng <0 thì xoá
     if (this.items[id].qty <= 0) {
       this.removeItem(id);

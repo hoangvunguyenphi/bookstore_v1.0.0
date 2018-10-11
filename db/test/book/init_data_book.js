@@ -9,7 +9,7 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient();
 console.log("Importing users into DynamoDB. Please wait.");
 
-var allBooks = JSON.parse(fs.readFileSync("bookdata.json", "utf8"));
+var allBooks = JSON.parse(fs.readFileSync("book_data.json", "utf8"));
 allBooks.forEach(function (book) {
   var params = {
     TableName: "DA2Book",

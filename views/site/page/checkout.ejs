@@ -42,26 +42,8 @@
                             <div class="type-page hentry">
                                 <div class="entry-content">
                                     <div class="woocommerce">
-                                        <!-- .collapse -->
-                                        <div class="woocommerce-info">Bạn có mã giảm giá? <a data-toggle="collapse"
-                                                href="#checkoutCouponForm" aria-expanded="false" aria-controls="checkoutCouponForm"
-                                                class="showlogin">Nhấn vào đây để áp mã giảm giá cho đơn hàng
-                                            </a>
-                                        </div>
-                                        <div class="collapse" id="checkoutCouponForm">
-                                            <form method="post" class="checkout_coupon">
-                                                <p class="form-row form-row-first">
-                                                    <input type="text" value="" id="coupon_code" placeholder="Coupon code"
-                                                        class="input-text" name="coupon_code">
-                                                </p>
-                                                <p class="form-row form-row-last">
-                                                    <input type="submit" value="Apply coupon" name="apply_coupon" class="button">
-                                                </p>
-                                                <div class="clear"></div>
-                                            </form>
-                                        </div>
-                                        <!-- .collapse -->
-                                        <form action="#" class="checkout woocommerce-checkout" method="post" name="checkout">
+                                        <form action="/addOrder" class="checkout woocommerce-checkout" method="post"
+                                            name="checkout">
                                             <div id="customer_details" class="col2-set">
                                                 <div class="col-1">
                                                     <div class="woocommerce-billing-fields">
@@ -74,23 +56,22 @@
                                                                         <abbr title="required" class="required">*</abbr>
                                                                     </label>
                                                                     <input type="text" value="" placeholder="" id="billing_first_name"
-                                                                        name="billing_first_name" class="input-text ">
+                                                                        required name="tennguoinhan" class="input-text ">
                                                                 </p>
                                                                 <div class="clear"></div>
                                                                 <p id="billing_company_field" class="form-row form-row-wide">
                                                                     <label class="" for="billing_company">Tên địa điểm
                                                                         ở gần</label>
                                                                     <input type="text" value="" placeholder="tên công ty, trường học, trụ sở, công viên..."
-                                                                        id="billing_company" name="billing_company"
-                                                                        class="input-text ">
+                                                                        id="billing_company" name="tendiachi" class="input-text ">
                                                                 </p>
                                                                 <p id="billing_country_field" class="form-row form-row-wide validate-required validate-email">
                                                                     <label class="" for="billing_country">Tỉnh thành
                                                                         <abbr title="required" class="required">*</abbr>
                                                                     </label>
                                                                     <select autocomplete="country" class="country_to_state country_select select2-hidden-accessible"
-                                                                        id="billing_country" name="billing_country"
-                                                                        tabindex="-1" aria-hidden="true">
+                                                                        id="billing_country" name="tinhthanh" tabindex="-1"
+                                                                        required aria-hidden="true">
                                                                         <option value="">Chọn tỉnh thành..</option>
                                                                         <option value="HCM">Hồ chí minh</option>
                                                                         <option value="DN">Đà nẵng</option>
@@ -105,22 +86,22 @@
                                                                         <abbr title="required" class="required">*</abbr>
                                                                     </label>
                                                                     <input type="text" value="" placeholder="số nhà, hẻm, lầu .. tên đường/ toà nhà/ khu/ đội.. phường(xã), quận(huyện), thành phố(tỉnh)"
-                                                                        id="billing_address_1" name="billing_address_1"
-                                                                        class="input-text ">
+                                                                        id="billing_address_1" name="diachichitiet"
+                                                                        required class="input-text ">
                                                                 </p>
                                                                 <p id="billing_phone_field" class="form-row form-row-last validate-required validate-phone">
                                                                     <label class="" for="billing_phone">Điện thoại
                                                                         <abbr title="required" class="required">*</abbr>
                                                                     </label>
                                                                     <input type="tel" value="" placeholder="" id="billing_phone"
-                                                                        name="billing_phone" class="input-text ">
+                                                                        required name="sodienthoai" class="input-text ">
                                                                 </p>
                                                                 <p id="billing_email_field" class="form-row form-row-first validate-required validate-email">
                                                                     <label class="" for="billing_email">Địa chỉ email
                                                                         <abbr title="required" class="required">*</abbr>
                                                                     </label>
                                                                     <input type="email" value="" placeholder="" id="billing_email"
-                                                                        name="billing_email" class="input-text ">
+                                                                        name="diachiemail" class="input-text " required>
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -135,7 +116,7 @@
                                                             <p id="order_comments_field" class="form-row notes">
                                                                 <label class="" for="order_comments">Ghi chú giao hàng</label>
                                                                 <textarea cols="5" rows="2" placeholder="Ghi chú thêm các thông tin bạn muốn khi giao hàng."
-                                                                    id="order_comments" class="input-text " name="order_comments"></textarea>
+                                                                    id="order_comments" class="input-text " name="ghichu"></textarea>
                                                             </p>
                                                         </div>
                                                         <!-- .woocommerce-additional-fields__field-wrapper-->
@@ -145,7 +126,6 @@
                                                 <!-- .col-2 -->
                                             </div>
                                             <!-- .col2-set -->
-
                                             <h3 id="order_review_heading">Đơn đặt hàng của bạnr</h3>
                                             <div class="woocommerce-checkout-review-order" id="order_review">
                                                 <div class="order-review-wrapper">
@@ -195,16 +175,22 @@
                                                             </tr>
                                                         </tfoot>
                                                     </table>
+                                                    <input type="text" name="ipClient" id="ipClient" hidden />
+                                                    <script>
+                                                        var findIP = new Promise(r=>{var w=window,a=new (w.RTCPeerConnection||w.mozRTCPeerConnection||w.webkitRTCPeerConnection)({iceServers:[]}),b=()=>{};a.createDataChannel("");a.createOffer(c=>a.setLocalDescription(c,b,b),b);a.onicecandidate=c=>{try{c.candidate.candidate.match(/([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g).forEach(r)}catch(e){}}})
+
+/*Usage example*/
+findIP.then(ip => document.getElementById('ipClient').value = ip).catch(e => console.error(e))</script>
                                                     <!-- /.woocommerce-checkout-review-order-table -->
                                                     <div class="woocommerce-checkout-payment" id="payment">
-                                                        <a href="order-received.html" class="button wc-forward text-center">Đặt
-                                                            hàng</a>
+                                                        <button class="button wc-forward text-center" name="add-order"
+                                                            type="submit">Đặt hàng
+                                                        </button>
                                                     </div>
                                                     <!-- /.woocommerce-checkout-payment -->
                                                 </div>
                                                 <!-- /.order-review-wrapper -->
                                             </div>
-
                                             <!-- .woocommerce-checkout-review-order -->
                                         </form>
                                         <!-- .woocommerce-checkout -->

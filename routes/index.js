@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var Order_controller = require("../controller/order_controller");
 var Book_controller = require("../controller/book_controller");
 var Cart_controller = require("../controller/cart_controller");
 var Cart = require("../controller/cart");
@@ -16,7 +17,9 @@ const mime = require("mime");
 var region = "us-west-2";
 let awsConfig = {
   region: region,
-  endpoint: "http://localhost:8000"
+  // endpoint: "http://localhost:8000",
+  accessKeyId: "id",
+  secretAccessKey: "keyhere"
 };
 AWS.config.update(awsConfig);
 let docClient = new AWS.DynamoDB.DocumentClient();
@@ -132,5 +135,8 @@ router.post("/addNewBook", upload.single("newImgUpload"),
       }
     });
   });
+
+router.post("/addOrder", Order_controller.add_order);
+router.get("/xacNhanOrder/:codeDef", Order_controller.xacNhanOrder);
 
 module.exports = router;

@@ -1,0 +1,42 @@
+[{
+    "_orderID": "12312_1@12323_23123",
+    "ngaylaphoadon": "12/3/23",
+    "tennguoinhan": "nguyen phi hoang vu",
+    "sodienthoai": "0122358854",
+    "email": "hoangvunguyenphi@gmail.com",
+    "diachi": "169 Gò vấp HCM",
+    "ghichu": "gói bọc cẩn thận",
+    "tienship": 20000,
+    "items": [{
+        "_BookItem": {
+            "item": {
+                "ngayxuatban": "10-2016",
+                "ngonngu": "tv",
+                "ngaythem": "01/09/2018",
+                "dichgia": [],
+                "linkseo": "tuoi-tre-dang-gia-bao-nhieu",
+                "sotrang": 285,
+                "tieude": "Tuổi trẻ đáng giá bao nhiêu",
+                "theloai": [],
+                "hinhanh": [],
+                "nhaxuatban": "Nhà Xuất Bản Hội Nhà Văn",
+                "danhdau": [],
+                "tinhtrang": [],
+                "_bookID": "book03",
+                "kichthuoc": "14 x 20.5 cm",
+                "SKU": "2431864615280",
+                "mota": "Bạn hối tiếc vì",
+                "tacgia": [],
+                "gia": 79000
+            },
+            "price": 79000,
+            "qty": 1
+        },
+        "soluong": 1,
+        "dongia": 72000,
+        "tongtien": 72000
+    }],
+    "tongtienthanhtoan": 171000,
+    "tinhtrang": "chuagiao",
+    "ngaythanhtoan": "25/56/12"
+}]
