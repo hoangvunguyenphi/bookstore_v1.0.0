@@ -1,13 +1,13 @@
 var AWS = require("aws-sdk");
-var region = "us-west-2";
-let awsConfig = {
-    region: region,
-    // endpoint: "http://localhost:8000",
-    "accessKeyId": "AKIAJFRGV5MEQS4DR77Q",
-    "secretAccessKey": "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",
-    "region": "us-west-2"
-};
-AWS.config.update(awsConfig);
+const awsconfig = require('../../../aws-config.json');
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+const region = awsconfig.AWS.region;
+AWS.config.update({
+    accessKeyId,
+    secretAccessKey,
+    region
+});
 let docClient = new AWS.DynamoDB.DocumentClient();
 var params = {
     TableName: "DA2Order"

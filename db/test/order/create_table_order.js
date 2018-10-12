@@ -1,11 +1,13 @@
 var AWS = require("aws-sdk");
 
+const awsconfig = require('../../../aws-config.json');
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+const region = awsconfig.AWS.region;
 AWS.config.update({
-    region: "us-west-2",
-    // endpoint: "http://localhost:8000",
-    "accessKeyId": "AKIAJFRGV5MEQS4DR77Q",
-    "secretAccessKey": "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",
-    "region": "us-west-2"
+    accessKeyId,
+    secretAccessKey,
+    region
 });
 
 var dynamodb = new AWS.DynamoDB();
