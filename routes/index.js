@@ -13,7 +13,7 @@ const UUID = require("uuid/v4");
 var multer = require("multer");
 var multerS3 = require("multer-s3");
 var path = require("path");
-const mime = require("mime");
+var path = require('path');
 var region = "us-west-2";
 let awsConfig = {
   region: region,
@@ -75,9 +75,7 @@ var upload = multer({
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     key: function (req, file, cb) {
-      console.log(file);
-      keyImgUpload = renameModule.editName(req.body.newTieuDe) + "-" + UUID() + "." + mime.getExtension(file.mimetype);
-      console.log(keyImgUpload);
+      keyImgUpload = renameModule.editName(req.body.newTieuDe) + "-" + UUID() + path.extname(file.originalname);
       cb(null, keyImgUpload);
     }
   })
