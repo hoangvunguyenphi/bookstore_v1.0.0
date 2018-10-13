@@ -1,12 +1,12 @@
 var AWS = require("aws-sdk");
 var Cart = require("./cart");
-const UUID = require("uuid/v4");
-let date = require("date-and-time");
+var UUID = require("uuid/v4");
+var date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
-const awsconfig = require("../aws-config.json");
-const accessKeyId = awsconfig.AWS.accessKeyId;
-const secretAccessKey = awsconfig.AWS.secretAccessKey;
-const region = awsconfig.AWS.region;
+var awsconfig = require("../aws-config.json");
+var accessKeyId = awsconfig.AWS.accessKeyId;
+var secretAccessKey = awsconfig.AWS.secretAccessKey;
+var region = awsconfig.AWS.region;
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
