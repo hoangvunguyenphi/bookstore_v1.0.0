@@ -13,14 +13,15 @@ const UUID = require("uuid/v4");
 var multer = require("multer");
 var multerS3 = require("multer-s3");
 var path = require("path");
-var path = require('path');
-var region = "us-west-2";
-let awsConfig = {
-  region: region,
-  // endpoint: "http://localhost:8000",
-  accessKeyId: "id",
-  secretAccessKey: "keyhere"
-};
+const awsconfig = require('../../../aws-config.json');
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+var region = awsconfig.AWS.region;
+AWS.config.update({
+  accessKeyId,
+  secretAccessKey,
+  region
+});
 AWS.config.update(awsConfig);
 let docClient = new AWS.DynamoDB.DocumentClient();
 
