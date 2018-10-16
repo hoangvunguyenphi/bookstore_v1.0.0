@@ -1,4 +1,5 @@
-[{
+[
+  {
     "_bookID": "book01",
     "dichgia": ["Thu Trang"],
     "gia": 72000,
@@ -6,7 +7,7 @@
     "ngaythem": "15/09/2018",
     "danhdau": ["hot", "new", "sale"],
     "hinhanh": [
-      "https://da2-book.s3.us-west-2.amazonaws.com/tuoi-tre-dang-gia-bao-nhieu-befe7485-1a9c-4771-abe7-6de58d957e93.jpeg"
+      "https://da2-book.s3.us-west-2.amazonaws.com/bon-chang-trai-cung-nhau-di-du-lich-058e4ac6-c2d0-4d67-8090-3a544af3cde7.gif"
     ],
     "kichthuoc": "14 x 20 cm",
     "linkseo": "bon-chang-trai-cung-nhau-di-du-lich",
@@ -16,7 +17,7 @@
     "SKU": "2701536880385",
     "sotrang": 368,
     "tacgia": ["Yuriko Mamiya"],
-    "theloai": ["Truyện ngắn"],
+    "theloai": "Truyện ngắn",
     "tieude": "Bốn Chàng Trai Cùng Nhau Đi Du Lịch",
     "ngonngu": "Nước ngoài"
   },
@@ -38,9 +39,9 @@
     "SKU": "2431864615280",
     "sotrang": 285,
     "tacgia": ["Rosie Nguyễn"],
-    "theloai": ["Sách kỹ năng sống"],
+    "theloai": "Sách kỹ năng sống",
     "tieude": "Tuổi trẻ đáng giá bao nhiêu",
-    "ngonngu": "Tiếng việt"
+    "ngonngu": "Tiếng Việt"
   },
   {
     "_bookID": "book02",
@@ -59,9 +60,9 @@
     "SKU": "8923094670350",
     "sotrang": 224,
     "tacgia": ["Yuriko Mamiya"],
-    "theloai": ["Truyện ngắn"],
+    "theloai": "Truyện ngắn",
     "tieude": "Mình Đừng Quên Nhau",
-    "ngonngu": "Tiếng việt"
+    "ngonngu": "Tiếng Việt"
   },
   {
     "_bookID": "book04",
@@ -81,7 +82,7 @@
     "SKU": "2518407786529",
     "sotrang": 228,
     "tacgia": ["Paulo Coelho"],
-    "theloai": ["Sách văn học"],
+    "theloai": "Sách văn học",
     "tieude": "Nhà Giả Kim",
     "ngonngu": "Nước ngoài"
   }

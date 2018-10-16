@@ -122,7 +122,7 @@ exports.edit_book = function (req, res, next) {
   var editBook = {
     tacgia: renameModule.splitList(req.body.editTacGia),
     tieude: req.body.editTieuDe,
-    theloai: renameModule.splitList(req.body.editTheLoai),
+    theloai: String(req.body.editTheLoai),
     SKU: req.body.editSKU,
     ngayxuatban: req.body.editNgayXuatBan,
     nhaxuatban: req.body.editNhaXuatBan,

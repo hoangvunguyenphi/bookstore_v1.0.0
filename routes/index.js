@@ -93,7 +93,7 @@ router.post("/addNewBook", upload.single("newImgUpload"),
       Item: {
         _bookID: UUID(),
         tieude: String(req.body.newTieuDe).trim(),
-        theloai: renameModule.splitList(String(req.body.newTheLoai)),
+        theloai: String(req.body.newTheLoai),
         tacgia: renameModule.splitList(String(req.body.newTacGia)),
         sotrang: parseInt(String(req.body.newSoTrang).trim()),
         SKU: String(req.body.newSKU).trim(),

@@ -74,8 +74,8 @@
                                             <% 
                                                 var listCatelogies=[];
                                                 allBooks.forEach(function(book){
-                                                    if(listCatelogies.indexOf(book.theloai[0]) == -1){
-                                                        listCatelogies.push(book.theloai[0]);
+                                                    if(listCatelogies.indexOf(book.theloai) == -1){
+                                                        listCatelogies.push(book.theloai);
                                                     }
                                                 });
                                                 listCatelogies.forEach(function(cat){
