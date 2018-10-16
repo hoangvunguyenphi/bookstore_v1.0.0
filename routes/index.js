@@ -18,9 +18,11 @@ var awsconfig = require('../aws-config.json');
 const accessKeyId = awsconfig.AWS.accessKeyId;
 const secretAccessKey = awsconfig.AWS.secretAccessKey;
 var region = awsconfig.AWS.region;
+var endpoint = "http://localhost:8000"
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
+  endpoint,
   region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
