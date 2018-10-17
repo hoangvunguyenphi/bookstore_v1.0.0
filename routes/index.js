@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var app = express();
 var Order_controller = require("../controller/order_controller");
 var Book_controller = require("../controller/book_controller");
 var Cart_controller = require("../controller/cart_controller");
@@ -18,11 +19,10 @@ var awsconfig = require('../aws-config.json');
 const accessKeyId = awsconfig.AWS.accessKeyId;
 const secretAccessKey = awsconfig.AWS.secretAccessKey;
 var region = awsconfig.AWS.region;
-var endpoint = "http://localhost:8000"
+var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  endpoint,
   region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
@@ -49,11 +49,13 @@ router.post("/editBook/:id", Book_controller.edit_book);
 
 router.get("/deleteBook/:id", Book_controller.delete_book)
 
-
 router.get("/check_out", Cart_controller.check_out)
 
+router.get("/showlist_:theloai", Book_controller.show_list_cat)
 
 router.post("/aSearchBook", Book_controller.admin_search_book);
+
+router.post("/csearch_book", Book_controller.search_book);
 
 var keyImgUpload = "";
 var s3 = new AWS.S3();
@@ -90,6 +92,7 @@ router.post("/addNewBook", upload.single("newImgUpload"),
     var now = date.format(new Date(), "DD/MM/YYYY");
     var url =
       "https://" + buket + ".s3." + region + ".amazonaws.com/" + keyImgUpload;
+    console.log("AAAA=" + req.body.newImgUpload);
     var params = {
       TableName: table,
       Item: {

@@ -1,5 +1,6 @@
 var AWS = require("aws-sdk");
 var Cart = require("./cart");
+var fs = require('fs');
 var UUID = require("uuid/v4");
 var date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
@@ -7,11 +8,10 @@ var awsconfig = require("../aws-config.json");
 var accessKeyId = awsconfig.AWS.accessKeyId;
 var secretAccessKey = awsconfig.AWS.secretAccessKey;
 var region = awsconfig.AWS.region;
-var endpoint = "http://localhost:8000"
+var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  endpoint,
   region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
@@ -19,26 +19,23 @@ let docClient = new AWS.DynamoDB.DocumentClient();
 //GET ALL BOOK
 exports.get_all_book = function (req, res, next) {
   var params = {
-    TableName: "DA2Book"
+    TableName: "DA2Book",
+    Limit: 50
   };
   //DUYET TAT CA COLLECTIONS TREN TABLE
-  docClient.scan(params, onScan);
-
-  function onScan(err, data) {
+  docClient.scan(params, function (err, data) {
     if (err) {
-      console.error(
+      console.log(
         "\nUnable to scan the table. Error JSON:",
         JSON.stringify(err, null, 2)
       );
       res.render("error");
     } else {
-      data.Items.forEach(function (book) {
-        console.log("INITIAL=" + book._bookID);
-      });
+      console.log(data.Count);
       //nếu session rỗng
       if (!req.session.cart) {
-        return res.render("../views/site/page/home", {
-          products: [],
+        return res.render("../views/site/page/index", {
+          products: [], //cartItem
           allBooks: data.Items,
           totalPrice: 0,
           totalQty: 0
@@ -46,14 +43,14 @@ exports.get_all_book = function (req, res, next) {
       }
       //ngược lại đang trong phiên session
       var cart = new Cart(req.session.cart);
-      res.render("../views/site/page/home", {
-        allBooks: data.Items,
+      res.render("../views/site/page/index", {
         products: cart.generateArray(),
+        allBooks: data.Items,
         totalPrice: cart.totalPrice,
         totalQty: cart.totalQty
       });
     }
-  }
+  })
 };
 //GET ALL BOOK ADMIN
 exports.get_all_book2 = function (req, res, next) {
@@ -64,7 +61,7 @@ exports.get_all_book2 = function (req, res, next) {
 
   function onScan(err, data) {
     if (err) {
-      console.error(
+      console.log(
         "\nUnable to scan the table. Error JSON:",
         JSON.stringify(err, null, 2)
       );
@@ -95,7 +92,7 @@ exports.get_detail_product = function (req, res, next) {
   //Thực hiện query object theo id lấy từ req.params
   docClient.query(params, function (err, data) {
     if (err) {
-      console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
       console.log(data);
       if (!req.session.cart) {
@@ -110,6 +107,7 @@ exports.get_detail_product = function (req, res, next) {
       var cart = new Cart(req.session.cart);
       res.render("../views/site/page/single-product", {
         sachDetail: data.Items,
+        allBooks: data.Items,
         products: cart.generateArray(),
         totalPrice: cart.totalPrice,
         totalQty: cart.totalQty
@@ -225,7 +223,7 @@ exports.admin_search_book = function (req, res, next) {
 
     docClient.scan(params, function (err, data) {
       if (err) {
-        console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
       } else {
         console.log("Query succeeded.");
         console.log(data.Items);
@@ -238,6 +236,88 @@ exports.admin_search_book = function (req, res, next) {
     res.redirect("/admin");
   }
 };
+
+exports.show_list_cat = function (req, res) {
+  var category = req.params.theloai;
+  console.log(category);
+  var params = {
+    TableName: "DA2Book",
+    FilterExpression: "#tl=:tloai",
+    ExpressionAttributeValues: {
+      ":tloai": category
+    },
+    ExpressionAttributeNames: {
+      "#tl": "theloai"
+    }
+  };
+
+  docClient.scan(params, function (err, data) {
+    if (err) {
+      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+      console.log("\nSố lượng tìm dc=" + data.Count);
+      if (!req.session.cart) {
+        return res.render("../views/site/page/list-book-cat.ejs", {
+          products: [],
+          allBooks: data.Items,
+          totalPrice: 0,
+          totalQty: 0
+        });
+      }
+      //ngược lại đang trong phiên session
+      var cart = new Cart(req.session.cart);
+      res.render("../views/site/page/list-book-cat.ejs", {
+        allBooks: data.Items,
+        products: cart.generateArray(),
+        totalPrice: cart.totalPrice,
+        totalQty: cart.totalQty
+      });
+    }
+  });
+};
+exports.search_book = function (req, res) {
+  var keySearch = req.body.stieude;
+  var sltTheloai = req.body.product_cat;
+  console.log(keySearch + "-" + sltTheloai);
+  if (keySearch.length != 0) {
+    var params = {
+      TableName: "DA2Book",
+      FilterExpression: "contains(#key, :key) and contains(#tl, :tl) ",
+      ExpressionAttributeValues: {
+        ":key": String(keySearch).trim() || " ",
+        ":tl": String(sltTheloai).trim()
+      },
+      ExpressionAttributeNames: {
+        "#key": "tieude",
+        "#tl": "theloai"
+      }
+    };
+    docClient.scan(params, function (err, data) {
+      if (err) {
+        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+      } else {
+        if (!req.session.cart) {
+          return res.render("../views/site/page/list-book-cat.ejs", {
+            products: [],
+            allBooks: data.Items,
+            totalPrice: 0,
+            totalQty: 0
+          });
+        }
+        //ngược lại đang trong phiên session
+        var cart = new Cart(req.session.cart);
+        res.render("../views/site/page/list-book-cat.ejs", {
+          allBooks: data.Items,
+          products: cart.generateArray(),
+          totalPrice: cart.totalPrice,
+          totalQty: cart.totalQty
+        });
+      }
+    });
+  } else {
+    res.redirect("/");
+  }
+}
 // var multer = require("multer");
 // var multerS3 = require("multer-s3");
 // var path = require("path");

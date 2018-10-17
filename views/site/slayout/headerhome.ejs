@@ -1,14 +1,11 @@
 <div class="top-bar top-bar-v3">
     <div class="col-full">
-        <ul id="menu-top-bar-left" class="nav menu-top-bar-left">
+        <ul id="menu-top-bar-right" class="nav menu-top-bar-right">
             <li class="menu-item animate-dropdown">
                 <a title="TechMarket eCommerce - Always free delivery" href="contact-v1.html">Nhà sách nhóm 11 &#8211;
                     luôn
                     bán sách cho bạn, chứ không bán cần</a>
             </li>
-        </ul>
-        <!-- .nav -->
-        <ul id="menu-top-bar-right" class="nav menu-top-bar-right">
             <li class="hidden-sm-down menu-item animate-dropdown">
                 <a title="Track Your Order" href="track-your-order.html">
                     <i class="tm tm-order-tracking"></i>Kiểm tra đơn đặt hàng</a>
@@ -39,19 +36,23 @@
                 <!-- ============================================================= End Header Logo ============================================================= -->
                 <% include menu%>
                 <!-- .departments-menu -->
-                <form class="navbar-search" method="get" action="home-v1.html">
+                <form class="navbar-search" method="POST" action="/csearch_book">
                     <label class="sr-only screen-reader-text" for="search">Tìm kiếm:</label>
                     <div class="input-group">
                         <input type="text" id="search" class="form-control search-field product-search-field" dir="ltr"
-                            value="" name="s" placeholder="Search for products" />
+                            value="" name="stieude" placeholder="Search for products" />
                         <div class="input-group-addon search-categories popover-header">
                             <select name='product_cat' id='product_cat' class='postform resizeselect'>
-                                <option value='0' selected='selected'>Tất cả các thể loại</option>
-                                <option class="level-0" value="television">Truyện tranh</option>
-                                <option class="level-0" value="home-theater-audio">Truyện ngắn</option>
-                                <option class="level-0" value="headphones">Truyện ngắn hơn</option>
-                                <option class="level-0" value="digital-cameras">Truyện ngắn hơn nữa</option>
-                                <option class="level-0" value="cells-tablets">Sách giáo khoa</option>
+                                <option value=' ' selected='selected'>Tất cả các thể loại</option>
+                                <%cat.forEach(function(ca){
+                                                    %>
+                                <option class="level-0" value="<%=ca.tentheloai%>">
+                                    <%=ca.tentheloai%>
+                                </option>
+                                <%
+                                })
+                                %>
+                                <!-- .product-category -->
                             </select>
                         </div>
                         <!-- .input-group-addon -->
@@ -149,162 +150,21 @@
                             <span class="tmhm-close">Close</span>
                             <ul id="menu-departments-menu-1" class="nav">
                                 <li class="highlight menu-item animate-dropdown">
-                                    <a title="Value of the Day" href="shop.html">Value of the Day</a>
+                                    <a title="Khuyến mãi" href="landing-page-v2.html">Khuyến mãi</a>
                                 </li>
                                 <li class="highlight menu-item animate-dropdown">
-                                    <a title="Top 100 Offers" href="shop.html">Top 100 Offers</a>
+                                    <a title="Hàng mới về" href="landing-page-v2.html">Hàng mới về</a>
                                 </li>
+                                <% cat.forEach(function(ca){
+                                        %>
                                 <li class="highlight menu-item animate-dropdown">
-                                    <a title="New Arrivals" href="shop.html">New Arrivals</a>
+                                    <a title="<%=ca.tentheloai%>" href="/showlist_<%=ca.tentheloai%>">
+                                        <%=ca.tentheloai%></a>
                                 </li>
-                                <li class="yamm-tfw menu-item menu-item-has-children animate-dropdown dropdown-submenu">
-                                    <a title="Computers &amp; Laptops" data-toggle="dropdown" class="dropdown-toggle"
-                                        aria-haspopup="true" href="#">Computers
-                                        &#038; Laptops <span class="caret"></span></a>
-                                    <ul role="menu" class=" dropdown-menu">
-                                        <li class="menu-item menu-item-object-static_block animate-dropdown">
-                                            <div class="yamm-content">
-                                                <div class="bg-yamm-content bg-yamm-content-bottom bg-yamm-content-right">
-                                                    <div class="kc-col-container">
-                                                        <div class="kc_single_image">
-                                                            <img src="assets/images/megamenu.jpg" class="" alt="" />
-                                                        </div>
-                                                        <!-- .kc_single_image -->
-                                                    </div>
-                                                    <!-- .kc-col-container -->
-                                                </div>
-                                                <!-- .bg-yamm-content -->
-                                                <div class="row yamm-content-row">
-                                                    <div class="col-md-6 col-sm-12">
-                                                        <div class="kc-col-container">
-                                                            <div class="kc_text_block">
-                                                                <ul>
-                                                                    <li class="nav-title">Computers &amp; Accessories</li>
-                                                                    <li><a href="shop.html">All Computers &amp;
-                                                                            Accessories</a></li>
-                                                                    <li><a href="shop.html">Laptops, Desktops &amp;
-                                                                            Monitors
-                                                                        </a></li>
-                                                                    <li><a href="shop.html">Pen Drives, Hard Drives
-                                                                            &amp;
-                                                                            Memory Cards</a></li>
-                                                                    <li><a href="shop.html">Printers &amp; Ink</a></li>
-                                                                    <li><a href="shop.html">Networking &amp; Internet
-                                                                            Devices
-                                                                        </a></li>
-                                                                    <li><a href="shop.html">Computer Accessories</a></li>
-                                                                    <li><a href="shop.html">Software</a></li>
-                                                                    <li class="nav-divider"></li>
-                                                                    <li>
-                                                                        <a href="#">
-                                                                            <span class="nav-text">All Electronics</span>
-                                                                            <span class="nav-subtext">Discover more
-                                                                                products
-                                                                            </span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <!-- .kc_text_block -->
-                                                        </div>
-                                                        <!-- .kc-col-container -->
-                                                    </div>
-                                                    <!-- .kc_column -->
-                                                    <div class="col-md-6 col-sm-12">
-                                                        <div class="kc-col-container">
-                                                            <div class="kc_text_block">
-                                                                <ul>
-                                                                    <li class="nav-title">Office &amp; Stationery</li>
-                                                                    <li><a href="shop.html">All Office &amp; Stationery</a></li>
-                                                                    <li><a href="shop.html">Pens &amp; Writing</a></li>
-                                                                </ul>
-                                                            </div>
-                                                            <!-- .kc_text_block -->
-                                                        </div>
-                                                        <!-- .kc-col-container -->
-                                                    </div>
-                                                    <!-- .kc_column -->
-                                                </div>
-                                                <!-- .kc_row -->
-                                            </div>
-                                            <!-- .yamm-content -->
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="yamm-tfw menu-item menu-item-has-children animate-dropdown dropdown-submenu">
-                                    <a title="Cameras &amp; Photo" data-toggle="dropdown" class="dropdown-toggle"
-                                        aria-haspopup="true" href="#">Cameras
-                                        &#038; Photo <span class="caret"></span></a>
-                                    <ul role="menu" class=" dropdown-menu">
-                                        <li class="menu-item menu-item-object-static_block animate-dropdown">
-                                            <div class="yamm-content">
-                                                <div class="bg-yamm-content bg-yamm-content-bottom bg-yamm-content-right">
-                                                    <div class="kc-col-container">
-                                                        <div class="kc_single_image">
-                                                            <img src="assets/images/megamenu-1.jpg" class="" alt="" />
-                                                        </div>
-                                                        <!-- .kc_single_image -->
-                                                    </div>
-                                                    <!-- .kc-col-container -->
-                                                </div>
-                                                <!-- .bg-yamm-content -->
-                                                <div class="row yamm-content-row">
-                                                    <div class="col-md-6 col-sm-12">
-                                                        <div class="kc-col-container">
-                                                            <div class="kc_text_block">
-                                                                <ul>
-                                                                    <li class="nav-title">Cameras & Photography</li>
-                                                                    <li><a href="shop.html">All Cameras & Photography</a></li>
-                                                                    <li><a href="shop.html">Point & Shoot Cameras</a></li>
-                                                                    <li><a href="shop.html">Lenses</a></li>
-                                                                    <li><a href="shop.html">Camera Accessories</a></li>
-                                                                    <li><a href="shop.html">Security & Surveillance</a></li>
-                                                                    <li><a href="shop.html">Binoculars & Telescopes</a></li>
-                                                                    <li><a href="shop.html">Camcorders</a></li>
-                                                                    <li class="nav-divider"></li>
-                                                                    <li>
-                                                                        <a href="#">
-                                                                            <span class="nav-text">All Electronics</span>
-                                                                            <span class="nav-subtext">Discover more
-                                                                                products
-                                                                            </span>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <!-- .kc_text_block -->
-                                                        </div>
-                                                        <!-- .kc-col-container -->
-                                                    </div>
-                                                    <!-- .kc_column -->
-                                                    <div class="col-md-6 col-sm-12">
-                                                        <div class="kc-col-container">
-                                                            <div class="kc_text_block">
-                                                                <ul>
-                                                                    <li class="nav-title">Audio & Video</li>
-                                                                    <li><a href="shop.html">All Audio & Video</a></li>
-                                                                    <li><a href="shop.html">Headphones & Speakers</a></li>
-                                                                    <li><a href="shop.html">Home Entertainment Systems</a></li>
-                                                                    <li><a href="shop.html">MP3 & Media Players</a></li>
-                                                                </ul>
-                                                            </div>
-                                                            <!-- .kc_text_block -->
-                                                        </div>
-                                                        <!-- .kc-col-container -->
-                                                    </div>
-                                                    <!-- .kc_column -->
-                                                </div>
-                                                <!-- .kc_row -->
-                                            </div>
-                                            <!-- .yamm-content -->
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item animate-dropdown">
-                                    <a title="Gadgets" href="shop.html">Gadgets</a>
-                                </li>
-                                <li class="menu-item animate-dropdown">
-                                    <a title="Virtual Reality" href="shop.html">Virtual Reality</a>
+                                <%
+                                    })%>
+                                <li class="highlight menu-item animate-dropdown">
+                                    <a title="Kiểm tra đơn hàng" href="/track_order">Kiểm tra đơn hàng</a>
                                 </li>
                             </ul>
                         </div>
@@ -313,11 +173,11 @@
                     <!-- .handheld-navigation -->
                     <div class="site-search">
                         <div class="widget woocommerce widget_product_search">
-                            <form role="search" method="get" class="woocommerce-product-search" action="home-v1.html">
+                            <form role="search" method="POST" class="woocommerce-product-search" action="/csearch_book">
                                 <label class="screen-reader-text" for="woocommerce-product-search-field-0">Search for:
                                 </label>
                                 <input type="search" id="woocommerce-product-search-field-0" class="search-field"
-                                    placeholder="Search products&hellip;" value="" name="s" />
+                                    placeholder="Search products&hellip;" value="" name="stieude" />
                                 <input type="submit" value="Search" />
                                 <input type="hidden" name="post_type" value="product" />
                             </form>

@@ -53,7 +53,22 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  var Cart = require("./controller/cart");
+  if (!req.session.cart) {
+    return res.render("../views/404.ejs", {
+      allBooks: [],
+      products: [],
+      totalPrice: 0,
+      totalQty: 0
+    });
+  }
+  var cart = new Cart(req.session.cart);
+  res.render("../views/error.ejs", {
+    allBooks: [],
+    products: cart.generateArray(),
+    totalPrice: cart.totalPrice,
+    totalQty: cart.totalQty
+  });
 });
-
+app.locals.cat = require('./db/test/category/category_data.json');
 module.exports = app;

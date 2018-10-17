@@ -4,13 +4,12 @@ const awsconfig = require('../../../aws-config.json');
 const accessKeyId = awsconfig.AWS.accessKeyId;
 const secretAccessKey = awsconfig.AWS.secretAccessKey;
 const region = awsconfig.AWS.region;
-var endpoint = "http://localhost:8000"
 AWS.config.update({
     accessKeyId,
     secretAccessKey,
-    endpoint,
     region
 });
+
 var dynamodb = new AWS.DynamoDB();
 
 var params = {

@@ -1,21 +1,21 @@
 [{
     "_categoryID": "1",
-    "tentheloai": "truyện ngắn",
+    "tentheloai": "Văn học",
     "hinhanh": "image/1.sms"
 }, {
     "_categoryID": "2",
-    "tentheloai": "truyện dài",
+    "tentheloai": "Thiếu nhi",
     "hinhanh": "image/2.sms"
 }, {
     "_categoryID": "3",
-    "tentheloai": "truyện tình cảm",
+    "tentheloai": "Học ngoại ngữ",
     "hinhanh": "image/3.sms"
 }, {
     "_categoryID": "4",
-    "tentheloai": "truyện kinh dị",
+    "tentheloai": "Kỹ năng - sống đẹp",
     "hinhanh": "image/4.sms"
 }, {
     "_categoryID": "5",
-    "tentheloai": "sách giáo khoa",
+    "tentheloai": "Kinh tế",
     "hinhanh": "image/5.sms"
 }]

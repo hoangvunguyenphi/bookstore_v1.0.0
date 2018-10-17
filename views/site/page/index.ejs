@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en-US" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>Techmarket HTML</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap-grid.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap-reboot.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/font-techmarket.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/slick.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/techmarket-font-awesome.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/slick-style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/animate.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="assets/css/colors/green.css" media="all" />
+
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
+    <link rel="shortcut icon" href="assets/images/fav-icon.png">
+</head>
+
+<body class="organic-market page-template-template-homepage-v1 woocommerce-active">
+    <div id="page" class="hfeed site">
+        <% include ../slayout/headerhome.ejs %>
+        <!-- .header-v1 -->
+        <!-- ============================================================= Header End ============================================================= -->
+        <div id="content" class="site-content">
+            <div class="col-full">
+                <div class="row">
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main">
+                            <div class="home-v1-slider home-slider" style="height:500px">
+                                <div class="slider-1" style="background-image: url(assets/images/slider/home-v9-background.jpg);">
+                                    <div class="caption">
+                                        <div class="title">Khuyến mãi sách hay giá 6k</div>
+                                        <div class="sub-title">Sách hay, mẹ đọc, chú hàng xóm ngủ.</div>
+                                        <div class="button">Xem ngay
+                                            <i class="tm tm-long-arrow-right"></i>
+                                        </div>
+                                        <div class="bottom-caption">Tặng kèm bộ ghép hình cho bé khi tổng tiền thanh
+                                            toán trên 99k</div>
+                                    </div>
+                                </div>
+                                <!-- .slider-1 -->
+                                <div class="slider-1 slider-2" style="background-image: url(assets/images/slider/home-v9-background.jpg);">
+                                    <div class="caption">
+                                        <div class="title">Đại lễ sách
+                                            <br> mừng ngày nhà giáo
+                                            <br> Việt Nam</div>
+                                        <div class="sub-title">Sách hay mới cập nhật
+                                            <br> nhiều chủ đề.</div>
+                                        <div class="button">Xem ngay
+                                            <i class="tm tm-long-arrow-right"></i>
+                                        </div>
+                                        <div class="bottom-caption">Tặng kèm bộ ghép hình cho bé khi tổng tiền thanh
+                                            toán trên 99k</div>
+                                    </div>
+                                </div>
+                                <!-- .slider-2 -->
+                            </div>
+                            <!-- .home-v1-slider -->
+                            <div class="features-list">
+                                <div class="features">
+                                    <div class="feature">
+                                        <div class="media">
+                                            <i class="feature-icon d-flex mr-3 tm tm-free-delivery"></i>
+                                            <div class="media-body feature-text">
+                                                <h5 class="mt-0">Giao Hàng</h5>
+                                                <span> Nhanh</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- .feature -->
+                                    <div class="feature">
+                                        <div class="media">
+                                            <i class="feature-icon d-flex mr-3 tm tm-feedback"></i>
+                                            <div class="media-body feature-text">
+                                                <h5 class="mt-0">99% Sách Mới Nhất</h5>
+                                                <span> Hiện Nay</span>
+                                            </div>
+                                        </div>
+                                        <!-- .media -->
+                                    </div>
+                                    <!-- .feature -->
+                                    <div class="feature">
+                                        <div class="media">
+                                            <i class="feature-icon d-flex mr-3 tm tm-free-return"></i>
+                                            <div class="media-body feature-text">
+                                                <h5 class="mt-0">365 Days</h5>
+                                                <span>for free return</span>
+                                            </div>
+                                        </div>
+                                        <!-- .media -->
+                                    </div>
+                                    <!-- .feature -->
+                                    <div class="feature">
+                                        <div class="media">
+                                            <i class="feature-icon d-flex mr-3 tm tm-safe-payments"></i>
+                                            <div class="media-body feature-text">
+                                                <h5 class="mt-0">Payment</h5>
+                                                <span>Secure System</span>
+                                            </div>
+                                        </div>
+                                        <!-- .media -->
+                                    </div>
+                                    <!-- .feature -->
+                                    <div class="feature">
+                                        <div class="media">
+                                            <i class="feature-icon d-flex mr-3 tm tm-best-brands"></i>
+                                            <div class="media-body feature-text">
+                                                <h5 class="mt-0">Only Best</h5>
+                                                <span>Brands</span>
+                                            </div>
+                                        </div>
+                                        <!-- .media -->
+                                    </div>
+                                    <!-- .feature -->
+                                </div>
+                                <!-- .features -->
+                            </div>
+                            <%
+                            function formatNumber(nStr, decSeperate, groupSeperate) {
+                                nStr += '';
+                                x = nStr.split(decSeperate);
+                                x1 = x[0];
+                                x2 = x.length > 1 ? '.' + x[1] : '';
+                                var rgx = /(\d+)(\d{3})/;
+                                while (rgx.test(x1)) {
+                                    x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+                                }
+                                return x1 + x2;
+                            }
+                            %>
+                            <!-- /.features list -->
+                            <div class="section-deals-carousel-and-products-carousel-tabs row">
+                                <section class="column-1 deals-carousel" id="sale-with-timer-carousel">
+                                    <div class="deals-carousel-inner-block">
+                                        <header class="section-header">
+                                            <h2 class="section-title">
+                                                <strong>Khuyến mãi</strong> trong tuần</h2>
+                                            <nav class="custom-slick-nav"></nav>
+                                        </header>
+                                        <!-- /.section-header -->
+                                        <div class="sale-products-with-timer-carousel deals-carousel-v1">
+                                            <div class="products-carousel">
+                                                <div class="container-fluid">
+                                                    <div class="woocommerce columns-1">
+                                                        <div class="products" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                            data-slick="{&quot;infinite&quot;:false,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:false,&quot;arrows&quot;:true,&quot;prevArrow&quot;:&quot;&lt;a href=\&quot;#\&quot;&gt;&lt;i class=\&quot;tm tm-arrow-left\&quot;&gt;&lt;\/i&gt;&lt;\/a&gt;&quot;,&quot;nextArrow&quot;:&quot;&lt;a href=\&quot;#\&quot;&gt;&lt;i class=\&quot;tm tm-arrow-right\&quot;&gt;&lt;\/i&gt;&lt;\/a&gt;&quot;,&quot;appendArrows&quot;:&quot;#sale-with-timer-carousel .custom-slick-nav&quot;}">
+                                                            <% allBooks.forEach(function(book){
+                                                                book.danhdau.forEach(function(dd){
+                                                                    if(dd=='weekdeal'){
+                                                                        %>
+                                                            <div class="sale-product-with-timer product">
+                                                                <a class="woocommerce-LoopProduct-link" href="/product/<%=book.linkseo%>_<%=book._bookID%>">
+                                                                    <div class="sale-product-with-timer-header">
+                                                                        <div class="price-and-title">
+                                                                            <span class="price">
+                                                                                <ins>
+                                                                                    <span class="woocommerce-Price-amount amount">
+                                                                                        <%=formatNumber(book.gia,'.',',')%><span
+                                                                                            class="woocommerce-Price-currencySymbol">₫</span>
+                                                                                    </span>
+                                                                                </ins>
+                                                                                <del>
+                                                                                    <span class="woocommerce-Price-amount amount">
+                                                                                        <%=formatNumber(book.gia*1.2,'.',',')%>
+                                                                                        <span class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                                </del>
+                                                                            </span>
+                                                                            <!-- /.price -->
+                                                                            <h2 class="woocommerce-loop-product__title">
+                                                                                <%=book.tieude %>
+                                                                            </h2>
+                                                                        </div>
+                                                                        <!-- /.price-and-title -->
+                                                                        <div class="sale-label-outer">
+                                                                            <div class="sale-saved-label">
+                                                                                <span class="saved-label-text">Tiết
+                                                                                    kiệm</span>
+                                                                                <span class="saved-label-amount">
+                                                                                    <span class="woocommerce-Price-amount amount">
+
+                                                                                        <%=formatNumber((book.gia*1.2) - book.gia,'.',',')%><span
+                                                                                            class="woocommerce-Price-currencySymbol">₫</span>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <!-- /.sale-saved-label -->
+                                                                        </div>
+                                                                        <!-- /.sale-label-outer -->
+                                                                    </div>
+                                                                    <!-- /.sale-product-with-timer-header -->
+                                                                    <img width="224" height="197" alt="" class="wp-post-image"
+                                                                        src="<%=book.hinhanh[0]%>">
+                                                                    <div class="deal-progress">
+                                                                        <div class="deal-stock">
+                                                                            <div class="stock-available">Hàng sẵn có:
+                                                                                <strong>1000</strong>
+                                                                            </div>
+                                                                        </div>
+                                                                        <!-- /.deal-stock -->
+                                                                        <div class="progress">
+                                                                            <span style="width:0%" class="progress-bar">0</span>
+                                                                        </div>
+                                                                        <!-- /.progress -->
+                                                                    </div>
+                                                                    <!-- /.deal-progress -->
+                                                                    <div class="deal-countdown-timer">
+                                                                        <div class="marketing-text">
+                                                                            <span class="line-1">Nhanh tay!</span>
+
+                                                                        </div>
+                                                                        <!-- /.marketing-text
+                                                                        <span class="deal-time-diff" style="display:none;">28800</span> -->
+                                                                        <!-- <div class="deal-countdown countdown"></div> -->
+                                                                    </div>
+                                                                    <div class="hover-area" style="position: relative; padding-top: 20px;">
+                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                            rel="nofollow">Add to cart</a>
+                                                                    </div>
+                                                                    <!-- /.deal-countdown-timer -->
+                                                                </a>
+                                                                <!-- /.woocommerce-LoopProduct-link -->
+                                                            </div>
+                                                            <!-- /.sale-product-with-timer -->
+                                                            <% } })
+                                                                        }) %>
+                                                        </div>
+                                                        <!-- /.products -->
+                                                    </div>
+                                                    <!-- /.woocommerce -->
+                                                </div>
+                                                <!-- /.container-fluid -->
+                                            </div>
+                                            <!-- /.slick-list -->
+                                        </div>
+                                        <!-- /.sale-products-with-timer-carousel -->
+                                        <footer class="section-footer">
+                                            <nav class="custom-slick-pagination">
+                                                <a class="slider-prev left" href="#" data-target="#sale-with-timer-carousel .products">
+                                                    <i class="tm tm-arrow-left"></i>Khuyến mãi trước</a>
+                                                <a class="slider-next right" href="#" data-target="#sale-with-timer-carousel .products">
+                                                    Khuyến mãi tiếp theo<i class="tm tm-arrow-right"></i></a>
+                                            </nav>
+                                        </footer>
+                                        <!-- /.section-footer -->
+                                    </div>
+                                    <!-- /.deals-carousel-inner-block -->
+                                </section>
+                                <!-- /.deals-carousel -->
+                                <section class="column-2 section-products-carousel-tabs tab-carousel-1">
+                                    <div class="section-products-carousel-tabs-wrap">
+                                        <header class="section-header">
+                                            <ul role="tablist" class="nav justify-content-end">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" href="#tab-5a0483f2e86980" data-toggle="tab">
+                                                        Mới về
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link " href="#tab-5a0483f2e86981" data-toggle="tab">
+                                                        Đang khuyến mãi
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link " href="#tab-5a0483f2e86982" data-toggle="tab">Phổ
+                                                        biến
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </header>
+                                        <!-- .section-header -->
+                                        <div class="tab-content">
+                                            <div id="tab-5a0483f2e86980" class="tab-pane active" role="tabpanel">
+                                                <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                    data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:5,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:true,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:480,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:1023,&quot;settings&quot;:{&quot;slidesPerRow&quot;:2}},{&quot;breakpoint&quot;:1169,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1400,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}}]}">
+                                                    <div class="container-fluid">
+                                                        <div class="woocommerce">
+                                                            <div class="products">
+                                                                <% allBooks.forEach(function(book){
+                                                                        book.danhdau.forEach(function(dd){
+                                                                            if(dd=='new'){
+                                                                    %>
+                                                                <div class="product">
+                                                                    <div class="yith-wcwl-add-to-wishlist">
+                                                                        <a rel="nofollow" class="add_to_wishlist">
+                                                                            Add to Wishlist</a>
+                                                                    </div>
+                                                                    <a href="/product/<%=book.linkseo%>_<%=book._bookID%>"
+                                                                        class="woocommerce-LoopProduct-link">
+                                                                        <img src="<%=book.hinhanh[0]%>" class="wp-post-image"
+                                                                            alt="">
+                                                                        <span class="price">
+                                                                            <ins>
+                                                                                <span class="amount"> </span>
+                                                                            </ins>
+                                                                            <span class="amount">
+                                                                                <%=formatNumber(book.gia,'.',',')%><span
+                                                                                    class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                        </span>
+                                                                        <!-- /.price -->
+                                                                        <h2 class="woocommerce-loop-product__title">
+                                                                            <%=book.tieude %>
+                                                                        </h2>
+                                                                    </a>
+                                                                    <div class="hover-area">
+                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                            rel="nofollow">Add to cart</a>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.product-outer -->
+                                                                <% } })
+                                                            }) %>
+                                                            </div>
+                                                        </div>
+                                                        <!-- .woocommerce -->
+                                                    </div>
+                                                    <!-- .container-fluid -->
+                                                </div>
+                                                <!-- .products-carousel -->
+                                            </div>
+                                            <!-- .tab-pane -->
+                                            <div id="tab-5a0483f2e86981" class="tab-pane " role="tabpanel">
+                                                <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                    data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:5,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:true,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:480,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:1023,&quot;settings&quot;:{&quot;slidesPerRow&quot;:2}},{&quot;breakpoint&quot;:1169,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1400,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}}]}">
+                                                    <div class="container-fluid">
+                                                        <div class="woocommerce">
+                                                            <div class="products">
+                                                                <% allBooks.forEach(function(book){
+                                                                        book.danhdau.forEach(function(dd){
+                                                                            if(dd=='sale'){
+                                                                    %>
+                                                                <div class="product">
+                                                                    <div class="yith-wcwl-add-to-wishlist">
+                                                                        <a rel="nofollow" class="add_to_wishlist">
+                                                                            Add to Wishlist</a>
+                                                                    </div>
+                                                                    <a href="/product/<%=book.linkseo%>_<%=book._bookID%>"
+                                                                        class="woocommerce-LoopProduct-link">
+                                                                        <img src="<%=book.hinhanh[0]%>" class="wp-post-image"
+                                                                            alt="">
+                                                                        <span class="price">
+                                                                            <ins>
+                                                                                <span class="amount"> </span>
+                                                                            </ins>
+                                                                            <span class="amount">
+                                                                                <%=formatNumber(book.gia,'.',',')%><span
+                                                                                    class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                        </span>
+                                                                        <!-- /.price -->
+                                                                        <h2 class="woocommerce-loop-product__title">
+                                                                            <%=book.tieude %>
+                                                                        </h2>
+                                                                    </a>
+                                                                    <div class="hover-area">
+                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                            rel="nofollow">Add to cart</a>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.product-outer -->
+                                                                <% } })
+                                                            }) %>
+
+                                                            </div>
+                                                        </div>
+                                                        <!-- .woocommerce -->
+                                                    </div>
+                                                    <!-- .container-fluid -->
+                                                </div>
+                                                <!-- .products-carousel -->
+                                            </div>
+                                            <!-- .tab-pane -->
+                                            <div id="tab-5a0483f2e86982" class="tab-pane " role="tabpanel">
+                                                <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                    data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:5,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:true,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:480,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:1023,&quot;settings&quot;:{&quot;slidesPerRow&quot;:2}},{&quot;breakpoint&quot;:1169,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1400,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}}]}">
+                                                    <div class="container-fluid">
+                                                        <div class="woocommerce">
+                                                            <div class="products">
+                                                                <% allBooks.forEach(function(book){
+                                                                        book.danhdau.forEach(function(dd){
+                                                                            if(dd=='hot'){
+                                                                    %>
+                                                                <div class="product">
+                                                                    <div class="yith-wcwl-add-to-wishlist">
+                                                                        <a rel="nofollow" class="add_to_wishlist">
+                                                                            Add to Wishlist</a>
+                                                                    </div>
+                                                                    <a href="/product/<%=book.linkseo%>_<%=book._bookID%>"
+                                                                        class="woocommerce-LoopProduct-link">
+                                                                        <img src="<%=book.hinhanh[0]%>" class="wp-post-image"
+                                                                            alt="">
+                                                                        <span class="price">
+                                                                            <ins>
+                                                                                <span class="amount"> </span>
+                                                                            </ins>
+                                                                            <span class="amount">
+                                                                                <%=formatNumber(book.gia,'.',',')%><span
+                                                                                    class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                        </span>
+                                                                        <!-- /.price -->
+                                                                        <h2 class="woocommerce-loop-product__title">
+                                                                            <%=book.tieude %>
+                                                                        </h2>
+                                                                    </a>
+                                                                    <div class="hover-area">
+                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                            rel="nofollow">Add to cart</a>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.product-outer -->
+                                                                <% } })
+                                                            }) %>
+                                                            </div>
+                                                        </div>
+                                                        <!-- .woocommerce -->
+                                                    </div>
+                                                    <!-- .container-fluid -->
+                                                </div>
+                                                <!-- .products-carousel -->
+                                            </div>
+                                            <!-- .tab-pane -->
+                                        </div>
+                                        <!-- .tab-content -->
+                                    </div>
+                                    <!-- .section-products-carousel-tabs-wrap -->
+                                </section>
+                                <!-- .section-products-carousel-tabs -->
+                            </div>
+                            <div class="fullwidth-notice stretch-full-width">
+                                <div class="col-full">
+                                    <p class="message">Download our new app today! Dont miss our mobile-only offers and
+                                        shop with Android Play.</p>
+                                </div>
+                                <!-- .col-full -->
+                            </div>
+                            <!-- .fullwidth-notice -->
+                            <section class="section-top-categories section-categories-carousel" id="categories-carousel-1">
+                                <header class="section-header">
+                                    <h4 class="pre-title">Featured</h4>
+                                    <h2 class="section-title">Tất cả các thể loại
+                                    </h2>
+                                    <nav class="custom-slick-nav"></nav>
+                                    <!-- .custom-slick-nav -->
+                                    <a class="readmore-link" href="#">Tất cả</a>
+                                </header>
+                                <!-- .section-header -->
+                                <div class="product-categories-1 product-categories-carousel" data-ride="tm-slick-carousel"
+                                    data-wrap=".products" data-slick="{&quot;infinite&quot;:false,&quot;slidesToShow&quot;:5,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:false,&quot;arrows&quot;:true,&quot;prevArrow&quot;:&quot;&lt;a href=\&quot;#\&quot;&gt;&lt;i class=\&quot;tm tm-arrow-left\&quot;&gt;&lt;\/i&gt;&lt;\/a&gt;&quot;,&quot;nextArrow&quot;:&quot;&lt;a href=\&quot;#\&quot;&gt;&lt;i class=\&quot;tm tm-arrow-right\&quot;&gt;&lt;\/i&gt;&lt;\/a&gt;&quot;,&quot;appendArrows&quot;:&quot;#categories-carousel-1 .custom-slick-nav&quot;,&quot;responsive&quot;:[{&quot;breakpoint&quot;:480,&quot;settings&quot;:{&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1}},{&quot;breakpoint&quot;:1200,&quot;settings&quot;:{&quot;slidesToShow&quot;:2,&quot;slidesToScroll&quot;:2}},{&quot;breakpoint&quot;:1400,&quot;settings&quot;:{&quot;slidesToShow&quot;:4,&quot;slidesToScroll&quot;:4}}]}">
+                                    <div class="woocommerce columns-5">
+                                        <div class="products">
+                                            <%cat.forEach(function(ca){
+                                            %>
+                                            <div class="product-category product">
+                                                <a href="/showlist_<%=ca.tentheloai%>">
+                                                    <img width="224" height="197" src='https://s3-us-west-2.amaz/onaws.com/da2-book/<%=ca.tentheloai%>.jpg'>
+                                                    <h2 class="woocommerce-loop-category__title">
+                                                        <%=ca.tentheloai%>
+                                                    </h2>
+                                                </a>
+                                            </div>
+                                            <!-- .product-category -->
+                                            <%
+                                        });
+                                        %>
+                                        </div>
+                                        <!-- .products -->
+                                    </div>
+                                    <!-- .woocommerce -->
+                                </div>
+                                <!-- .product-categories-carousel -->
+                            </section>
+                            <!-- .section-categories-carousel -->
+                            <div class="banners">
+                                <div class="row">
+                                    <div class="banner banner-long text-in-left">
+                                        <a href="shop.html">
+                                            <div style="background-size: cover; background-position: center center; background-image: url( assets/images/organic/organic-banner1.jpg); height: 259px;"
+                                                class="banner-bg">
+                                                <div class="caption">
+                                                    <div class="banner-info">
+                                                        <h3 class="title">
+                                                            <strong>Buy one. Get One.</strong>
+                                                            <br> 50% off for selected products in Fitness category.</h3>
+                                                    </div>
+                                                    <!-- /.banner-info -->
+                                                    <span class="banner-action button">Browse</span>
+                                                </div>
+                                                <!-- /.caption -->
+                                            </div>
+                                            <!-- /.banner-bg -->
+                                        </a>
+                                    </div>
+                                    <!-- /.banner -->
+                                    <div class="banner banner-short text-in-left">
+                                        <a href="shop.html">
+                                            <div style="background-size: cover; background-position: center center; background-image: url( assets/images/organic/organic-banner2.jpg ); height: 259px;"
+                                                class="banner-bg">
+                                                <div class="caption">
+                                                    <div class="banner-info">
+                                                        <h3 class="title">
+                                                            <strong>Chocolate?</strong>
+                                                            <br> Kitchen Hazelnut.</h3>
+                                                    </div>
+                                                    <!-- /.banner-info -->
+                                                    <span class="price">$34.99</span>
+                                                    <span class="banner-action button">Buy Now</span>
+                                                </div>
+                                                <!-- /.caption -->
+                                            </div>
+                                            <!-- /.banner-bg -->
+                                        </a>
+                                    </div>
+                                    <!-- /.banner -->
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <section class="section-products-carousel-tabs techmarket-tabs">
+                                <div class="section-products-carousel-tabs-wrap">
+                                    <header class="section-header">
+                                        <h2 class="section-title">Thể loại hot</h2>
+                                        <ul role="tablist" class="nav justify-content-end">
+                                            <li class="nav-item"><a class="nav-link active" href="#tab-59f89f0ad18d70"
+                                                    data-toggle="tab">Kinh tế</a></li>
+                                            <li class="nav-item"><a class="nav-link " href="#tab-59f89f0ad18d71"
+                                                    data-toggle="tab">Văn học</a></li>
+                                            <li class="nav-item"><a class="nav-link " href="#tab-59f89f0ad18d72"
+                                                    data-toggle="tab">Thiếu nhi</a></li>
+                                            <li class="nav-item"><a class="nav-link " href="#tab-59f89f0ad18d73"
+                                                    data-toggle="tab">Kỹ năng &amp; Sống đẹp</a></li>
+                                        </ul>
+                                    </header>
+                                    <div class="tab-content">
+                                        <div id="tab-59f89f0ad18d70" class="tab-pane active" role="tabpanel">
+                                            <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:7,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:false,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:766,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:780,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}},{&quot;breakpoint&quot;:1200,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1700,&quot;settings&quot;:{&quot;slidesPerRow&quot;:5}}]}">
+                                                <div class="container-fluid">
+                                                    <div class="woocommerce columns-7">
+                                                        <div class="products">
+                                                            <% allBooks.forEach(function(book){
+                                                                        if(book.theloai=='Kinh tế'){
+                                                                            %>
+                                                            <div class="product">
+                                                                <div class="yith-wcwl-add-to-wishlist">
+                                                                    <a rel="nofollow" class="add_to_wishlist">
+                                                                        Add to Wishlist</a>
+                                                                </div>
+                                                                <a href="/product/<%=book.linkseo%>_<%=book._bookID%>"
+                                                                    class="woocommerce-LoopProduct-link">
+                                                                    <img src="<%=book.hinhanh[0]%>" class="wp-post-image"
+                                                                        alt="">
+                                                                    <span class="price">
+                                                                        <ins>
+                                                                            <span class="amount"> </span>
+                                                                        </ins>
+                                                                        <span class="amount">
+                                                                            <%=formatNumber(book.gia,'.',',')%><span
+                                                                                class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                    </span>
+                                                                    <!-- /.price -->
+                                                                    <h2 class="woocommerce-loop-product__title">
+                                                                        <%=book.tieude %>
+                                                                    </h2>
+                                                                </a>
+                                                                <div class="hover-area">
+                                                                    <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        rel="nofollow">Add to cart</a>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.product-outer -->
+                                                            <%}})%>
+                                                        </div>
+                                                    </div>
+                                                    <!-- .woocommerce -->
+                                                </div>
+                                                <!-- .container-fluid -->
+                                            </div>
+                                            <!-- .products-carousel -->
+                                        </div>
+                                        <!-- .tab-pane -->
+                                        <div id="tab-59f89f0ad18d71" class="tab-pane " role="tabpanel">
+                                            <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:7,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:false,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:766,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:780,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}},{&quot;breakpoint&quot;:1200,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1700,&quot;settings&quot;:{&quot;slidesPerRow&quot;:5}}]}">
+                                                <div class="container-fluid">
+                                                    <div class="woocommerce columns-5">
+                                                        <div class="products">
+                                                            <% allBooks.forEach(function(book){
+                                                                    if(book.theloai=='Văn học'){
+                                                                        %>
+                                                            <div class="product">
+                                                                <div class="yith-wcwl-add-to-wishlist">
+                                                                    <a rel="nofollow" class="add_to_wishlist">
+                                                                        Add to Wishlist</a>
+                                                                </div>
+                                                                <a href="/product/<%=book.linkseo%>_<%=book._bookID%>"
+                                                                    class="woocommerce-LoopProduct-link">
+                                                                    <img src="<%=book.hinhanh[0]%>" class="wp-post-image"
+                                                                        alt="">
+                                                                    <span class="price">
+                                                                        <ins>
+                                                                            <span class="amount"> </span>
+                                                                        </ins>
+                                                                        <span class="amount">
+                                                                            <%=formatNumber(book.gia,'.',',')%><span
+                                                                                class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                    </span>
+                                                                    <!-- /.price -->
+                                                                    <h2 class="woocommerce-loop-product__title">
+                                                                        <%=book.tieude %>
+                                                                    </h2>
+                                                                </a>
+                                                                <div class="hover-area">
+                                                                    <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        rel="nofollow">Add to cart</a>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.product-outer -->
+                                                            <%}})%>
+                                                        </div>
+                                                    </div>
+                                                    <!-- .woocommerce -->
+                                                </div>
+                                                <!-- .container-fluid -->
+                                            </div>
+                                            <!-- .products-carousel -->
+                                        </div>
+                                        <!-- .tab-pane -->
+                                        <div id="tab-59f89f0ad18d72" class="tab-pane " role="tabpanel">
+                                            <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:7,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:false,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:766,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:780,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}},{&quot;breakpoint&quot;:1200,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1700,&quot;settings&quot;:{&quot;slidesPerRow&quot;:5}}]}">
+                                                <div class="container-fluid">
+                                                    <div class="woocommerce columns-5">
+                                                        <div class="products">
+                                                            <% allBooks.forEach(function(book){
+                                                                    if(book.theloai=='Thiếu nhi'){
+                                                                        %>
+                                                            <div class="product">
+                                                                <div class="yith-wcwl-add-to-wishlist">
+                                                                    <a rel="nofollow" class="add_to_wishlist">
+                                                                        Add to Wishlist</a>
+                                                                </div>
+                                                                <a href="/product/<%=book.linkseo%>_<%=book._bookID%>"
+                                                                    class="woocommerce-LoopProduct-link">
+                                                                    <img src="<%=book.hinhanh[0]%>" class="wp-post-image"
+                                                                        alt="">
+                                                                    <span class="price">
+                                                                        <ins>
+                                                                            <span class="amount"> </span>
+                                                                        </ins>
+                                                                        <span class="amount">
+                                                                            <%=formatNumber(book.gia,'.',',')%><span
+                                                                                class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                    </span>
+                                                                    <!-- /.price -->
+                                                                    <h2 class="woocommerce-loop-product__title">
+                                                                        <%=book.tieude %>
+                                                                    </h2>
+                                                                </a>
+                                                                <div class="hover-area">
+                                                                    <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        rel="nofollow">Add to cart</a>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.product-outer -->
+                                                            <%}})%>
+                                                        </div>
+                                                    </div>
+                                                    <!-- .woocommerce -->
+                                                </div>
+                                                <!-- .container-fluid -->
+                                            </div>
+                                            <!-- .products-carousel -->
+                                        </div>
+                                        <!-- .tab-pane -->
+                                        <div id="tab-59f89f0ad18d73" class="tab-pane " role="tabpanel">
+                                            <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:7,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:false,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:766,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:780,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}},{&quot;breakpoint&quot;:1200,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1700,&quot;settings&quot;:{&quot;slidesPerRow&quot;:5}}]}">
+                                                <div class="container-fluid">
+                                                    <div class="woocommerce columns-5">
+                                                        <div class="products">
+                                                            <% allBooks.forEach(function(book){
+                                                                    if(book.theloai=='Kỹ năng - sống đẹp'){
+                                                                        %>
+                                                            <div class="product">
+                                                                <div class="yith-wcwl-add-to-wishlist">
+                                                                    <a rel="nofollow" class="add_to_wishlist">
+                                                                        Add to Wishlist</a>
+                                                                </div>
+                                                                <a href="/product/<%=book.linkseo%>_<%=book._bookID%>"
+                                                                    class="woocommerce-LoopProduct-link">
+                                                                    <img src="<%=book.hinhanh[0]%>" class="wp-post-image"
+                                                                        alt="">
+                                                                    <span class="price">
+                                                                        <ins>
+                                                                            <span class="amount"> </span>
+                                                                        </ins>
+                                                                        <span class="amount">
+                                                                            <%=formatNumber(book.gia,'.',',')%><span
+                                                                                class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                    </span>
+                                                                    <!-- /.price -->
+                                                                    <h2 class="woocommerce-loop-product__title">
+                                                                        <%=book.tieude %>
+                                                                    </h2>
+                                                                </a>
+                                                                <div class="hover-area">
+                                                                    <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        rel="nofollow">Add to cart</a>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.product-outer -->
+                                                            <%}})%>
+                                                        </div>
+                                                    </div>
+                                                    <!-- .woocommerce -->
+                                                </div>
+                                                <!-- .container-fluid -->
+                                            </div>
+                                            <!-- .products-carousel -->
+                                        </div>
+                                        <!-- .tab-pane -->
+                                        <div id="tab-59f89f0ad18d74" class="tab-pane " role="tabpanel">
+                                            <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:7,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:false,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:766,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:780,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}},{&quot;breakpoint&quot;:1200,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1700,&quot;settings&quot;:{&quot;slidesPerRow&quot;:5}}]}">
+                                                <div class="container-fluid">
+                                                    <div class="woocommerce columns-5">
+                                                        <div class="products">
+                                                            <div class="product">
+                                                                <a href="single-product-fullwidth.html" class="woocommerce-LoopProduct-link">
+                                                                    <img src="assets/images/shoes/6.jpg" class="wp-post-image"
+                                                                        alt="">
+                                                                    <span class="price">
+                                                                        <ins>
+                                                                            <span class="amount"> 789.95</span>
+                                                                        </ins>
+                                                                        <del>
+                                                                            <span class="amount">999.00</span>
+                                                                        </del>
+                                                                        <span class="amount"> </span>
+                                                                    </span>
+                                                                    <!-- /.price -->
+                                                                    <h2 class="woocommerce-loop-product__title">NikeLab
+                                                                        Free Run Motion Fly Knit 2017</h2>
+                                                                </a>
+                                                                <div class="hover-area">
+                                                                    <a class="button add_to_cart_button" href="cart.html"
+                                                                        rel="nofollow">Add to cart</a>
+                                                                    <a class="add-to-compare-link" href="compare.html">Compare</a>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.product-outer -->
+                                                            <div class="product">
+                                                                <a href="single-product-fullwidth.html" class="woocommerce-LoopProduct-link">
+                                                                    <img src="assets/images/shoes/9.jpg" class="wp-post-image"
+                                                                        alt="">
+                                                                    <span class="price">
+                                                                        <ins>
+                                                                            <span class="amount"> </span>
+                                                                        </ins>
+                                                                        <span class="amount"> 456.00</span>
+                                                                    </span>
+                                                                    <!-- /.price -->
+                                                                    <h2 class="woocommerce-loop-product__title">Nike
+                                                                        Air Max Jewell</h2>
+                                                                </a>
+                                                                <div class="hover-area">
+                                                                    <a class="button add_to_cart_button" href="cart.html"
+                                                                        rel="nofollow">Add to cart</a>
+                                                                    <a class="add-to-compare-link" href="compare.html">Compare</a>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /.product-outer -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- .woocommerce -->
+                                                </div>
+                                                <!-- .container-fluid -->
+                                            </div>
+                                            <!-- .products-carousel -->
+                                        </div>
+                                        <!-- .tab-pane -->
+                                    </div>
+                                    <!-- .tab-content -->
+                                </div>
+                                <!-- .section-products-carousel-tabs-wrap -->
+                            </section>
+                            <div class="banner full-width-banner">
+                                <a href="shop.html">
+                                    <div style="background-size: cover; background-position: center center; background-image: url( assets/images/organic/organic-banner3.jpg ); height: 236px;"
+                                        class="banner-bg">
+                                        <div class="caption">
+                                            <div class="banner-info">
+                                                <h3 class="title">
+                                                    <strong>Extremely Portable</strong>, learn
+                                                    <br> to ride in just 3 minutes</h3>
+                                                <h4 class="subtitle">Travel up to 22km in a single charge</h4>
+                                            </div>
+                                            <span class="banner-action button">Browse now
+                                                <i class="feature-icon d-flex ml-4 tm tm-long-arrow-right"></i>
+                                            </span>
+                                        </div>
+                                        <!-- /.caption -->
+                                    </div>
+                                    <!-- /.banner-b -->
+                                </a>
+                                <!-- /.section-header -->
+                            </div>
+                        </main>
+                        <!-- #main -->
+                    </div>
+                    <!-- #primary -->
+                </div>
+                <!-- .row -->
+            </div>
+            <!-- .col-full -->
+        </div>
+        <% include ../slayout/footer.ejs %>
+        <!-- .site-footer -->
+    </div>
+    <script>
+        function formatNumber(nStr, decSeperate, groupSeperate) {
+            nStr += '';
+            x = nStr.split(decSeperate);
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+            }
+            return x1 + x2;
+        }
+    </script>
+    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="assets/js/tether.min.js"></script>
+    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="assets/js/jquery-migrate.min.js"></script>
+    <script type="text/javascript" src="assets/js/hidemaxlistitem.min.js"></script>
+    <script type="text/javascript" src="assets/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="assets/js/hidemaxlistitem.min.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="assets/js/scrollup.min.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="assets/js/waypoints-sticky.min.js"></script>
+    <script type="text/javascript" src="assets/js/pace.min.js"></script>
+    <script type="text/javascript" src="assets/js/slick.min.js"></script>
+    <script type="text/javascript" src="assets/js/scripts.js"></script>
+
+</body>
+
+</html>

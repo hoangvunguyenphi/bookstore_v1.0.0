@@ -5,18 +5,17 @@ const awsconfig = require('../../../aws-config.json');
 const accessKeyId = awsconfig.AWS.accessKeyId;
 const secretAccessKey = awsconfig.AWS.secretAccessKey;
 const region = awsconfig.AWS.region;
-var endpoint = "http://localhost:8000"
+var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  endpoint,
   region
 });
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 console.log("Importing users into DynamoDB. Please wait.");
 
-var allBooks = JSON.parse(fs.readFileSync("./tmp.json", "utf8"));
+var allBooks = JSON.parse(fs.readFileSync("./local_book_data.json", "utf8"));
 allBooks.forEach(function (book) {
   var params = {
     TableName: "DA2Book",
