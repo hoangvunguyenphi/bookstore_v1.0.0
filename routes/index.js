@@ -15,7 +15,7 @@ var multer = require("multer");
 var multerS3 = require("multer-s3");
 var path = require("path");
 
-var awsconfig = require('../aws-config.json');
+var awsconfig = require('../../aws-config.json');
 const accessKeyId = awsconfig.AWS.accessKeyId;
 const secretAccessKey = awsconfig.AWS.secretAccessKey;
 var region = awsconfig.AWS.region;

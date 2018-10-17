@@ -1,5 +1,5 @@
 var AWS = require("aws-sdk");
-var awsconfig = require("../../../aws-config.json");
+const awsconfig = require('../../../../aws-config.json');
 var accessKeyId = awsconfig.AWS.accessKeyId;
 var secretAccessKey = awsconfig.AWS.secretAccessKey;
 var region = awsconfig.AWS.region;
