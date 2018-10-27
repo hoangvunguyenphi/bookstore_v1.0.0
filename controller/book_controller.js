@@ -12,6 +12,7 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
+  endpoint,
   region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
@@ -52,29 +53,7 @@ exports.get_all_book = function (req, res, next) {
     }
   })
 };
-//GET ALL BOOK ADMIN
-exports.get_all_book2 = function (req, res, next) {
-  var params = {
-    TableName: "DA2Book"
-  };
-  docClient.scan(params, onScan);
-
-  function onScan(err, data) {
-    if (err) {
-      console.log(
-        "\nUnable to scan the table. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-      res.render("error");
-    } else {
-      res.render("../views/admin/page/ahome.ejs", {
-        allBooks: data.Items
-      });
-    }
-  }
-};
-
-//GET CHI TIET SP
+//GET CHI TIET SPs
 exports.get_detail_product = function (req, res, next) {
   var sachID = req.params.id;
   console.log("\n_________" + sachID);
@@ -317,6 +296,53 @@ exports.search_book = function (req, res) {
   } else {
     res.redirect("/");
   }
+}
+
+//GET ALL BOOK ADMIN
+exports.get_all_book2 = function (req, res, next) {
+  var params = {
+    TableName: "DA2Book"
+  };
+  docClient.scan(params, onScan);
+
+  function onScan(err, data) {
+    if (err) {
+      console.log(
+        "\nUnable to scan the table. Error JSON:",
+        JSON.stringify(err, null, 2)
+      );
+    } else {
+      console.log(data.Items.length);
+      res.render("../views/admin/page/danh-sach-san-pham.ejs", {
+        allBooks: data.Items
+      });
+    }
+  }
+};
+
+exports.get_detail_product2 = function (req, res) {
+  var sachID = req.params.id;
+  console.log("\n_________" + sachID);
+
+  var params = {
+    TableName: "DA2Book",
+    KeyConditionExpression: "#ma = :id",
+    ExpressionAttributeNames: {
+      "#ma": "_bookID"
+    },
+    ExpressionAttributeValues: {
+      ":id": sachID
+    }
+  };
+  docClient.query(params, function (err, data) {
+    if (err) {
+      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+      res.render("../views/admin/page/chi-tiet-san-pham.ejs", {
+        sachDetail: data.Items,
+      })
+    }
+  });
 }
 // var multer = require("multer");
 // var multerS3 = require("multer-s3");

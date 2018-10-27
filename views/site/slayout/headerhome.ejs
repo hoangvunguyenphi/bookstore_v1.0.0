@@ -35,6 +35,19 @@
                 <!-- /.site-branding -->
                 <!-- ============================================================= End Header Logo ============================================================= -->
                 <% include menu%>
+                <%
+                function formatNumber(nStr, decSeperate, groupSeperate) {
+                    nStr += '';
+                    x = nStr.split(decSeperate);
+                    x1 = x[0];
+                    x2 = x.length > 1 ? '.' + x[1] : '';
+                    var rgx = /(\d+)(\d{3})/;
+                    while (rgx.test(x1)) {
+                        x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+                    }
+                    return x1 + x2;
+                }
+                %>
                 <!-- .departments-menu -->
                 <form class="navbar-search" method="POST" action="/csearch_book">
                     <label class="sr-only screen-reader-text" for="search">Tìm kiếm:</label>
@@ -73,10 +86,10 @@
                         <a class="cart-contents" href="/cart" data-toggle="dropdown" title="View your shopping cart">
                             <i class="tm tm-shopping-bag"></i>
                             <span class="count">
-                                <%=totalQty%></span>
+                                <%=formatNumber(totalQty,'.',',')%> ₫</span>
                             <span class="amount">
                                 <span class="price-label">Giỏ hàng</span>
-                                <%=totalPrice%> đồng</span>
+                                <%=formatNumber(totalPrice,'.',',')%> ₫</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-mini-cart">
                             <li>
@@ -96,7 +109,7 @@
                                                 <span class="quantity">
                                                     <%=itc.qty%> ×
                                                     <span class="woocommerce-Price-amount amount">
-                                                        <%=itc.item.gia%> <span class="woocommerce-Price-currencySymbol">đồng</span></span>
+                                                        <%=formatNumber(itc.item.gia,'.',',')%> <span class="woocommerce-Price-currencySymbol">₫</span></span>
                                                 </span>
                                             </li>
                                             <% });%>
@@ -105,7 +118,7 @@
                                         <p class="woocommerce-mini-cart__total total">
                                             <strong>Tổng tiền:</strong>
                                             <span class="woocommerce-Price-amount amount">
-                                                <%=totalPrice%> <span class="woocommerce-Price-currencySymbol">đồng</span></span>
+                                                <%=formatNumber(totalPrice,'.',',')%> <span class="woocommerce-Price-currencySymbol">₫</span></span>
                                         </p>
                                         <p class="woocommerce-mini-cart__buttons buttons">
                                             <a href="/cart" class="button wc-forward">Xem giỏ hàng</a>

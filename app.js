@@ -54,6 +54,7 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   var Cart = require("./controller/cart");
+  console.log(err);
   if (!req.session.cart) {
     return res.render("../views/404.ejs", {
       allBooks: [],

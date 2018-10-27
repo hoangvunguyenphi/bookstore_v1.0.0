@@ -23,39 +23,64 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
+  endpoint,
   region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
 
-/* GET home page. */
+//Trang chủ
 router.get("/", Book_controller.get_all_book);
 
+//Chi tiết sp
 router.get("/product/*_:id", Book_controller.get_detail_product);
 
+//Thêm vào giỏ hàng với sl=1
 router.get("/addtocart/:id", Cart_controller.add_to_cart);
 // router.post("/addtocart", Cart_controller.add_to_cart);
 
-router.get("/cart", Cart_controller.get_items_cart);
-
-router.post("/updatecart", Cart_controller.update_cart);
-
-router.get("/deletecart/:id", Cart_controller.delete_cart_item);
-
-router.get("/admin", Book_controller.get_all_book2);
-
+//Thêm sản phẩm vào giỏ khi ở trang chi tiết sp với số lượng nhập vào
 router.post("/add_detail_to_cart/:id", Cart_controller.add_to_cart2);
 
-router.post("/editBook/:id", Book_controller.edit_book);
-
-router.get("/deleteBook/:id", Book_controller.delete_book)
-
+//Đi đến đặt hàng
 router.get("/check_out", Cart_controller.check_out)
 
+//Xử lý đặt hàng= thêm order, gửi mail xác nhận
+router.post("/addOrder", Order_controller.add_order);
+
+//Xác nhận order = OTP code 
+router.get("/xacNhanOrder/:codeDef", Order_controller.xacNhanOrder);
+
+//xem sp theo thể loại
 router.get("/showlist_:theloai", Book_controller.show_list_cat)
 
-router.post("/aSearchBook", Book_controller.admin_search_book);
-
+//Tìm kiếm sp
 router.post("/csearch_book", Book_controller.search_book);
+
+//Xem giỏ hàng
+router.get("/cart", Cart_controller.get_items_cart);
+
+//Update số lượng sp trong giỏ
+router.post("/updatecart", Cart_controller.update_cart);
+
+//Xoá sp trong giỏ
+router.get("/deletecart/:id", Cart_controller.delete_cart_item);
+
+//ADMIN
+////////////////////////////////////////////////////////////////////////////////////////
+
+//Admin index
+router.get("/admin", Book_controller.get_all_book2);
+
+router.get("/viewBookDetail_:id", Book_controller.get_detail_product2)
+//Chỉnh sửa sp
+router.post("/admin/editBook/:id", Book_controller.edit_book);
+
+
+//Xoá sp
+router.get("/deleteBook/:id", Book_controller.delete_book)
+
+//Admin search book
+router.post("/aSearchBook", Book_controller.admin_search_book);
 
 var keyImgUpload = "";
 var s3 = new AWS.S3();
@@ -139,8 +164,5 @@ router.post("/addNewBook", upload.single("newImgUpload"),
       }
     });
   });
-
-router.post("/addOrder", Order_controller.add_order);
-router.get("/xacNhanOrder/:codeDef", Order_controller.xacNhanOrder);
 
 module.exports = router;
