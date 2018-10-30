@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "aws-sdk": "^2.309.0",
+    "body-parser": "^1.18.3",
+    "connect-multiparty": "^2.2.0",
     "cookie-parser": "~1.4.3",
     "date-and-time": "^0.6.2",
     "debug": "~2.6.9",

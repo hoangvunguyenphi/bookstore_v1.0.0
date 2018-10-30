@@ -299,6 +299,12 @@ exports.search_book = function (req, res) {
 }
 
 //GET ALL BOOK ADMIN
+exports.addNewBook = function (req, res, next) {
+  res.render("../views/admin/page/addNewBook.ejs");
+};
+
+
+//GET ALL BOOK ADMIN
 exports.get_all_book2 = function (req, res, next) {
   var params = {
     TableName: "DA2Book"
@@ -313,7 +319,7 @@ exports.get_all_book2 = function (req, res, next) {
       );
     } else {
       console.log(data.Items.length);
-      res.render("../views/admin/page/danh-sach-san-pham.ejs", {
+      res.render("../views/admin/page/list-book.ejs", {
         allBooks: data.Items
       });
     }
@@ -338,7 +344,7 @@ exports.get_detail_product2 = function (req, res) {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
-      res.render("../views/admin/page/chi-tiet-san-pham.ejs", {
+      res.render("../views/admin/page/bookDetail.ejs", {
         sachDetail: data.Items,
       })
     }
