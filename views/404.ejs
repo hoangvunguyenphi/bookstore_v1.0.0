@@ -5,20 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>Techmarket HTML</title>
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap-grid.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap-reboot.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/font-techmarket.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/slick.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/techmarket-font-awesome.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/slick-style.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/animate.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="assets/css/colors/green.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-grid.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-reboot.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-techmarket.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/slick.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/techmarket-font-awesome.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/slick-style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/animate.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/colors/green.css" media="all" />
 
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
-    <link rel="shortcut icon" href="assets/images/fav-icon.png">
+    <link rel="shortcut icon" href="/assets/images/fav-icon.png">
 </head>
 
 <body class="page-template-default error-page">
@@ -39,10 +39,15 @@
                         <main id="main" class="site-main">
                             <div class="error404">
                                 <div class="info-404">
-                                    <h2 class="title">404!</h2>
-                                    <p class="lead error-text">Oops! That page can’t be found.</p>
-                                    <p class="lead">Nothing was found at this location. Try searching, or check out the
-                                        links below.</p>
+                                    <p class="lead error-text">
+                                        <%= message %>
+                                    </p>
+                                    <p>
+                                        <%= error.status %>
+                                    </p>
+                                    <p>
+                                        <%= error.stack %>
+                                    </p>
                                     <div class="sub-form-row">
                                         <div class="widget woocommerce widget_product_search">
                                             <form class="search-form">
@@ -67,20 +72,20 @@
         <%include ./site/slayout/footer.ejs%>
     </div>
 
-    <script type="text/javascript" src="assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="assets/js/tether.min.js"></script>
-    <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="assets/js/jquery-migrate.min.js"></script>
-    <script type="text/javascript" src="assets/js/hidemaxlistitem.min.js"></script>
-    <script type="text/javascript" src="assets/js/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="assets/js/hidemaxlistitem.min.js"></script>
-    <script type="text/javascript" src="assets/js/jquery.easing.min.js"></script>
-    <script type="text/javascript" src="assets/js/scrollup.min.js"></script>
-    <script type="text/javascript" src="assets/js/jquery.waypoints.min.js"></script>
-    <script type="text/javascript" src="assets/js/waypoints-sticky.min.js"></script>
-    <script type="text/javascript" src="assets/js/pace.min.js"></script>
-    <script type="text/javascript" src="assets/js/slick.min.js"></script>
-    <script type="text/javascript" src="assets/js/scripts.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/tether.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery-migrate.min.js"></script>
+    <script type="text/javascript" src="/assets/js/hidemaxlistitem.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/assets/js/hidemaxlistitem.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="/assets/js/scrollup.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="/assets/js/waypoints-sticky.min.js"></script>
+    <script type="text/javascript" src="/assets/js/pace.min.js"></script>
+    <script type="text/javascript" src="/assets/js/slick.min.js"></script>
+    <script type="text/javascript" src="/assets/js/scripts.js"></script>
 
 </body>
 
