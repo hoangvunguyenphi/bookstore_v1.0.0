@@ -4,6 +4,7 @@ var fs = require('fs');
 var UUID = require("uuid/v4");
 var date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
+var helpers = require('./helpers')
 var awsconfig = require("../../aws-config.json");
 var accessKeyId = awsconfig.AWS.accessKeyId;
 var secretAccessKey = awsconfig.AWS.secretAccessKey;
@@ -255,22 +256,35 @@ exports.show_list_cat = function (req, res) {
   });
 };
 exports.search_book = function (req, res) {
-  var keySearch = req.body.stieude;
+  var keySearch = helpers.change_alias(req.body.stieude);
   var sltTheloai = req.body.product_cat;
   console.log(keySearch + "-" + sltTheloai);
   if (keySearch.length != 0) {
-    var params = {
-      TableName: "DA2Book",
-      FilterExpression: "contains(#key, :key) and contains(#tl, :tl) ",
-      ExpressionAttributeValues: {
-        ":key": String(keySearch).trim() || " ",
-        ":tl": String(sltTheloai).trim()
-      },
-      ExpressionAttributeNames: {
-        "#key": "tieude",
-        "#tl": "theloai"
-      }
-    };
+    if(sltTheloai === 'tatca'){
+      var params = {
+        TableName: "DA2Book",
+        FilterExpression: "contains(#key, :key)",
+        ExpressionAttributeValues: {
+          ":key": String(keySearch).trim() || " ",
+        },
+        ExpressionAttributeNames: {
+          "#key": "key", // đã thêm attri không dấu vào table
+        }
+      };
+    } else {
+      var params = {
+        TableName: "DA2Book",
+        FilterExpression: "contains(#key, :key) and contains(#tl, :tl) ",
+        ExpressionAttributeValues: {
+          ":key": String(keySearch).trim() || " ",
+          ":tl": String(sltTheloai).trim()
+        },
+        ExpressionAttributeNames: {
+          "#key": "key", // đã thêm attri không dấu vào table
+          "#tl": "theloai"
+        }
+      };
+    }
     docClient.scan(params, function (err, data) {
       if (err) {
         console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
@@ -294,7 +308,44 @@ exports.search_book = function (req, res) {
       }
     });
   } else {
-    res.redirect("/");
+    if(sltTheloai === 'tatca'){
+      var params = {
+        TableName: "DA2Book"
+      }
+    } else {
+      var params = {
+        TableName: "DA2Book",
+        FilterExpression: "contains(#tl, :tl) ",
+        ExpressionAttributeValues: {
+          ":tl": String(sltTheloai).trim()
+        },
+        ExpressionAttributeNames: {
+          "#tl": "theloai"
+        }
+      };
+    }
+    docClient.scan(params, function (err, data) {
+      if (err) {
+        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+      } else {
+        if (!req.session.cart) {
+          return res.render("../views/site/page/list-book-cat.ejs", {
+            products: [],
+            allBooks: data.Items,
+            totalPrice: 0,
+            totalQty: 0
+          });
+        }
+        //ngược lại đang trong phiên session
+        var cart = new Cart(req.session.cart);
+        res.render("../views/site/page/list-book-cat.ejs", {
+          allBooks: data.Items,
+          products: cart.generateArray(),
+          totalPrice: cart.totalPrice,
+          totalQty: cart.totalQty
+        });
+      }
+    });
   }
 }
 

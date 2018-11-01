@@ -1,6 +1,7 @@
 var AWS = require("aws-sdk");
 var fs = require("fs");
 var rename = require('../../../controller/edit_name');
+var helpers = require('../../../controller/helpers')
 const awsconfig = require('../../../../aws-config.json');
 const accessKeyId = awsconfig.AWS.accessKeyId;
 const secretAccessKey = awsconfig.AWS.secretAccessKey;
@@ -9,6 +10,7 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
+  endpoint,
   region
 });
 
@@ -23,6 +25,7 @@ allBooks.forEach(function (book) {
       _bookID: book._bookID,
       tacgia: book.tacgia,
       tieude: book.tieude,
+      key: helpers.change_alias(book.tieude),
       theloai: book.theloai,
       sotrang: book.sotrang,
       SKU: book.SKU,
