@@ -23,7 +23,9 @@
 
 <body class="organic-market page-template-template-homepage-v1 woocommerce-active">
     <div id="page" class="hfeed site">
-        <% include ../slayout/headerhome.ejs %>
+        <div id="specificLoadCart">
+            <% include ../slayout/headerhome.ejs %>
+        </div>
         <!-- .header-v1 -->
         <!-- ============================================================= Header End ============================================================= -->
         <div id="content" class="site-content">
@@ -218,7 +220,7 @@
                                                                         <!-- <div class="deal-countdown countdown"></div> -->
                                                                     </div>
                                                                     <div class="hover-area" style="position: relative; padding-top: 20px;">
-                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        <a class="button add_to_cart_button" OnClick="addToCart('<%=book._bookID%>');"
                                                                             rel="nofollow">Add to cart</a>
                                                                     </div>
                                                                     <!-- /.deal-countdown-timer -->
@@ -830,6 +832,19 @@
                 x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
             }
             return x1 + x2;
+        }
+
+        function addToCart(id){
+            //alert('Clicked: '+id)
+            $.ajax({
+               type: "GET",
+               url: "/addtocart/"+id,
+               success: function(){
+                $('#specificLoadCart').load(' #specificLoadCart')
+                alert('đã thêm vào giỏ hàng')
+               },
+               error: function(){}
+            });
         }
     </script>
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
