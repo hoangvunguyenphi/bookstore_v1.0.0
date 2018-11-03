@@ -25,19 +25,7 @@
     <div id="page" class="hfeed site">
 
         <%include ../slayout/headerhome.ejs%>
-        <%
-        function formatNumber(nStr, decSeperate, groupSeperate) {
-            nStr += '';
-            x = nStr.split(decSeperate);
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
-            }
-            return x1 + x2;
-        }
-        %>
+
         <!-- ============================================================= Header End ============================================================= -->
         <div id="content" class="site-content" tabindex="-1">
             <div class="col-full">
@@ -87,7 +75,7 @@
                                                     <img width="224" height="197" alt="" class="attachment-shop_catalog size-shop_catalog wp-post-image"
                                                         src="<%=book.hinhanh[0]%>">
                                                     <span class="price">
-                                                        <%=formatNumber(book.gia,'.',',')%><span class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                        <%=editName.formatNumber(book.gia,'.',',')%><span class="woocommerce-Price-currencySymbol">₫</span></span>
                                                     </span>
                                                     <h2 class="woocommerce-loop-product__title">
                                                         <%=book.tieude%>

@@ -35,19 +35,6 @@
                 <!-- /.site-branding -->
                 <!-- ============================================================= End Header Logo ============================================================= -->
                 <% include menu%>
-                <%
-                function formatNumber(nStr, decSeperate, groupSeperate) {
-                    nStr += '';
-                    x = nStr.split(decSeperate);
-                    x1 = x[0];
-                    x2 = x.length > 1 ? '.' + x[1] : '';
-                    var rgx = /(\d+)(\d{3})/;
-                    while (rgx.test(x1)) {
-                        x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
-                    }
-                    return x1 + x2;
-                }
-                %>
                 <!-- .departments-menu -->
                 <form class="navbar-search" method="POST" action="/csearch_book">
                     <label class="sr-only screen-reader-text" for="search">Tìm kiếm:</label>
@@ -81,57 +68,15 @@
                     <!-- .input-group -->
                 </form>
                 <!-- .header-wishlist -->
-                <ul id="site-header-cart" class="site-header-cart menu">
-                    <li class="animate-dropdown dropdown ">
-                        <a class="cart-contents" href="/cart" data-toggle="dropdown" title="View your shopping cart">
-                            <i class="tm tm-shopping-bag"></i>
-                            <span class="count">
-                                <%=totalQty%></span>
+                <ul id="site-header-cart" class="site-header-cart my-cart-icon">
+                    <li class="animate-dropdown ">
+                        <a class="cart-contents" title="View your shopping cart" style=" cursor: pointer;">
+                            <span class="tm tm-shopping-bag my-cart-icon">
+                                <span class="badge badge-notify my-cart-badge"></span>
+                            </span>
                             <span class="amount">
-                                <span class="price-label">Giỏ hàng</span>
-                                <%=formatNumber(totalPrice,'.',',')%>
-                                ₫</span>
+                                <span class="price-label">0</span> đồng</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-mini-cart">
-                            <li>
-                                <div class="widget woocommerce widget_shopping_cart">
-                                    <div class="widget_shopping_cart_content">
-                                        <ul class="woocommerce-mini-cart cart_list product_list_widget ">
-                                            <%products.forEach(function(itc){
-                                                    %>
-                                            <li class="woocommerce-mini-cart-item mini_cart_item">
-                                                <a href="/deletecart/<%=itc.item._bookID%>" class="remove" aria-label="Remove this item"
-                                                    data-product_id="65" data-product_sku="">×</a>
-                                                <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
-                                                    <img src="<%=itc.item.hinhanh[0]%>" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image"
-                                                        alt="">
-                                                    <%=itc.item.tieude%>
-                                                </a>
-                                                <span class="quantity">
-                                                    <%=itc.qty%> ×
-                                                    <span class="woocommerce-Price-amount amount">
-                                                        <%=formatNumber(itc.item.gia,'.',',')%> <span class="woocommerce-Price-currencySymbol">₫</span></span>
-                                                </span>
-                                            </li>
-                                            <% });%>
-                                        </ul>
-                                        <!-- .cart_list -->
-                                        <p class="woocommerce-mini-cart__total total">
-                                            <strong>Tổng tiền:</strong>
-                                            <span class="woocommerce-Price-amount amount">
-                                                <%=formatNumber(totalPrice,'.',',')%> <span class="woocommerce-Price-currencySymbol">₫</span></span>
-                                        </p>
-                                        <p class="woocommerce-mini-cart__buttons buttons">
-                                            <a href="/cart" class="button wc-forward">Xem giỏ hàng</a>
-                                            <a href="/check_out" class="button checkout wc-forward">Đặt hàng</a>
-                                        </p>
-                                    </div>
-                                    <!-- .widget_shopping_cart_content -->
-                                </div>
-                                <!-- .widget_shopping_cart -->
-                            </li>
-                        </ul>
-                        <!-- .dropdown-menu-mini-cart -->
                     </li>
                 </ul>
                 <!-- .site-header-cart -->
@@ -199,10 +144,12 @@
                         <!-- .widget -->
                     </div>
                     <!-- .site-search -->
-                    <a class="handheld-header-cart-link has-icon" href="/cart" title="View your shopping cart">
-                        <i class="tm tm-shopping-bag"></i>
-                        <span class="count">
-                            <%=totalQty%></span>
+                    <a class="cart-contents" title="View your shopping cart" style="float: right; cursor: pointer;">
+                        <span class="glyphicon glyphicon-shopping-cart my-cart-icon" style="margin-left: 2px;margin-top: 2px;">
+                            <span class="badge badge-notify my-cart-badge"></span>
+                        </span>
+                        <span class="amount">
+                            <span class="price-label">Your Cart</span>&#036;136.99</span>
                     </a>
                 </div>
                 <!-- /.row -->

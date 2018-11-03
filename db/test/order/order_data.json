@@ -1,42 +1,37 @@
 [{
-    "_orderID": "12312_1@12323_23123",
-    "ngaylaphoadon": "12/3/23",
-    "tennguoinhan": "nguyen phi hoang vu",
-    "sodienthoai": "0122358854",
+    "_orderID": "5837eb48-9509-44d9-82fd-e10513da96d8",
+    "codeDef": "fcc06b71-b4db-417d-866d-62c7d9744e3c",
+    "diachi": "hẻm 491, ngô văn khoai",
     "email": "hoangvunguyenphi@gmail.com",
-    "diachi": "169 Gò vấp HCM",
-    "ghichu": "gói bọc cẩn thận",
-    "tienship": 20000,
+    "ghichu": " ",
+    "ipClient": "192.168.0.2",
     "items": [{
-        "_BookItem": {
-            "item": {
-                "ngayxuatban": "10-2016",
-                "ngonngu": "tv",
-                "ngaythem": "01/09/2018",
-                "dichgia": [],
-                "linkseo": "tuoi-tre-dang-gia-bao-nhieu",
-                "sotrang": 285,
-                "tieude": "Tuổi trẻ đáng giá bao nhiêu",
-                "theloai": [],
-                "hinhanh": [],
-                "nhaxuatban": "Nhà Xuất Bản Hội Nhà Văn",
-                "danhdau": [],
-                "tinhtrang": [],
-                "_bookID": "book03",
-                "kichthuoc": "14 x 20.5 cm",
-                "SKU": "2431864615280",
-                "mota": "Bạn hối tiếc vì",
-                "tacgia": [],
-                "gia": 79000
-            },
-            "price": 79000,
-            "qty": 1
-        },
-        "soluong": 1,
-        "dongia": 72000,
-        "tongtien": 72000
+        "id": "book44",
+        "name": "Tôi Thấy Hoa Vàng Trên Cỏ Xanh (Nguyễn Nhật Ánh)",
+        "summary": "summary 1",
+        "price": 82000,
+        "quantity": 5,
+        "image": "https://pipe.tikicdn.com/cache/550x550/media/catalog/product/t/o/toi_thay_hoa_vang.jpg"
+    }, {
+        "id": "book41",
+        "name": "Bí Mật Tư Duy Triệu Phú (Tái Bản 2015)",
+        "summary": "summary 1",
+        "price": 78000,
+        "quantity": 1,
+        "image": "https://pipe.tikicdn.com/cache/550x550/media/catalog/product/b/i/bi-mat-tu-duy-trieu-phu-a_2.jpg"
+    }, {
+        "id": "book18",
+        "name": "Thỏ Bảy Màu",
+        "summary": "summary 1",
+        "price": 79000,
+        "quantity": 1,
+        "image": "https://pipe.tikicdn.com/cache/550x550/media/catalog/product/i/m/img726.u2469.d20161031.t152122.575763.jpg"
     }],
-    "tongtienthanhtoan": 171000,
-    "tinhtrang": "chuagiao",
-    "ngaythanhtoan": "25/56/12"
+    "ngaylaphoadon": "13/10/2018",
+    "ngaythanhtoan": " ",
+    "sodienthoai": "0962282962",
+    "tennguoinhan": "Hoàng Vũ",
+    "tienship": 1111,
+    "tinhtrang": "Chờ xác nhận",
+    "tongtienthanhtoan": 388000
 }]

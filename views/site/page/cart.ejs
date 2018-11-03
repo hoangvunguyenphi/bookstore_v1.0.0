@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-US" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Techmarket HTML</title>
+    <title>Giỏ hàng</title>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-grid.min.css" media="all" />
@@ -16,8 +16,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/animate.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/colors/green.css" media="all" />
-
-    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
     <link rel="shortcut icon" href="/assets/images/fav-icon.png">
 </head>
 
@@ -81,7 +80,7 @@
                                                             <td data-title="Price" class="product-price">
                                                                 <span class="woocommerce-Price-amount amount">
                                                                     <span class="woocommerce-Price-currencySymbol"></span>
-                                                                    <%=itc.item.gia %>
+                                                                    <%=editName.formatNumber(itc.item.gia,'.',',') %>
                                                                     đồng
                                                                 </span>
                                                             </td>
@@ -96,7 +95,7 @@
                                                             <td data-title="Total" class="product-subtotal">
                                                                 <span class="woocommerce-Price-amount amount">
                                                                     <span class="woocommerce-Price-currencySymbol"></span>
-                                                                    <%=itc.item.gia * itc.qty%>
+                                                                    <%=editName.formatNumber(itc.item.gia * itc.qty,'.',',') %>
                                                                     đồng
                                                                 </span>
                                                                 <a title="Remove this item" class="remove" href="/deletecart/<%=itc.item._bookID%>">×</a>
@@ -124,7 +123,8 @@
                                                                 <th>Tổng tiền</th>
                                                                 <td data-title="Subtotal">
                                                                     <span class="woocommerce-Price-amount amount">
-                                                                        <%=totalPrice %> <span class="woocommerce-Price-currencySymbol">
+                                                                        <%=editName.formatNumber(totalPrice,'.',',') %>
+                                                                        <span class="woocommerce-Price-currencySymbol">
                                                                             đồng</span>
                                                                     </span>
                                                                 </td>
@@ -138,7 +138,8 @@
                                                                 <td data-title="Total">
                                                                     <strong>
                                                                         <span class="woocommerce-Price-amount amount">
-                                                                            <%=totalPrice %> <span class="woocommerce-Price-currencySymbol">
+                                                                            <%=editName.formatNumber(totalPrice,'.',',') %><span
+                                                                                class="woocommerce-Price-currencySymbol">
                                                                                 đồng</span></span>
                                                                     </strong>
                                                                 </td>

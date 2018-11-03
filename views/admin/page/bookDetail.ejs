@@ -72,74 +72,72 @@
                     <div class="col-md-12">
                         <div class="box box-body">
                             <div class="col-md-6">
-                                <h4><i class="fa fa-list"></i> &nbsp; Danh sách sản phẩm</h4>
+                                <h4><i class="fa fa-list"></i> &nbsp; Thông tin sản phẩm</h4>
                             </div>
                             <div class="col-md-6 text-right">
-                                <a href="/admin/product/addNew" class="btn btn-success"><i class="fa fa-plus"></i>
-                                    Thông tin sản phẩm</a>
+                                <a href="/admin/product" class="btn btn-success"><i class="fa fa-plus"></i>
+                                    Danh sách sản phẩm</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
-                        <!-- general form elements -->
-                        <% sachDetail.forEach(function(b){
-                                %>
                         <div class="box box-primary">
-                            <form method="POST" action="/admin/product/saveNewBook" enctype="multipart/form-data">
+                            <form method="POST" action="/admin/product/update/<%=sachDetail[0]._bookID%>">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Mã sản phẩm:
                                         <b>
-                                            <%=b._bookID%></b>
+                                            <%=sachDetail[0]._bookID%></b>
                                     </h3>
                                 </div>
-                                <!-- /.box-header -->
-                                <!-- form start -->
                                 <div class="row">
                                     <div class="col-md-9">
                                         <div class="form-group col-xs-4">
                                             <label for="newSKU">SKU</label>
-                                            <input type="text" class="form-control" id="newSKU" name="newSKU" value="<%=b.SKU%>"
+                                            <input type="text" class="form-control" id="newSKU" name="newSKU" value="<%=sachDetail[0].SKU%>"
                                                 placeholder="Nhập SKU" required>
                                         </div>
                                         <div class="form-group col-xs-8">
                                             <label for="newTieuDe">Tiêu đề</label>
-                                            <input type="text" class="form-control" id="newTieuDe" value="<%=b.tieude%>"
+                                            <input type="text" class="form-control" id="newTieuDe" value="<%=sachDetail[0].tieude%>"
                                                 name="newTieuDe" required placeholder="Nhập tiêu đề sách">
                                         </div>
                                         <div class="form-group  col-xs-4">
                                             <label for="newTacGia">Tác giả</label>
-                                            <input type="text" class="form-control" id="newTacGia" value="<%=b.tacgia%>"
+                                            <input type="text" class="form-control" id="newTacGia" value="<%=sachDetail[0].tacgia%>"
                                                 name="newTacGia" required placeholder="Nhập tên tác giả">
                                         </div>
                                         <div class="form-group col-xs-4">
                                             <label for="newNgonNgu">Ngôn ngữ</label>
                                             <select class="form-control" id="newNgonNgu" name="newNgonNgu">
                                                 <%
-                                                        if(b.ngonngu = 'Tiếng Việt'){
-                                                            %>
-                                                <option value="Tiếng Việt" selected>Tiếng
-                                                    Việt
-                                                </option>
-                                                <option value="Nước Ngoài">Nước Ngoài</option>
-                                                <%
+                                                    var a=['Tiếng Việt','Nước Ngoài'];
+                                                    for(var i =0;i< a.length ; i++){
+                                                            if(a[i]==sachDetail[0].ngonngu){
+                                                                a.splice(i,1);
+                                                            }
                                                     }
-                                                    else{
-                                                        %>
-                                                <option value="Tiếng Việt">Tiếng Việt
+                                                %>
+                                                <option name="<%=sachDetail[0].ngonngu%>" value="<%=sachDetail[0].ngonngu%>"
+                                                    selected>
+                                                    <%=sachDetail[0].ngonngu%>
                                                 </option>
-                                                <option value="Nước Ngoài" selected>Nước Ngoài</option>
                                                 <%
-                                                        }
-                                                    %>
+                                                    a.forEach(function(ab){
+                                                %>
+                                                <option name="<%=ab%>" value="<%=ab%>">
+                                                    <%=ab%>
+                                                </option>
+                                                <%
+                                                    })%>
                                             </select>
                                         </div>
                                         <div class="form-group col-xs-4">
                                             <label for="newTheLoai">Thể loại</label>
                                             <select class="form-control" id="newTheLoai" name="newTheLoai">
                                                 <% cat.forEach(function(ca){
-                                                    if(ca.tentheloai == b.theloai){
+                                                    if(ca.tentheloai == sachDetail[0].theloai){
                                                         %>
                                                 <option value="<%=ca.tentheloai%>" selected>
                                                     <%=ca.tentheloai%>
@@ -156,34 +154,38 @@
                                         </div>
                                         <div class="form-group col-xs-4">
                                             <label for="newDichGia">Dịch giả</label>
-                                            <input type="text" class="form-control" id="newDichGia" value="<%=b.dichgia%>"
-                                                name="newDichGia" placeholder="Nhập tên dịch giả">
+                                            <input type="text" class="form-control" id="newDichGia" value="<%=sachDetail[0].dichgia%>"
+                                                name="newDichGia" placeholder="Tên dịch giả">
                                         </div>
-
-                                        <div class="form-group col-xs-4">
-                                            <label for="newNgayXuatBan">Ngày xuất bản</label>
-                                            <input type="text" class="form-control pull-right" id="datepicker" value="<%=b.ngayxuatban%>"
-                                                name="newNgayXuatBan" placeholder="Nhập ngày xuất bản">
-                                        </div>
-                                        <div class="form-group col-xs-4">
+                                        <div class="form-group col-xs-8">
                                             <label for="newNhaXuatBan">Nhà xuất bản</label>
                                             <input type="text" class="form-control" id="newNhaXuatBan" name="newNhaXuatBan"
-                                                value="<%=b.nhaxuatban%>" placeholder="Nhập tên nhà xuất bản">
+                                                value="<%=sachDetail[0].nhaxuatban%>" placeholder="Nhập tên nhà xuất bản">
+                                        </div>
+                                        <div class="form-group col-xs-4">
+                                            <label for="newNgayXuatBan">Ngày xuất bản</label>
+                                            <input type="text" class="form-control pull-right" id="datepicker" value="<%=sachDetail[0].ngayxuatban%>"
+                                                name="newNgayXuatBan" placeholder="Nhập ngày xuất bản">
                                         </div>
                                         <div class="form-group col-xs-4">
                                             <label for="newSoTrang">Số trang</label>
                                             <input type="text" class="form-control" id="newSoTrang" name="newSoTrang"
-                                                value="<%=b.sotrang%>" placeholder="Nhập số trang">
+                                                value="<%=sachDetail[0].sotrang%>" placeholder="Nhập số trang">
                                         </div>
-                                        <div class="form-group col-xs-8">
+                                        <div class="form-group col-xs-4">
                                             <label for="newKichThuoc">Kích thước</label>
                                             <input type="text" class="form-control" id="newKichThuoc" name="newKichThuoc"
-                                                value="<%=b.kichthuoc%>" placeholder="Nhập kích cỡ sách">
+                                                value="<%=sachDetail[0].kichthuoc%>" placeholder="Nhập kích cỡ sách">
+                                        </div>
+                                        <div class="form-group col-xs-12">
+                                            <label for="newLinkSeo">Linkseo</label>
+                                            <input type="text" class="form-control" id="newLinkSeo" name="newLinkSeo"
+                                                value="<%=sachDetail[0].linkseo%>" placeholder="Linkseo">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div style="width: 300px;height: 300px;">
-                                            <img src="<%=b.hinhanh[0]%>" width="100%" />
+                                            <img src="<%=sachDetail[0].hinhanh[0]%>" width="100%" />
                                         </div>
                                     </div>
                                 </div>
@@ -192,30 +194,32 @@
                                         <label for="newMoTa">Mô tả</label>
                                         <div class="form-group">
                                             <textarea id="newMoTa" name="newMoTa" class="form-control" style="height: 300px">
-                                            <%=b.mota%>
+                                            <%=sachDetail[0].mota%>
                                             </textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-6">
+                                    <div class="form-group col-md-4">
                                         <label for="newDanhDau">Đánh dấu</label>
                                         <select class="form-control select2" multiple="multiple" data-placeholder="Chọn đánh dấu"
                                             id="newDanhDau" name="newDanhDau" style="width: 100%;">
                                             <%
                                             var a=['new','hot','sale','popular','weekdeal'];
-                                            for(var i =0;i<a.length;i++){
-                                                b.danhdau.forEach(function(dd){
-                                                    if(a[i]==dd){
-                                                        a.splice(i,1);
-                                                    }
-                                                });
-                                            }
-                                            b.danhdau.forEach(function(dd){
+                                            sachDetail[0].danhdau.forEach(function(dd){
                                             %>
                                             <option name="<%=dd%>" value="<%=dd%>" selected>
                                                 <%=dd%>
                                             </option>
                                             <%
                                             });
+                                            
+                                            sachDetail[0].danhdau.forEach(function(dd){
+                                                for(var i =0;i< a.length ; i++){
+                                                    if(a[i]==dd){
+                                                        a.splice(i,1);
+                                                    }
+                                            } });
+                                            console.log( sachDetail[0].danhdau)
+                                            console.log(a);
                                             a.forEach(function(ab){
                                                 %>
                                             <option name="<%=ab%>" value="<%=ab%>">
@@ -225,17 +229,71 @@
                                             })%>
                                         </select>
                                     </div>
+                                    <div class="form-group col-xs-4">
+                                        <label for="newTinhTrang">Tình trạng</label><select class="form-control select2"
+                                            data-placeholder="Chọn đánh dấu" id="newTinhTrang" name="newTinhTrang"
+                                            style="width: 100%;">
+                                            <%
+                                            var a=['còn hàng','hết hàng'];
+                                            sachDetail[0].tinhtrang.forEach(function(dd){
+                                            for(var i =0;i< a.length ; i++){
+                                                    if(a[i]==dd){
+                                                        a.splice(i,1);
+                                                    }
+                                            } });
+                                        sachDetail[0].tinhtrang.forEach(function(dd){
+                                        %>
+                                            <option name="<%=dd%>" value="<%=dd%>" selected>
+                                                <%=dd%>
+                                            </option>
+                                            <%
+                                        });
+                                        a.forEach(function(ab){
+                                            %>
+                                            <option name="<%=ab%>" value="<%=ab%>">
+                                                <%=ab%>
+                                            </option>
+                                            <%
+                                        })%>
+                                        </select>
+                                    </div>
                                     <div class="form-group col-md-4">
                                         <label for="newGia">Giá</label>
-                                        <input type="text" class="form-control" value="<%=b.gia%>" id="newGia" name="newGia"
-                                            placeholder="Nhập giá bán" required>
+                                        <input type="text" class="form-control" value="<%=sachDetail[0].gia%>" id="newGia"
+                                            name="newGia" placeholder="Nhập giá bán" required>
                                     </div>
-                                    <div class="form-group col-md-12">
-                                        <label>Hình ảnh</label>
-                                        <input type="file" name="newImgUpload" id="newImgUpload" class="form-control"
-                                            accept="image/gif, image/jpeg, image/jpg, image/png" required onchange="return ValidateExtension()">
-                                        <p id="lblError" style="color:red"></p>
+                                    <!-- <div class="form-group col-xs-4">
+                                        <label for="newDiemDen">Điểm đến</label>
+                                        <select class="form-control " data-placeholder="Chọn điểm đến" id="newDiemDen"
+                                            disabled name="newDiemDen" style="width: 100%;">
+                                            <%
+                                            var diadiem=['select','HCM','HN', 'HP','DN'];
+                                            diadiem.forEach(function(dd){
+                                            %>
+                                            <option name="<%=dd%>" value="<%=dd%>">
+                                                <%=dd%>
+                                            </option>
+                                            <%
+                                            })
+                                            %>
+                                        </select>
                                     </div>
+                                    <div class="form-group col-xs-4">
+                                        <label for="newDiemDi">Điểm đi</label>
+                                        <select class="form-control " data-placeholder="Chọn điểm đến" id="newDiemDi"
+                                            name="newDiemDi" style="width: 100%;">
+                                            <%
+                                            var diadiem1=['select','HCM','HN', 'HP','DN'];
+                                            diadiem1.forEach(function(dd){
+                                            %>
+                                            <option name="<%=dd%>" value="<%=dd%>">
+                                                <%=dd%>
+                                            </option>
+                                            <%
+                                            });
+                                            %>
+                                        </select>
+                                    </div> -->
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer ">
@@ -244,8 +302,6 @@
                                 </div>
                             </form>
                         </div>
-                        <%
-                            })%>
                         <script type="text/javascript">
                             function ValidateExtension() {
                                 var allowedFiles = [".jpg", ".jpeg", ".png", ".gif", ".bmp"];
@@ -332,13 +388,33 @@
         });
         $('#newNgonNgu').change(function () {
             if (this.value == "Tiếng Việt") {
+                $('#newDichGia').val("");
                 $('#newDichGia').prop('readOnly', true);
             } else {
                 if (this.value == "Nước Ngoài") {
                     $('#newDichGia').prop('readOnly', false);
+                    $('#newDichGia').val("<%=sachDetail[0].dichgia%>");
                 }
             }
         }).change();
+
+
+        // $('#newDiemDi').change(function () {
+        //     if (this.value != 'select') {
+        //         $('#newDiemDen').prop('disabled', false);
+        //     } else {
+        //         $('#newDiemDen').prop('disabled', true);
+        //     }
+        // }).change();
+        // $(document).ready(function () {
+        //     $('#newDiemDi').on('change', function (event) {
+        //         var prevValue = $(this).data('previous');
+        //         $('#newDiemDen').not(this).find('option[value="' + prevValue + '"]').show();
+        //         var value = $(this).val();
+        //         $(this).data('previous', value);
+        //         $('#newDiemDen').not(this).find('option[value="' + value + '"]').hide();
+        //     });
+        // });
     </script>
 </body>
 

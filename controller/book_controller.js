@@ -1,5 +1,4 @@
 var AWS = require("aws-sdk");
-var Cart = require("./cart");
 var fs = require('fs');
 var UUID = require("uuid/v4");
 var date = require("date-and-time");
@@ -16,7 +15,6 @@ AWS.config.update({
   region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
-
 //GET ALL BOOK
 exports.get_all_book = function (req, res, next) {
   var params = {
@@ -33,22 +31,8 @@ exports.get_all_book = function (req, res, next) {
       res.render("error");
     } else {
       console.log(data.Count);
-      //nếu session rỗng
-      if (!req.session.cart) {
-        return res.render("../views/site/page/index", {
-          products: [], //cartItem
-          allBooks: data.Items,
-          totalPrice: 0,
-          totalQty: 0
-        });
-      }
-      //ngược lại đang trong phiên session
-      var cart = new Cart(req.session.cart);
       res.render("../views/site/page/index", {
-        products: cart.generateArray(),
-        allBooks: data.Items,
-        totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
+        allBooks: data.Items
       });
     }
   })
@@ -73,23 +57,9 @@ exports.get_detail_product = function (req, res, next) {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
-      console.log(data);
-      if (!req.session.cart) {
-        return res.render("../views/site/page/single-product", {
-          sachDetail: data.Items,
-          products: [],
-          allBooks: data.Items,
-          totalPrice: 0,
-          totalQty: 0
-        });
-      }
-      var cart = new Cart(req.session.cart);
       res.render("../views/site/page/single-product", {
         sachDetail: data.Items,
-        allBooks: data.Items,
-        products: cart.generateArray(),
-        totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
+        allBooks: data.Items
       });
     }
   });
@@ -97,23 +67,23 @@ exports.get_detail_product = function (req, res, next) {
 
 exports.edit_book = function (req, res, next) {
   var bookid = req.params.id;
-  console.log(req.body.editTinhTrang);
+  console.log(req.body.newTinhTrang);
   var editBook = {
-    tacgia: renameModule.splitList(req.body.editTacGia),
-    tieude: req.body.editTieuDe,
-    theloai: String(req.body.editTheLoai),
-    SKU: req.body.editSKU,
-    ngayxuatban: req.body.editNgayXuatBan,
-    nhaxuatban: req.body.editNhaXuatBan,
-    kichthuoc: req.body.editKichThuoc,
-    mota: req.body.editMoTa,
-    dichgia: renameModule.splitList(req.body.editDichGia),
-    ngonngu: req.body.editNgonNgu,
-    tinhtrang: renameModule.splitList(req.body.editTinhTrang) || [],
-    danhdau: renameModule.splitList(req.body.editDanhDau) || [],
-    linkseo: req.body.editLinkSeo,
-    sotrang: parseInt(req.body.editSoTrang),
-    gia: parseFloat(req.body.editGia)
+    tacgia: renameModule.splitList(req.body.newTacGia),
+    tieude: req.body.newTieuDe,
+    theloai: String(req.body.newTheLoai),
+    SKU: req.body.newSKU,
+    ngayxuatban: req.body.newNgayXuatBan,
+    nhaxuatban: req.body.newNhaXuatBan,
+    kichthuoc: req.body.newKichThuoc,
+    mota: req.body.newMoTa,
+    dichgia: renameModule.splitList(req.body.newDichGia),
+    ngonngu: req.body.newNgonNgu,
+    tinhtrang: renameModule.splitList(req.body.newTinhTrang) || [],
+    danhdau: renameModule.splitList(req.body.newDanhDau) || [],
+    linkseo: req.body.newLinkSeo,
+    sotrang: parseInt(req.body.newSoTrang),
+    gia: parseFloat(req.body.newGia)
   };
   console.log(editBook);
   var params = {
@@ -158,8 +128,8 @@ exports.edit_book = function (req, res, next) {
     if (err) {
       console.log("users::update::error - " + JSON.stringify(err, null, 2));
     } else {
-      console.log("users::update::success " + JSON.stringify(data));
-      res.redirect("/admin");
+      // console.log("users::update::success " + JSON.stringify(data));
+      res.redirect("/admin/product/detail/" + bookid);
     }
   });
 };
@@ -178,7 +148,7 @@ exports.delete_book = function (req, res, next) {
       console.log("users::delete::error - " + JSON.stringify(err, null, 2));
     } else {
       console.log("users::delete::success");
-      res.redirect("/admin");
+      res.redirect("/admin/product");
     }
   });
 };
@@ -235,21 +205,8 @@ exports.show_list_cat = function (req, res) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
       console.log("\nSố lượng tìm dc=" + data.Count);
-      if (!req.session.cart) {
-        return res.render("../views/site/page/list-book-cat.ejs", {
-          products: [],
-          allBooks: data.Items,
-          totalPrice: 0,
-          totalQty: 0
-        });
-      }
-      //ngược lại đang trong phiên session
-      var cart = new Cart(req.session.cart);
       res.render("../views/site/page/list-book-cat.ejs", {
-        allBooks: data.Items,
-        products: cart.generateArray(),
-        totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
+        allBooks: data.Items
       });
     }
   });
@@ -275,21 +232,8 @@ exports.search_book = function (req, res) {
       if (err) {
         console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
       } else {
-        if (!req.session.cart) {
-          return res.render("../views/site/page/list-book-cat.ejs", {
-            products: [],
-            allBooks: data.Items,
-            totalPrice: 0,
-            totalQty: 0
-          });
-        }
-        //ngược lại đang trong phiên session
-        var cart = new Cart(req.session.cart);
         res.render("../views/site/page/list-book-cat.ejs", {
-          allBooks: data.Items,
-          products: cart.generateArray(),
-          totalPrice: cart.totalPrice,
-          totalQty: cart.totalQty
+          allBooks: data.Items
         });
       }
     });
@@ -297,12 +241,6 @@ exports.search_book = function (req, res) {
     res.redirect("/");
   }
 }
-
-//GET ALL BOOK ADMIN
-exports.addNewBook = function (req, res, next) {
-  res.render("../views/admin/page/addNewBook.ejs");
-};
-
 
 //GET ALL BOOK ADMIN
 exports.get_all_book2 = function (req, res, next) {

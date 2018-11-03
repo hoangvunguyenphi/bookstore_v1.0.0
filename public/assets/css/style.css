@@ -39360,3 +39360,19 @@ form.track_order input[type="submit"] {
   left: auto !important;
   top: 130% !important;
 }
+
+.tm-shopping-bag:before {
+  content: "\61";
+  font-size: 27px;
+}
+
+.badge-notify {
+  background: red;
+  position: relative;
+  top: -20px;
+  right: 10px;
+}
+
+.my-cart-btn {
+  width: 100%;
+}

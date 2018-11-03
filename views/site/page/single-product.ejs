@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en-US" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Techmarket HTML</title>
+    <title>
+        <%=sachDetail[0].tieude%>
+    </title>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-grid.min.css" media="all" />
@@ -17,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/colors/green.css" media="all" />
 
-    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <link rel="shortcut icon" href="/assets/images/fav-icon.png">
 </head>
 
@@ -171,17 +173,19 @@
                                                     </ins>
                                                 </p>
                                                 <!-- .single-product-header -->
-                                                <form method="POST" class="cart" action="/add_detail_to_cart/<%=item._bookID%>">
-                                                    <div class="quantity">
+                                                <div>
+                                                    <div class="quantity" style="float:left; width: 100px;">
                                                         <label for="quantity-input">Số lượng</label>
                                                         <input type="number" size="4" class="input-text qty text" title="Qty"
                                                             value="1" name="abasdjuwas" id="quantity-input">
                                                     </div>
                                                     <!-- .quantity -->
-                                                    <button class="single_add_to_cart_button button alt" value="185"
-                                                        name="add-to-cart" type="submit">Add
-                                                        to cart</button>
-                                                </form>
+                                                    <button class="single_add_to_cart_button button my-cart-btn" style="float:left; "
+                                                        data-id="<%=item._bookID%>" data-name="<%=item.tieude%>"
+                                                        data-summary="<%=item.tacgia%> - <%=item.nhaxuatban%> - <%=item.theloai%>"
+                                                        data-price="<%=item.gia%>" data-quantity="1" data-image="<%=item.hinhanh[0]%>">Add
+                                                        to Cart</button>
+                                                </div>
                                                 <!-- .cart -->
                                             </div>
                                             <!-- .product-actions -->
@@ -191,7 +195,6 @@
                                     <!-- .entry-summary -->
                                 </div>
                                 <!-- .single-product-wrapper -->
-
                                 <div class="woocommerce-tabs wc-tabs-wrapper">
                                     <ul role="tablist" class="nav tabs wc-tabs">
                                         <li class="nav-item accessories_tab">
@@ -219,9 +222,11 @@
                                             <h1 style="text-align: center;">
                                                 <%=item.tieude%>
                                             </h1>
-                                            <p style="text-align: center;max-width: 1160px;margin: auto auto 60px;">
-                                                <%=item.mota%>
-                                            </p>
+                                            <div style="text-align: center;max-width: 1160px;margin: auto auto 60px;"
+                                                id="dvMoTa">
+
+                                            </div>
+
                                             <!-- <div style="text-align: center;">
                                                         <iframe width="854" height="480" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/K5OGs8a3vlM?ecver=1"></iframe>
                                                     </div>
@@ -356,7 +361,73 @@
     <script type="text/javascript" src="/assets/js/pace.min.js"></script>
     <script type="text/javascript" src="/assets/js/slick.min.js"></script>
     <script type="text/javascript" src="/assets/js/scripts.js"></script>
-
+    <script type='text/javascript' src="/socket.io/socket.io.js"></script>
+    <script type='text/javascript' src="/js/jquery.mycart/jquery.mycart.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var goToCartIcon = function ($addTocartBtn) {
+                var cart = $('.my-cart-badge');
+                var imgtodrag = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") +
+                    '"/>').css({
+                    "position": "fixed",
+                    "z-index": "9999"
+                });
+                $addTocartBtn.prepend(imgtodrag);
+                if (imgtodrag) {
+                    var imgclone = imgtodrag.clone()
+                        .offset({
+                            top: imgtodrag.offset().top,
+                            left: imgtodrag.offset().left
+                        })
+                        .css({
+                            'opacity': '1',
+                            'position': 'absolute',
+                            'height': '150px',
+                            'width': '150px',
+                            'z-index': '9999'
+                        })
+                        .appendTo($('body'))
+                        .animate({
+                            'top': cart.offset().top + 10,
+                            'left': cart.offset().left + 10,
+                            'width': 75,
+                            'height': 75
+                        }, 1000, 'easeInOutExpo', function () {
+                            imgtodrag.remove();
+                        });
+                    setTimeout(function () {}, 1500);
+                    imgclone.animate({
+                        'width': 0,
+                        'height': 0
+                    }, function () {
+                        $(this).detach()
+                    });
+                }
+            }
+            $('.my-cart-btn').myCart({
+                classCartIcon: 'my-cart-icon',
+                classCartBadge: 'my-cart-badge',
+                classProductQuantity: 'my-product-quantity',
+                classProductRemove: 'my-product-remove',
+                classCheckoutCart: 'my-cart-checkout',
+                affixCartIcon: true,
+                showCheckoutModal: true,
+                clickOnAddToCart: function ($addTocart) {
+                    goToCartIcon($addTocart);
+                },
+                clickOnCartIcon: function ($cartIcon, products, totalPrice, totalQuantity) {
+                    console.log("cart icon clicked", $cartIcon, products, totalPrice, totalQuantity);
+                },
+                checkoutCart: function (products, totalPrice, totalQuantity) {
+                    console.log("checking out", products, totalPrice, totalQuantity);
+                },
+                getDiscountPrice: function (products, totalPrice, totalQuantity) {
+                    console.log("calculating discount", products, totalPrice, totalQuantity);
+                    return totalPrice * 0.5;
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

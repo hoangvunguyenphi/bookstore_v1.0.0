@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Techmarket HTML</title>
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" media="all" />
+    <title>Trang chủ</title>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-grid.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-reboot.min.css" media="all" />
@@ -17,7 +17,8 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/colors/green.css" media="all" />
 
-    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
+    <!-- Google Font -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
     <link rel="shortcut icon" href="/assets/images/fav-icon.png">
 </head>
 
@@ -120,19 +121,6 @@
                                 </div>
                                 <!-- .features -->
                             </div>
-                            <%
-                            function formatNumber(nStr, decSeperate, groupSeperate) {
-                                nStr += '';
-                                x = nStr.split(decSeperate);
-                                x1 = x[0];
-                                x2 = x.length > 1 ? '.' + x[1] : '';
-                                var rgx = /(\d+)(\d{3})/;
-                                while (rgx.test(x1)) {
-                                    x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
-                                }
-                                return x1 + x2;
-                            }
-                            %>
                             <!-- /.features list -->
                             <div class="section-deals-carousel-and-products-carousel-tabs row">
                                 <section class="column-1 deals-carousel" id="sale-with-timer-carousel">
@@ -154,19 +142,21 @@
                                                                     if(dd=='weekdeal'){
                                                                         %>
                                                             <div class="sale-product-with-timer product">
-                                                                <a class="woocommerce-LoopProduct-link" href="/product/<%=book.linkseo%>_<%=book._bookID%>">
-                                                                    <div class="sale-product-with-timer-header">
+                                                                <!-- href="/product/<%=book.linkseo%>_<%=book._bookID%> -->
+                                                                <a class="woocommerce-LoopProduct-link">
+                                                                    <div class="
+                                                                    sale-product-with-timer-header">
                                                                         <div class="price-and-title">
                                                                             <span class="price">
                                                                                 <ins>
                                                                                     <span class="woocommerce-Price-amount amount">
-                                                                                        <%=formatNumber(book.gia,'.',',')%><span
+                                                                                        <%=editName.formatNumber(book.gia,'.',',')%><span
                                                                                             class="woocommerce-Price-currencySymbol">₫</span>
                                                                                     </span>
                                                                                 </ins>
                                                                                 <del>
                                                                                     <span class="woocommerce-Price-amount amount">
-                                                                                        <%=formatNumber(book.gia*1.2,'.',',')%>
+                                                                                        <%=editName.formatNumber(book.gia*1.2,'.',',')%>
                                                                                         <span class="woocommerce-Price-currencySymbol">₫</span></span>
                                                                                 </del>
                                                                             </span>
@@ -182,8 +172,7 @@
                                                                                     kiệm</span>
                                                                                 <span class="saved-label-amount">
                                                                                     <span class="woocommerce-Price-amount amount">
-
-                                                                                        <%=formatNumber((book.gia*1.2) - book.gia,'.',',')%><span
+                                                                                        <%=editName.formatNumber((book.gia*1.2) - book.gia,'.',',')%><span
                                                                                             class="woocommerce-Price-currencySymbol">₫</span>
                                                                                     </span>
                                                                                 </span>
@@ -211,15 +200,18 @@
                                                                     <div class="deal-countdown-timer">
                                                                         <div class="marketing-text">
                                                                             <span class="line-1">Nhanh tay!</span>
-
                                                                         </div>
                                                                         <!-- /.marketing-text
                                                                         <span class="deal-time-diff" style="display:none;">28800</span> -->
                                                                         <!-- <div class="deal-countdown countdown"></div> -->
                                                                     </div>
                                                                     <div class="hover-area" style="position: relative; padding-top: 20px;">
-                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
-                                                                            rel="nofollow">Add to cart</a>
+                                                                        <button class="button add_to_cart_button my-cart-btn"
+                                                                            data-id="<%=book._bookID%>" data-name="<%=book.tieude%>"
+                                                                            data-summary="<%=book.tacgia%> - <%=book.nhaxuatban%> - <%=book.theloai%>"
+                                                                            data-price="<%=book.gia%>" data-quantity="1"
+                                                                            data-image="<%=book.hinhanh[0]%>">Add
+                                                                            to Cart</button>
                                                                     </div>
                                                                     <!-- /.deal-countdown-timer -->
                                                                 </a>
@@ -298,7 +290,7 @@
                                                                                 <span class="amount"> </span>
                                                                             </ins>
                                                                             <span class="amount">
-                                                                                <%=formatNumber(book.gia,'.',',')%><span
+                                                                                <%=editName.formatNumber(book.gia,'.',',')%><span
                                                                                     class="woocommerce-Price-currencySymbol">₫</span></span>
                                                                         </span>
                                                                         <!-- /.price -->
@@ -307,8 +299,12 @@
                                                                         </h2>
                                                                     </a>
                                                                     <div class="hover-area">
-                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
-                                                                            rel="nofollow">Add to cart</a>
+                                                                        <button class="button add_to_cart_button my-cart-btn"
+                                                                            data-id="<%=book._bookID%>" data-name="<%=book.tieude%>"
+                                                                            data-summary="<%=book.tacgia%> - <%=book.nhaxuatban%> - <%=book.theloai%>"
+                                                                            data-price="<%=book.gia%>" data-quantity="1"
+                                                                            data-image="<%=book.hinhanh[0]%>">Add
+                                                                            to Cart</button>
                                                                     </div>
                                                                 </div>
                                                                 <!-- /.product-outer -->
@@ -347,7 +343,7 @@
                                                                                 <span class="amount"> </span>
                                                                             </ins>
                                                                             <span class="amount">
-                                                                                <%=formatNumber(book.gia,'.',',')%><span
+                                                                                <%=editName.formatNumber(book.gia,'.',',')%><span
                                                                                     class="woocommerce-Price-currencySymbol">₫</span></span>
                                                                         </span>
                                                                         <!-- /.price -->
@@ -397,7 +393,7 @@
                                                                                 <span class="amount"> </span>
                                                                             </ins>
                                                                             <span class="amount">
-                                                                                <%=formatNumber(book.gia,'.',',')%><span
+                                                                                <%=editName.formatNumber(book.gia,'.',',')%><span
                                                                                     class="woocommerce-Price-currencySymbol">₫</span></span>
                                                                         </span>
                                                                         <!-- /.price -->
@@ -525,11 +521,14 @@
                                             <li class="nav-item"><a class="nav-link active" href="#tab-59f89f0ad18d70"
                                                     data-toggle="tab">Kinh tế</a></li>
                                             <li class="nav-item"><a class="nav-link " href="#tab-59f89f0ad18d71"
-                                                    data-toggle="tab">Văn học</a></li>
+                                                    data-toggle="tab">Văn
+                                                    học</a></li>
                                             <li class="nav-item"><a class="nav-link " href="#tab-59f89f0ad18d72"
-                                                    data-toggle="tab">Thiếu nhi</a></li>
+                                                    data-toggle="tab">Thiếu
+                                                    nhi</a></li>
                                             <li class="nav-item"><a class="nav-link " href="#tab-59f89f0ad18d73"
-                                                    data-toggle="tab">Kỹ năng &amp; Sống đẹp</a></li>
+                                                    data-toggle="tab">Kỹ
+                                                    năng &amp; Sống đẹp</a></li>
                                         </ul>
                                     </header>
                                     <div class="tab-content">
@@ -556,7 +555,7 @@
                                                                             <span class="amount"> </span>
                                                                         </ins>
                                                                         <span class="amount">
-                                                                            <%=formatNumber(book.gia,'.',',')%><span
+                                                                            <%=editName.formatNumber(book.gia,'.',',')%><span
                                                                                 class="woocommerce-Price-currencySymbol">₫</span></span>
                                                                     </span>
                                                                     <!-- /.price -->
@@ -603,7 +602,7 @@
                                                                             <span class="amount"> </span>
                                                                         </ins>
                                                                         <span class="amount">
-                                                                            <%=formatNumber(book.gia,'.',',')%><span
+                                                                            <%=editName.formatNumber(book.gia,'.',',')%><span
                                                                                 class="woocommerce-Price-currencySymbol">₫</span></span>
                                                                     </span>
                                                                     <!-- /.price -->
@@ -650,7 +649,7 @@
                                                                             <span class="amount"> </span>
                                                                         </ins>
                                                                         <span class="amount">
-                                                                            <%=formatNumber(book.gia,'.',',')%><span
+                                                                            <%=editName.formatNumber(book.gia,'.',',')%><span
                                                                                 class="woocommerce-Price-currencySymbol">₫</span></span>
                                                                     </span>
                                                                     <!-- /.price -->
@@ -697,7 +696,7 @@
                                                                             <span class="amount"> </span>
                                                                         </ins>
                                                                         <span class="amount">
-                                                                            <%=formatNumber(book.gia,'.',',')%><span
+                                                                            <%=editName.formatNumber(book.gia,'.',',')%><span
                                                                                 class="woocommerce-Price-currencySymbol">₫</span></span>
                                                                     </span>
                                                                     <!-- /.price -->
@@ -746,7 +745,8 @@
                                                                 </a>
                                                                 <div class="hover-area">
                                                                     <a class="button add_to_cart_button" href="cart.html"
-                                                                        rel="nofollow">Add to cart</a>
+                                                                        rel="nofollow">Add
+                                                                        to cart</a>
                                                                     <a class="add-to-compare-link" href="compare.html">Compare</a>
                                                                 </div>
                                                             </div>
@@ -767,7 +767,8 @@
                                                                 </a>
                                                                 <div class="hover-area">
                                                                     <a class="button add_to_cart_button" href="cart.html"
-                                                                        rel="nofollow">Add to cart</a>
+                                                                        rel="nofollow">Add
+                                                                        to cart</a>
                                                                     <a class="add-to-compare-link" href="compare.html">Compare</a>
                                                                 </div>
                                                             </div>
@@ -819,19 +820,8 @@
         <% include ../slayout/footer.ejs %>
         <!-- .site-footer -->
     </div>
-    <script>
-        function formatNumber(nStr, decSeperate, groupSeperate) {
-            nStr += '';
-            x = nStr.split(decSeperate);
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
-            }
-            return x1 + x2;
-        }
-    </script>
+
+    <script type='text/javascript' src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/tether.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
@@ -846,7 +836,72 @@
     <script type="text/javascript" src="/assets/js/pace.min.js"></script>
     <script type="text/javascript" src="/assets/js/slick.min.js"></script>
     <script type="text/javascript" src="/assets/js/scripts.js"></script>
-
+    <script type='text/javascript' src="/js/jquery.mycart/jquery.mycart.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var goToCartIcon = function ($addTocartBtn) {
+                var cart = $('.my-cart-badge');
+                var imgtodrag = $('<img width="30px" height="30px" src="' + $addTocartBtn.data("image") +
+                    '"/>').css({
+                    "position": "fixed",
+                    "z-index": "9999"
+                });
+                $addTocartBtn.prepend(imgtodrag);
+                if (imgtodrag) {
+                    var imgclone = imgtodrag.clone()
+                        .offset({
+                            top: imgtodrag.offset().top,
+                            left: imgtodrag.offset().left
+                        })
+                        .css({
+                            'opacity': '1',
+                            'position': 'absolute',
+                            'height': '150px',
+                            'width': '150px',
+                            'z-index': '9999'
+                        })
+                        .appendTo($('body'))
+                        .animate({
+                            'top': cart.offset().top + 10,
+                            'left': cart.offset().left + 10,
+                            'width': 75,
+                            'height': 75
+                        }, 1000, 'easeInOutExpo', function () {
+                            imgtodrag.remove();
+                        });
+                    setTimeout(function () {}, 1500);
+                    imgclone.animate({
+                        'width': 0,
+                        'height': 0
+                    }, function () {
+                        $(this).detach()
+                    });
+                }
+            }
+            $('.my-cart-btn').myCart({
+                classCartIcon: 'my-cart-icon',
+                classCartBadge: 'my-cart-badge',
+                classProductQuantity: 'my-product-quantity',
+                classProductRemove: 'my-product-remove',
+                classCheckoutCart: 'my-cart-checkout',
+                affixCartIcon: true,
+                showCheckoutModal: true,
+                clickOnAddToCart: function ($addTocart) {
+                    goToCartIcon($addTocart);
+                },
+                clickOnCartIcon: function ($cartIcon, products, totalPrice, totalQuantity) {
+                    console.log("cart icon clicked", $cartIcon, products, totalPrice, totalQuantity);
+                },
+                checkoutCart: function (products, totalPrice, totalQuantity) {
+                    console.log("checking out", products, totalPrice, totalQuantity);
+                },
+                getDiscountPrice: function (products, totalPrice, totalQuantity) {
+                    console.log("calculating discount", products, totalPrice, totalQuantity);
+                    return totalPrice * 0.5;
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
