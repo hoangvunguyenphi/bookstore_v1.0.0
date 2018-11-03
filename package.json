@@ -10,7 +10,6 @@
     "body-parser": "^1.18.3",
     "connect-multiparty": "^2.2.0",
     "cookie-parser": "~1.4.3",
-    "cookies": "^0.7.2",
     "date-and-time": "^0.6.2",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
@@ -20,10 +19,6 @@
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
     "multer": "^1.3.1",
-    "multer-s3": "^2.7.0",
-    "node-localstorage": "^1.3.1",
-    "socket.io": "^2.1.1",
-    "soket.io": "^1.0.0",
-    "store": "^2.0.12"
+    "multer-s3": "^2.7.0"
   }
 }
