@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>Giỏ hàng</title>
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-grid.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-reboot.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-techmarket.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/slick.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/techmarket-font-awesome.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/slick-style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/animate.min.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="/assets/css/colors/green.css" media="all" />
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
+    <link rel="shortcut icon" href="/assets/images/fav-icon.png">
+</head>
+
+<body class="page home page-template-default">
+    <div id="page" class="hfeed site">
+        <% include ../slayout/headerhome.ejs %>
+        <div id="content" class="site-content">
+            <div class="col-full">
+                <div class="row">
+                    <nav class="woocommerce-breadcrumb">
+                        <a href="home-v1.html">Home</a>
+                        <span class="delimiter">
+                            <i class="tm tm-breadcrumbs-arrow-right"></i>
+                        </span>
+                        Cart
+                    </nav>
+                    <!-- .woocommerce-breadcrumb -->
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main">
+                            <div class="type-page hentry">
+                                <div class="entry-content">
+                                    <div class="woocommerce">
+                                        <div class="cart-wrapper">
+                                            <form method="post" action="/updatecart" class="woocommerce-cart-form">
+                                                <table class="shop_table shop_table_responsive cart">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="product-remove">&nbsp;</th>
+                                                            <th class="product-thumbnail">&nbsp;</th>
+                                                            <th class="product-name">Product</th>
+                                                            <th class="product-price">Price</th>
+                                                            <th class="product-quantity">Quantity</th>
+                                                            <th class="product-subtotal">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <%products.forEach(function(itc){
+                                                                %>
+                                                        <tr>
+                                                            <td class="product-remove">
+                                                                <a class="remove" href="/deletecart/<%=itc.item._bookID%>">×</a>
+                                                            </td>
+                                                            <td class="product-thumbnail">
+                                                                <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
+                                                                    <img width="180" height="180" alt="" class="wp-post-image"
+                                                                        src="<%=itc.item.hinhanh[0]%>">
+                                                                </a>
+                                                            </td>
+                                                            <td data-title="Product" class="product-name">
+                                                                <div class="media cart-item-product-detail">
+                                                                    <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
+                                                                        <img width="180" height="180" alt="" class="wp-post-image"
+                                                                            src="<%=itc.item.hinhanh[0]%>">
+                                                                    </a>
+                                                                    <div class="media-body align-self-center">
+                                                                        <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
+                                                                            <%=itc.item.tieude%></a>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td data-title="Price" class="product-price">
+                                                                <span class="woocommerce-Price-amount amount">
+                                                                    <span class="woocommerce-Price-currencySymbol"></span>
+                                                                    <%=itc.item.gia %>
+                                                                    đồng
+                                                                </span>
+                                                            </td>
+                                                            <td class="product-quantity" data-title="Quantity">
+                                                                <div class="quantity">
+                                                                    <label for="quantity-input-1">Số lượng</label>
+                                                                    <input id="quantity-input-1" type="number" name="<%=itc.item._bookID%>"
+                                                                        value="<%=itc.qty%>" title="Qty" class="input-text qty text"
+                                                                        size="4">
+                                                                </div>
+                                                            </td>
+                                                            <td data-title="Total" class="product-subtotal">
+                                                                <span class="woocommerce-Price-amount amount">
+                                                                    <span class="woocommerce-Price-currencySymbol"></span>
+                                                                    <%=itc.item.gia * itc.qty%>
+                                                                    đồng
+                                                                </span>
+                                                                <a title="Remove this item" class="remove" href="/deletecart/<%=itc.item._bookID%>">×</a>
+                                                            </td>
+                                                        </tr>
+                                                        <%
+                                                            }) %>
+                                                        <tr>
+                                                            <td class="actions" colspan="6">
+                                                                <input type="submit" value="Update cart" name="update_cart"
+                                                                    class="button">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <!-- .shop_table shop_table_responsive -->
+                                            </form>
+                                            <!-- .woocommerce-cart-form -->
+                                            <div class="cart-collaterals">
+                                                <div class="cart_totals">
+                                                    <h2>Cart totals</h2>
+                                                    <table class="shop_table shop_table_responsive">
+                                                        <tbody>
+                                                            <tr class="cart-subtotal">
+                                                                <th>Tổng tiền</th>
+                                                                <td data-title="Subtotal">
+                                                                    <span class="woocommerce-Price-amount amount">
+                                                                        <%=totalPrice %> <span class="woocommerce-Price-currencySymbol">
+                                                                            đồng</span>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="shipping">
+                                                                <th>Ship/COD</th>
+                                                                <td data-title="Shipping">Tiền ship chưa được tính</td>
+                                                            </tr>
+                                                            <tr class="order-total">
+                                                                <th>Total</th>
+                                                                <td data-title="Total">
+                                                                    <strong>
+                                                                        <span class="woocommerce-Price-amount amount">
+                                                                            <%=totalPrice %> <span class="woocommerce-Price-currencySymbol">
+                                                                                đồng</span></span>
+                                                                    </strong>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <!-- .shop_table shop_table_responsive -->
+                                                    <div class="wc-proceed-to-checkout">
+                                                        <!-- .wc-proceed-to-checkout -->
+                                                        <a class="checkout-button button alt wc-forward" href="/check_out">
+                                                            Đi đến đặt hàng</a>
+                                                        <a class="back-to-shopping" href="/">Trở lại mua sắm</a>
+                                                    </div>
+                                                    <!-- .wc-proceed-to-checkout -->
+                                                </div>
+                                                <!-- .cart_totals -->
+                                            </div>
+                                            <!-- .cart-collaterals -->
+                                        </div>
+                                        <!-- .cart-wrapper -->
+                                    </div>
+                                    <!-- .woocommerce -->
+                                </div>
+                                <!-- .entry-content -->
+                            </div>
+                            <!-- .hentry -->
+                        </main>
+                        <!-- #main -->
+                    </div>
+                    <!-- #primary -->
+                </div>
+                <!-- .row -->
+            </div>
+            <!-- .col-full -->
+        </div>
+        <!-- #content -->
+        <!-- .col-full -->
+        <% include ../slayout/footer%>
+    </div>
+
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/tether.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery-migrate.min.js"></script>
+    <script type="text/javascript" src="/assets/js/hidemaxlistitem.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/assets/js/hidemaxlistitem.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.easing.min.js"></script>
+    <script type="text/javascript" src="/assets/js/scrollup.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.waypoints.min.js"></script>
+    <script type="text/javascript" src="/assets/js/waypoints-sticky.min.js"></script>
+    <script type="text/javascript" src="/assets/js/pace.min.js"></script>
+    <script type="text/javascript" src="/assets/js/slick.min.js"></script>
+    <script type="text/javascript" src="/assets/js/scripts.js"></script>
+
+</body>
+
+</html>

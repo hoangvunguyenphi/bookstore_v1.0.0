@@ -1,0 +1,27 @@
+<div id="departments-menu" class="dropdown departments-menu">
+    <button class="btn dropdown-toggle btn-block" type="button" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        <i class="tm tm-departments-thin"></i>
+        <span>All Departments</span>
+    </button>
+    <ul id="menu-departments-menu" class="dropdown-menu yamm departments-menu-dropdown">
+        <li class="menu-item menu-item-type-custom animate-dropdown">
+            <a title="Khuyến mãi" href="landing-page-v2.html">Khuyến mãi</a>
+        </li>
+        <li class="menu-item menu-item-type-custom animate-dropdown">
+            <a title="Hàng mới về" href="landing-page-v2.html">Hàng mới về</a>
+        </li>
+        <% cat.forEach(function(ca){
+            %>
+        <li class="menu-item menu-item-type-custom animate-dropdown">
+            <a title="<%=ca.tentheloai%>" href="/product/<%=ca.tentheloai%>">
+                <%=ca.tentheloai%></a>
+        </li>
+        <%
+        })%>
+        <li class="menu-item menu-item-type-custom animate-dropdown">
+            <a title="Kiểm tra đơn hàng" href="/track_order">Kiểm tra đơn hàng</a>
+        </li>
+
+    </ul>
+</div>

@@ -1,0 +1,217 @@
+<div class="top-bar top-bar-v3">
+    <div class="col-full">
+        <ul id="menu-top-bar-right" class="nav menu-top-bar-right">
+            <li class="menu-item animate-dropdown">
+                <a title="TechMarket eCommerce - Always free delivery" href="contact-v1.html">Nhà sách nhóm 11 &#8211;
+                    luôn
+                    bán sách cho bạn, chứ không bán cần</a>
+            </li>
+            <li class="hidden-sm-down menu-item animate-dropdown">
+                <a title="Track Your Order" href="track-your-order.html">
+                    <i class="tm tm-order-tracking"></i>Kiểm tra đơn đặt hàng</a>
+            </li>
+            <li class="menu-item">
+                <a title="My Account" href="login-and-register.html">
+                    <i class="tm tm-login-register"></i>Đăng ký hoặc đăng nhập</a>
+            </li>
+        </ul>
+        <!-- .nav -->
+    </div>
+    <!-- .col-full -->
+</div>
+<!-- .top-bar-v2 -->
+<header id="masthead" class="site-header header-v3" style="background-image: none; ">
+    <div class="col-full desktop-only">
+        <div class="techmarket-sticky-wrap">
+            <div class="row">
+                <div class="site-branding">
+
+                    <a href="/" class="custom-logo-link" rel="home" style="font-size: 30px">
+                        <strong>Trang chủ</strong> <i class="footer-newsletter-icon tm tm-newsletter"></i>
+                    </a>
+
+                    <!-- /.custom-logo-link -->
+                </div>
+                <!-- /.site-branding -->
+                <!-- ============================================================= End Header Logo ============================================================= -->
+                <% include menu%>
+                <%
+                function formatNumber(nStr, decSeperate, groupSeperate) {
+                    nStr += '';
+                    x = nStr.split(decSeperate);
+                    x1 = x[0];
+                    x2 = x.length > 1 ? '.' + x[1] : '';
+                    var rgx = /(\d+)(\d{3})/;
+                    while (rgx.test(x1)) {
+                        x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+                    }
+                    return x1 + x2;
+                }
+                %>
+                <!-- .departments-menu -->
+                <form class="navbar-search" method="POST" action="/csearch_book">
+                    <label class="sr-only screen-reader-text" for="search">Tìm kiếm:</label>
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control search-field product-search-field" dir="ltr"
+                            value="" name="stieude" placeholder="Search for products" />
+                        <div class="input-group-addon search-categories popover-header">
+                            <select name='product_cat' id='product_cat' class='postform resizeselect'>
+                                <option value=' ' selected='selected'>Tất cả các thể loại</option>
+                                <%cat.forEach(function(ca){
+                                                    %>
+                                <option class="level-0" value="<%=ca.tentheloai%>">
+                                    <%=ca.tentheloai%>
+                                </option>
+                                <%
+                                })
+                                %>
+                                <!-- .product-category -->
+                            </select>
+                        </div>
+                        <!-- .input-group-addon -->
+                        <div class="input-group-btn input-group-append">
+                            <input type="hidden" id="search-param" name="post_type" value="product" />
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-search"></i>
+                                <span class="search-btn">Tìm</span>
+                            </button>
+                        </div>
+                        <!-- .input-group-btn -->
+                    </div>
+                    <!-- .input-group -->
+                </form>
+                <!-- .header-wishlist -->
+                <ul id="site-header-cart" class="site-header-cart menu">
+                    <li class="animate-dropdown dropdown ">
+                        <a class="cart-contents" href="/cart" data-toggle="dropdown" title="View your shopping cart">
+                            <i class="tm tm-shopping-bag"></i>
+                            <span class="count">
+                                <%=totalQty%></span>
+                            <span class="amount">
+                                <span class="price-label">Giỏ hàng</span>
+                                <%=formatNumber(totalPrice,'.',',')%>
+                                ₫</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-mini-cart">
+                            <li>
+                                <div class="widget woocommerce widget_shopping_cart">
+                                    <div class="widget_shopping_cart_content">
+                                        <ul class="woocommerce-mini-cart cart_list product_list_widget ">
+                                            <%products.forEach(function(itc){
+                                                    %>
+                                            <li class="woocommerce-mini-cart-item mini_cart_item">
+                                                <a href="/deletecart/<%=itc.item._bookID%>" class="remove" aria-label="Remove this item"
+                                                    data-product_id="65" data-product_sku="">×</a>
+                                                <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
+                                                    <img src="<%=itc.item.hinhanh[0]%>" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image"
+                                                        alt="">
+                                                    <%=itc.item.tieude%>
+                                                </a>
+                                                <span class="quantity">
+                                                    <%=itc.qty%> ×
+                                                    <span class="woocommerce-Price-amount amount">
+                                                        <%=formatNumber(itc.item.gia,'.',',')%> <span class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                </span>
+                                            </li>
+                                            <% });%>
+                                        </ul>
+                                        <!-- .cart_list -->
+                                        <p class="woocommerce-mini-cart__total total">
+                                            <strong>Tổng tiền:</strong>
+                                            <span class="woocommerce-Price-amount amount">
+                                                <%=formatNumber(totalPrice,'.',',')%> <span class="woocommerce-Price-currencySymbol">₫</span></span>
+                                        </p>
+                                        <p class="woocommerce-mini-cart__buttons buttons">
+                                            <a href="/cart" class="button wc-forward">Xem giỏ hàng</a>
+                                            <a href="/check_out" class="button checkout wc-forward">Đặt hàng</a>
+                                        </p>
+                                    </div>
+                                    <!-- .widget_shopping_cart_content -->
+                                </div>
+                                <!-- .widget_shopping_cart -->
+                            </li>
+                        </ul>
+                        <!-- .dropdown-menu-mini-cart -->
+                    </li>
+                </ul>
+                <!-- .site-header-cart -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- .techmarket-sticky-wrap -->
+    </div>
+    <!-- .col-full -->
+    <div class="col-full handheld-only">
+        <div class="handheld-header">
+            <div class="row">
+                <div class="site-branding">
+                    <a href="/" class="custom-logo-link" rel="home">
+                        Trang chủ
+                    </a>
+                    <!-- /.custom-logo-link -->
+                </div>
+                <!-- /.site-branding -->
+            </div>
+            <!-- /.row -->
+            <div class="techmarket-sticky-wrap">
+                <div class="row">
+                    <nav id="handheld-navigation" class="handheld-navigation" aria-label="Handheld Navigation">
+                        <button class="btn navbar-toggler" type="button">
+                            <i class="tm tm-departments-thin"></i>
+                            <span>Menu</span>
+                        </button>
+                        <div class="handheld-navigation-menu">
+                            <span class="tmhm-close">Close</span>
+                            <ul id="menu-departments-menu-1" class="nav">
+                                <li class="highlight menu-item animate-dropdown">
+                                    <a title="Khuyến mãi" href="landing-page-v2.html">Khuyến mãi</a>
+                                </li>
+                                <li class="highlight menu-item animate-dropdown">
+                                    <a title="Hàng mới về" href="landing-page-v2.html">Hàng mới về</a>
+                                </li>
+                                <% cat.forEach(function(ca){
+                                        %>
+                                <li class="highlight menu-item animate-dropdown">
+                                    <a title="<%=ca.tentheloai%>" href="/product/<%=ca.tentheloai%>">
+                                        <%=ca.tentheloai%></a>
+                                </li>
+                                <%
+                                    })%>
+                                <li class="highlight menu-item animate-dropdown">
+                                    <a title="Kiểm tra đơn hàng" href="/track_order">Kiểm tra đơn hàng</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- .handheld-navigation-menu -->
+                    </nav>
+                    <!-- .handheld-navigation -->
+                    <div class="site-search">
+                        <div class="widget woocommerce widget_product_search">
+                            <form role="search" method="POST" class="woocommerce-product-search" action="/csearch_book">
+                                <label class="screen-reader-text" for="woocommerce-product-search-field-0">Search for:
+                                </label>
+                                <input type="search" id="woocommerce-product-search-field-0" class="search-field"
+                                    placeholder="Search products&hellip;" value="" name="stieude" />
+                                <input type="submit" value="Search" />
+                                <input type="hidden" name="post_type" value="product" />
+                            </form>
+                        </div>
+                        <!-- .widget -->
+                    </div>
+                    <!-- .site-search -->
+                    <a class="handheld-header-cart-link has-icon" href="/cart" title="View your shopping cart">
+                        <i class="tm tm-shopping-bag"></i>
+                        <span class="count">
+                            <%=totalQty%></span>
+                    </a>
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- .techmarket-sticky-wrap -->
+        </div>
+        <!-- .handheld-header -->
+    </div>
+    <!-- .handheld-only -->
+</header>
+<!-- .header-v3 -->
+<!-- ============================================================= Header End ============================================================= -->
