@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en-US" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Techmarket HTML</title>
+    <title>
+        <%=sachDetail[0].tieude%>
+    </title>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-grid.min.css" media="all" />
@@ -17,7 +19,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/colors/green.css" media="all" />
 
-    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <link rel="shortcut icon" href="/assets/images/fav-icon.png">
 </head>
 
@@ -219,9 +221,11 @@
                                             <h1 style="text-align: center;">
                                                 <%=item.tieude%>
                                             </h1>
-                                            <p style="text-align: center;max-width: 1160px;margin: auto auto 60px;">
-                                                <%=item.mota%>
-                                            </p>
+                                            <div style="text-align: center;max-width: 1160px;margin: auto auto 60px;"
+                                                id="dvMoTa">
+
+                                            </div>
+
                                             <!-- <div style="text-align: center;">
                                                         <iframe width="854" height="480" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/K5OGs8a3vlM?ecver=1"></iframe>
                                                     </div>
@@ -356,7 +360,11 @@
     <script type="text/javascript" src="/assets/js/pace.min.js"></script>
     <script type="text/javascript" src="/assets/js/slick.min.js"></script>
     <script type="text/javascript" src="/assets/js/scripts.js"></script>
-
+    <script>
+        function loadMoTa() {
+            document.getElementById('dvMoTa').innerHTML = "<%=sachDetail[0].mota%>"
+        }
+    </script>
 </body>
 
 </html>

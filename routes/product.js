@@ -27,7 +27,9 @@ let docClient = new AWS.DynamoDB.DocumentClient();
 //Admin index
 router.get("/", Book_controller.get_all_book2);
 
-router.get("/addNew", Book_controller.addNewBook);
+router.get("/addNew", function (req, res) {
+  res.render("../views/admin/page/addNewBook.ejs");
+});
 
 //xemchi tiet
 router.get("/detail/:id", Book_controller.get_detail_product2);
@@ -42,40 +44,58 @@ router.get("/delete/:id", Book_controller.delete_book);
 router.post("/aSearchBook", Book_controller.admin_search_book);
 
 var keyImgUpload = "";
+// var s3 = new AWS.S3();
+// var upload = multer({
+//   limits: {
+//     fileSize: 3 * 1024 * 1024
+//   },
+//   fileFilter: function (res, file, cb) {
+//     var filetypes = /jpeg|jpg|png|gif|bmp/;
+//     var mimetype = filetypes.test(file.mimetype);
+//     var extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+//     if (mimetype && extname) {
+//       return cb(null, true);
+//     }
+//     cb(
+//       "Error: File upload only supports the following filetypes - " +
+//       filetypes +
+//       "!! GO BACK !"
+//     );
+//   },
+//   storage: multerS3({
+//     s3: s3,
+//     bucket: "da2-book",
+//     contentType: multerS3.AUTO_CONTENT_TYPE,
+//     acl: "public-read",
+//     key: function (req, file, cb) {
+//       keyImgUpload =
+//         renameModule.editName(req.body.newTieuDe) +
+//         "-" +
+//         UUID() +
+//         path.extname(file.originalname);
+//       cb(null, keyImgUpload);
+//     }
+//   })
+// });
 var s3 = new AWS.S3();
 var upload = multer({
-  limits: {
-    fileSize: 3 * 1024 * 1024
-  },
-  fileFilter: function(res, file, cb) {
-    var filetypes = /jpeg|jpg|png|gif|bmp/;
-    var mimetype = filetypes.test(file.mimetype);
-    var extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    if (mimetype && extname) {
-      return cb(null, true);
-    }
-    cb(
-      "Error: File upload only supports the following filetypes - " +
-        filetypes +
-        "!! GO BACK !"
-    );
-  },
   storage: multerS3({
     s3: s3,
     bucket: "da2-book",
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
-    key: function(req, file, cb) {
+    key: function (req, file, callback) {
       keyImgUpload =
         renameModule.editName(req.body.newTieuDe) +
         "-" +
         UUID() +
         path.extname(file.originalname);
-      cb(null, keyImgUpload);
+      callback(null, keyImgUpload);
     }
   })
 });
-router.post("/saveNewBook", upload.single("newImgUpload"), function(req, res) {
+//upload.single("newImgUpload")
+router.post("/saveNewBook", function (req, res) {
   var table = "DA2Book";
   var buket = "da2-book";
   var now = date.format(new Date(), "DD/MM/YYYY");
@@ -105,19 +125,17 @@ router.post("/saveNewBook", upload.single("newImgUpload"), function(req, res) {
     }
   };
   console.log(params);
-  docClient.put(params, function(err, data) {
+  docClient.put(params, function (err, data) {
     if (err) {
       var params = {
         Bucket: buket,
         Delete: {
-          Objects: [
-            {
-              Key: keyImgUpload
-            }
-          ]
+          Objects: [{
+            Key: keyImgUpload
+          }]
         }
       };
-      s3.deleteObjects(params, function(err, data) {
+      s3.deleteObjects(params, function (err, data) {
         if (err) console.log(err, err.stack);
         else {
           console.log(data);

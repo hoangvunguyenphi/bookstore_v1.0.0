@@ -74,4 +74,5 @@ app.use(function (err, req, res, next) {
   });
 });
 app.locals.cat = require('./db/test/category/category_data.json');
+app.locals.editName = require('./controller/edit_name');
 module.exports = app;

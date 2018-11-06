@@ -1,42 +1,93 @@
 [{
-    "_orderID": "12312_1@12323_23123",
-    "ngaylaphoadon": "12/3/23",
-    "tennguoinhan": "nguyen phi hoang vu",
-    "sodienthoai": "0122358854",
+    "_orderID": "5837eb48-9509-44d9-82fd-e10513da96d8",
+    "codeDef": "fcc06b71-b4db-417d-866d-62c7d9744e3c",
+    "diachi": "hẻm 491, ngô văn khoai",
     "email": "hoangvunguyenphi@gmail.com",
-    "diachi": "169 Gò vấp HCM",
-    "ghichu": "gói bọc cẩn thận",
-    "tienship": 20000,
+    "ghichu": " ",
+    "ipClient": "192.168.0.2",
     "items": [{
-        "_BookItem": {
             "item": {
-                "ngayxuatban": "10-2016",
-                "ngonngu": "tv",
-                "ngaythem": "01/09/2018",
-                "dichgia": [],
-                "linkseo": "tuoi-tre-dang-gia-bao-nhieu",
-                "sotrang": 285,
-                "tieude": "Tuổi trẻ đáng giá bao nhiêu",
-                "theloai": [],
-                "hinhanh": [],
-                "nhaxuatban": "Nhà Xuất Bản Hội Nhà Văn",
-                "danhdau": [],
-                "tinhtrang": [],
                 "_bookID": "book03",
+                "danhdau": [
+                    "hot",
+                    "sale",
+                    "new"
+                ],
+                "danhgia": [
+                    "hay lắm mn ơi"
+                ],
+                "danhgiasao": 4,
+                "dichgia": [],
+                "gia": 79000,
+                "hinhanh": [
+                    "https://da2-book.s3.us-west-2.amazonaws.com/tuoi-tre-dang-gia-bao-nhieu-befe7485-1a9c-4771-abe7-6de58d957e93.jpeg"
+                ],
                 "kichthuoc": "14 x 20.5 cm",
-                "SKU": "2431864615280",
-                "mota": "Bạn hối tiếc vì",
-                "tacgia": [],
-                "gia": 79000
+                "linkseo": "tuoi-tre-dang-gia-bao-nhieu",
+                "mota": "Bạn hối tiếc vì không nắm bắt lấy một cơ hội nào đó, chẳng có ai phải mất ngủ. Bạn trải qua những ngày tháng nhạt nhẽo với công việc bạn căm ghét, người ta chẳng hề bận lòng.    Bạn có chết mòn nơi xó tường với những ước mơ dang dở, đó không phải là việc của họ.    Suy cho cùng, quyết định là ở bạn. Muốn có điều gì hay không là tùy bạn.    Nên hãy làm những điều bạn thích. Hãy đi theo tiếng nói trái tim. Hãy sống theo cách bạn cho là mình nên sống.Vì sau tất cả, chẳng ai quan tâm",
+                "ngaythem": " ",
+                "ngayxuatban": "10-2016",
+                "nhaxuatban": "Nhà Xuất Bản Hội Nhà Văn",
+                "SKU": 2431864615280,
+                "sotrang": 285,
+                "tacgia": [
+                    "Rosie Nguyễn"
+                ],
+                "theloai": [
+                    "sach-tieng-viet",
+                    "sach-ky-nang-song"
+                ],
+                "tieude": "Tuổi trẻ đáng giá bao nhiêu",
+                "tinhtrang": " "
             },
-            "price": 79000,
-            "qty": 1
+            "price": 316000,
+            "qty": 4
         },
-        "soluong": 1,
-        "dongia": 72000,
-        "tongtien": 72000
-    }],
-    "tongtienthanhtoan": 171000,
-    "tinhtrang": "chuagiao",
-    "ngaythanhtoan": "25/56/12"
+        {
+            "item": {
+                "_bookID": "book04",
+                "danhdau": [
+                    "popular",
+                    "new"
+                ],
+                "danhgia": [
+                    "hay lắm mn ơi"
+                ],
+                "danhgiasao": 5,
+                "dichgia": [
+                    "Lê Chu Cầu"
+                ],
+                "gia": 72000,
+                "hinhanh": [
+                    "https://da2-book.s3.us-west-2.amazonaws.com/nha-gia-kim-fbaee11a-ab83-4832-a6b6-6d081e3215d3.jpeg"
+                ],
+                "kichthuoc": "3 x 20.5 cm",
+                "linkseo": "nha-gia-kim",
+                "mota": "Mashima – một anh chàng thật thà và thụ động.\nShigeta – một nhà nghiên cứu thường thường bậc trung, đã có một đời vợ.\nNakasugi – một anh chàng luôn bị cô bạn gái kiểm soát, có ưu điểm là dễ gây thiện cảm cho người đối diện.\nVà Saiki – Một anh chàng cực kì đẹp trai nhưng tính khí lạ đời.\nKhông phải bạn bè cũng chẳng đặc biệt thân thích, vậy mà bốn con người ấy lại đồng hành cùng nhau trên những chuyến đi. Qua mỗi chuyến đi họ trở nên thân thiết hơn nhưng vẫn luôn cố gắng giữ một khoảng cách, không can thiệp quá sâu vào sự riêng tư của những người bạn đồng hành nhưng vẫn luôn sẵn sàng đưa tay giúp đỡ, an ủi lẫn nhau. \nCuốn sách để lại cho người đọc một cảm giác vô cùng dễ chịu.",
+                "ngaythem": " ",
+                "ngayxuatban": "10-2013",
+                "nhaxuatban": "Nhà Xuất Bản Văn Học",
+                "SKU": 2518407786529,
+                "sotrang": 228,
+                "tacgia": [
+                    "Paulo Coelho"
+                ],
+                "theloai": [
+                    "sach-tieng-viet",
+                    "sach-van-hoc"
+                ],
+                "tieude": "Nhà Giả Kim",
+                "tinhtrang": " "
+            },
+            "price": 72000,
+            "qty": 1
+        }
+    ],
+    "ngaylaphoadon": "13/10/2018",
+    "ngaythanhtoan": " ",
+    "sodienthoai": "0962282962",
+    "tennguoinhan": "Hoàng Vũ",
+    "tienship": 1111,
+    "tinhtrang": "Chờ xác nhận",
+    "tongtienthanhtoan": 388000
 }]

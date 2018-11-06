@@ -15,8 +15,7 @@ module.exports = function Cart(oldCart) {
       };
     }
     storedItem.qty++;
-    storedItem.price = parseFloat(storedItem.item.gia * storedItem.qty);
-    console.log("Add price:" + storedItem.price)
+    storedItem.price = storedItem.item.gia * storedItem.qty;
     this.calculateTotal();
   };
 
@@ -42,11 +41,11 @@ module.exports = function Cart(oldCart) {
         };
       }
       this.items[id].qty = parseInt(qtyy);
-      this.items[id].price = parseFloat(qtyy * this.items[id].item.price);
+      this.items[id].price = parseInt(qtyy) * this.items[id].item.gia;
       this.calculateTotal();
     } else {
       this.items[id].qty += parseInt(qtyy);
-      this.items[id].price += parseFloat(qtyy * this.items[id].item.price);
+      this.items[id].price += parseInt(qtyy) * this.items[id].item.gia;
       this.calculateTotal();
     }
 
@@ -68,10 +67,8 @@ module.exports = function Cart(oldCart) {
 
   //update
   this.update = function (id, qtyy) {
-    this.items[id].qty = parseInt(qtyy);
-    this.items[id].price = parseFloat(qtyy * this.items[id].item.gia);
-    console.log("update:" + this.items[id].price);
-    //Nếu nhập số lượng <0 thì xoá
+    this.items[id].qty = qtyy;
+    this.items[id].price = qtyy * this.items[id].item.gia;
     if (this.items[id].qty <= 0) {
       this.removeItem(id);
     }
@@ -83,8 +80,7 @@ module.exports = function Cart(oldCart) {
     this.totalPrice = 0;
     this.totalQty = 0;
     for (var id in this.items) {
-      var amout = parseFloat(this.items[id].item.gia * this.items[id].qty);
-      console.log("amout" + amout);
+      var amout = this.items[id].item.gia * this.items[id].qty;
       this.totalPrice += amout;
       this.totalQty++;
     }

@@ -28,6 +28,7 @@ exports.add_order = function (req, res, next) {
     });
   }
   var cart = new Cart(req.session.cart);
+  console.log(cart.generateArray())
   var now = date.format(new Date(), "DD/MM/YYYY");
   var params = {
     TableName: "DA2Order",
@@ -42,7 +43,7 @@ exports.add_order = function (req, res, next) {
       tienship: 1111,
       items: cart.generateArray(),
       tongtienthanhtoan: cart.totalPrice,
-      tinhtrang: "Chưa xác nhận",
+      tinhtrang: "Chờ xác nhận",
       ngaythanhtoan: " ",
       codeDef: UUID(),
       ipClient: req.body.ipClient // có thể sẽ check ip customer để tránh spam, thêm condition Expression limit đơn đặt hàng trong 1 khoảng time// chưa làm
@@ -140,6 +141,7 @@ exports.add_order = function (req, res, next) {
     }
   });
 };
+
 exports.xacNhanOrder = function (req, res) {
   var codeDef = req.params.codeDef;
   console.log(codeDef);
@@ -193,3 +195,50 @@ exports.xacNhanOrder = function (req, res) {
     }
   });
 };
+
+exports.getAllOrder = function (req, res) {
+  var params = {
+    TableName: "DA2Order"
+  };
+  //DUYET TAT CA COLLECTIONS TREN TABLE
+  docClient.scan(params, onScan);
+
+  function onScan(err, data) {
+    if (err) {
+      console.error(
+        "\nUnable to scan the table. Error JSON:",
+        JSON.stringify(err, null, 2)
+      );
+      res.send(JSON.stringify(err, null, 2));
+    } else {
+      res.render("../views/admin/page/list-order.ejs", {
+        allOrder: data.Items
+      })
+    }
+  }
+};
+
+
+exports.getDetailOrder = function (req, res) {
+  var orderID = req.params.id;
+  var params = {
+    TableName: "DA2Order",
+    KeyConditionExpression: "#ma = :id",
+    ExpressionAttributeNames: {
+      "#ma": "_orderID"
+    },
+    ExpressionAttributeValues: {
+      ":id": orderID
+    }
+  };
+  docClient.query(params, function (err, data) {
+    if (err) {
+      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+      res.send(JSON.stringify(err, null, 2));
+    } else {
+      res.render("../views/admin/page/orderDetail.ejs", {
+        orderDetail: data.Items,
+      })
+    }
+  });
+}

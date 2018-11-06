@@ -74,7 +74,6 @@ exports.get_detail_product = function (req, res, next) {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
-      console.log(data);
       if (!req.session.cart) {
         return res.render("../views/site/page/single-product", {
           sachDetail: data.Items,
@@ -98,23 +97,23 @@ exports.get_detail_product = function (req, res, next) {
 
 exports.edit_book = function (req, res, next) {
   var bookid = req.params.id;
-  console.log(req.body.editTinhTrang);
+  console.log(req.body.newTinhTrang);
   var editBook = {
-    tacgia: renameModule.splitList(req.body.editTacGia),
-    tieude: req.body.editTieuDe,
-    theloai: String(req.body.editTheLoai),
-    SKU: req.body.editSKU,
-    ngayxuatban: req.body.editNgayXuatBan,
-    nhaxuatban: req.body.editNhaXuatBan,
-    kichthuoc: req.body.editKichThuoc,
-    mota: req.body.editMoTa,
-    dichgia: renameModule.splitList(req.body.editDichGia),
-    ngonngu: req.body.editNgonNgu,
-    tinhtrang: renameModule.splitList(req.body.editTinhTrang) || [],
-    danhdau: renameModule.splitList(req.body.editDanhDau) || [],
-    linkseo: req.body.editLinkSeo,
-    sotrang: parseInt(req.body.editSoTrang),
-    gia: parseFloat(req.body.editGia)
+    tacgia: renameModule.splitList(req.body.newTacGia),
+    tieude: req.body.newTieuDe,
+    theloai: String(req.body.newTheLoai),
+    SKU: req.body.newSKU,
+    ngayxuatban: req.body.newNgayXuatBan,
+    nhaxuatban: req.body.newNhaXuatBan,
+    kichthuoc: req.body.newKichThuoc,
+    mota: req.body.newMoTa,
+    dichgia: renameModule.splitList(req.body.newDichGia),
+    ngonngu: req.body.newNgonNgu,
+    tinhtrang: renameModule.splitList(req.body.newTinhTrang) || [],
+    danhdau: renameModule.splitList(req.body.newDanhDau) || [],
+    linkseo: req.body.newLinkSeo,
+    sotrang: parseInt(req.body.newSoTrang),
+    gia: parseFloat(req.body.newGia)
   };
   console.log(editBook);
   var params = {
@@ -159,8 +158,8 @@ exports.edit_book = function (req, res, next) {
     if (err) {
       console.log("users::update::error - " + JSON.stringify(err, null, 2));
     } else {
-      console.log("users::update::success " + JSON.stringify(data));
-      res.redirect("/admin");
+      // console.log("users::update::success " + JSON.stringify(data));
+      res.redirect("/admin/product/detail/" + bookid);
     }
   });
 };
@@ -348,12 +347,6 @@ exports.search_book = function (req, res) {
     });
   }
 }
-
-//GET ALL BOOK ADMIN
-exports.addNewBook = function (req, res, next) {
-  res.render("../views/admin/page/addNewBook.ejs");
-};
-
 
 //GET ALL BOOK ADMIN
 exports.get_all_book2 = function (req, res, next) {

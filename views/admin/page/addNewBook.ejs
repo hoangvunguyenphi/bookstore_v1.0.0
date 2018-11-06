@@ -108,9 +108,12 @@
                                             required placeholder="Nhập tên tác giả">
                                     </div>
                                     <div class="form-group col-xs-4">
-                                        <label for="newDichGia">Dịch giả</label>
-                                        <input type="text" class="form-control" id="newDichGia" name="newDichGia"
-                                            placeholder="Nhập tên dịch giả">
+                                        <label for="newNgonNgu">Ngôn ngữ</label>
+                                        <select class="form-control" id="newNgonNgu" name="newNgonNgu">
+                                            <option value="Tiếng Việt">Tiếng Việt
+                                            </option>
+                                            <option value="Nước Ngoài">Nước Ngoài</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-xs-4">
                                         <label for="newTheLoai">Thể loại</label>
@@ -124,12 +127,9 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-xs-4">
-                                        <label for="newNgonNgu">Ngôn ngữ</label>
-                                        <select class="form-control" id="newNgonNgu" name="newNgonNgu">
-                                            <option value="Tiếng Việt">Tiếng Việt
-                                            </option>
-                                            <option value="Nước Ngoài">Nước Ngoài</option>
-                                        </select>
+                                        <label for="newDichGia">Dịch giả</label>
+                                        <input type="text" class="form-control" id="newDichGia" name="newDichGia"
+                                            placeholder="Nhập tên dịch giả">
                                     </div>
                                     <div class="form-group col-xs-4">
                                         <label for="newNgayXuatBan">Ngày xuất bản</label>
@@ -272,6 +272,15 @@
         $(function () {
             $("#newMoTa").wysihtml5();
         });
+        $('#newNgonNgu').change(function () {
+            if (this.value == "Tiếng Việt") {
+                $('#newDichGia').prop('readOnly', true);
+            } else {
+                if (this.value == "Nước Ngoài") {
+                    $('#newDichGia').prop('readOnly', false);
+                }
+            }
+        }).change();
     </script>
 </body>
 
