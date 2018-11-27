@@ -223,7 +223,7 @@
                                                                         <!-- <div class="deal-countdown countdown"></div> -->
                                                                     </div>
                                                                     <div class="hover-area" style="position: relative; padding-top: 20px;">
-                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
                                                                             rel="nofollow">Add to cart</a>
                                                                     </div>
                                                                     <!-- /.deal-countdown-timer -->
@@ -312,7 +312,7 @@
                                                                         </h2>
                                                                     </a>
                                                                     <div class="hover-area">
-                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
                                                                             rel="nofollow">Add to cart</a>
                                                                     </div>
                                                                 </div>
@@ -361,7 +361,7 @@
                                                                         </h2>
                                                                     </a>
                                                                     <div class="hover-area">
-                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
                                                                             rel="nofollow">Add to cart</a>
                                                                     </div>
                                                                 </div>
@@ -411,7 +411,7 @@
                                                                         </h2>
                                                                     </a>
                                                                     <div class="hover-area">
-                                                                        <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                        <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
                                                                             rel="nofollow">Add to cart</a>
                                                                     </div>
                                                                 </div>
@@ -570,7 +570,7 @@
                                                                     </h2>
                                                                 </a>
                                                                 <div class="hover-area">
-                                                                    <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                    <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
                                                                         rel="nofollow">Add to cart</a>
                                                                 </div>
                                                             </div>
@@ -617,7 +617,7 @@
                                                                     </h2>
                                                                 </a>
                                                                 <div class="hover-area">
-                                                                    <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                    <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
                                                                         rel="nofollow">Add to cart</a>
                                                                 </div>
                                                             </div>
@@ -664,7 +664,7 @@
                                                                     </h2>
                                                                 </a>
                                                                 <div class="hover-area">
-                                                                    <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                    <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
                                                                         rel="nofollow">Add to cart</a>
                                                                 </div>
                                                             </div>
@@ -711,7 +711,7 @@
                                                                     </h2>
                                                                 </a>
                                                                 <div class="hover-area">
-                                                                    <a class="button add_to_cart_button" href="/addtocart/<%=book._bookID%>"
+                                                                    <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
                                                                         rel="nofollow">Add to cart</a>
                                                                 </div>
                                                             </div>
@@ -836,6 +836,86 @@
             }
             return x1 + x2;
         }
+
+        function addToCart(id) {
+            $.ajax({
+                type: "GET",
+                url: "/addtocart/" + id,
+                dataType: "json",
+                success: function (data) {
+                    //alert('đã thêm vào giỏ hàng' + data.totalPrice);
+                    $('.update-totalPrice').html(formatNumber(data.totalPrice, '.', ',') + '₫');
+                    $('.update-totalQty').html(data.totalQty);
+
+                    var update = '';
+                    data.products.forEach(itc => {
+                        update += '<li class="woocommerce-mini-cart-item mini_cart_item">';
+                        update += '<a onclick="deleteCartItem(\'' + itc.item._bookID +
+                            '\')" class="remove" aria-label="Remove this item"';
+                        update += 'data-product_id="65" data-product_sku="">×</a>';
+                        update += '<a href="/product/' + itc.item.linkseo + '_' + itc.item._bookID +
+                            '">';
+                        update += '<img src="' + itc.item.hinhanh[0] +
+                            '" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image" alt="">';
+                        update += itc.item.tieude + '</a><span class="quantity"> ' + itc.qty + '×';
+                        update += '<span class="woocommerce-Price-amount amount">';
+                        update += formatNumber(itc.item.gia, '.', ',') +
+                            '<span class="woocommerce-Price-currencySymbol">₫</span></span>';
+                        update += '</span> </li>';
+                    });
+                    $('.update-products').html(update);
+                    // hiệu ứng blinking ở cuối assets style.css
+                    var $div2blink = $(".divtoBlink"); // Save reference, only look this item up once, then save
+                    var backgroundInterval = setInterval(function () {
+                        $div2blink.toggleClass("backgroundRed");
+                    }, 500);
+                    setTimeout(function () {
+                        window.clearInterval(backgroundInterval);
+                    }, 2200)
+                },
+                error: function () {}
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        $('.add_to_cart_button').on('click', function () {
+            var cart = $('.shopping-cart');
+            var imgtodrag = $(this).parent('.item').find("img").eq(0);
+            if (imgtodrag) {
+                var imgclone = imgtodrag.clone()
+                    .offset({
+                        top: imgtodrag.offset().top,
+                        left: imgtodrag.offset().left
+                    })
+                    .css({
+                        'opacity': '0.5',
+                        'position': 'absolute',
+                        'height': '150px',
+                        'width': '150px',
+                        'z-index': '100'
+                    })
+                    .appendTo($('body'))
+                    .animate({
+                        'top': cart.offset().top + 10,
+                        'left': cart.offset().left + 10,
+                        'width': 75,
+                        'height': 75
+                    }, 1000, 'easeInOutExpo');
+
+                setTimeout(function () {
+                    cart.effect("shake", {
+                        times: 2
+                    }, 200);
+                }, 1500);
+
+                imgclone.animate({
+                    'width': 0,
+                    'height': 0
+                }, function () {
+                    $(this).detach()
+                });
+            }
+        });
     </script>
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/tether.min.js"></script>

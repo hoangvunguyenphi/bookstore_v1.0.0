@@ -8,7 +8,6 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  endpoint,
   region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
@@ -36,7 +35,11 @@ exports.add_to_cart = function (req, res, next) {
         cart.add(it, it._bookID);
       });
       req.session.cart = cart;
-      res.redirect("/");
+      res.json({
+        products: cart.generateArray(),
+        totalPrice: cart.totalPrice,
+        totalQty: cart.totalQty
+      });
     }
   });
 };
@@ -64,7 +67,11 @@ exports.add_to_cart2 = function (req, res, next) {
         cart.add2(it, it._bookID, soluong);
       });
       req.session.cart = cart;
-      res.redirect("/cart");
+      res.json({
+        products: cart.generateArray(),
+        totalPrice: cart.totalPrice,
+        totalQty: cart.totalQty
+      });
     }
   });
 };
@@ -110,7 +117,11 @@ exports.delete_cart_item = function (req, res, next) {
   var cart = new Cart(req.session.cart ? req.session.cart : {});
   cart.removeItem(productId);
   req.session.cart = cart;
-  res.redirect("/cart");
+  res.json({
+    products: cart.generateArray(),
+    totalPrice: cart.totalPrice,
+    totalQty: cart.totalQty
+  });
 };
 
 //Module get các item trong cart

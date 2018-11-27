@@ -6,27 +6,6 @@ var Cart_controller = require("../controller/cart_controller");
 
 //Trang chủ
 router.get("/", Book_controller.get_all_book);
-// router.get("/", function (req, res) {
-//     Book_controller.get_all_book(function (data) {
-//         console.log(data)
-//         if (!req.session.cart) {
-//             return res.render("../views/site/page/index", {
-//                 products: [], //cartItem
-//                 allBooks: data.data.Items,
-//                 totalPrice: 0,
-//                 totalQty: 0
-//             });
-//         }
-//         //ngược lại đang trong phiên session
-//         var cart = new Cart(req.session.cart);
-//         res.render("../views/site/page/index", {
-//             products: cart.generateArray(),
-//             allBooks: data.data.Items,
-//             totalPrice: cart.totalPrice,
-//             totalQty: cart.totalQty
-//         });
-//     });
-// });
 
 //Chi tiết sp
 router.get("/product/*_:id", Book_controller.get_detail_product);
@@ -36,7 +15,7 @@ router.get("/addtocart/:id", Cart_controller.add_to_cart);
 // router.post("/addtocart", Cart_controller.add_to_cart);
 
 //Thêm sản phẩm vào giỏ khi ở trang chi tiết sp với số lượng nhập vào
-router.post("/add_detail_to_cart/:id", Cart_controller.add_to_cart2);
+router.post("/product/*_:id", Cart_controller.add_to_cart2);
 
 //Đi đến đặt hàng
 router.get("/check_out", Cart_controller.check_out);

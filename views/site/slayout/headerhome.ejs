@@ -25,11 +25,9 @@
         <div class="techmarket-sticky-wrap">
             <div class="row">
                 <div class="site-branding">
-
                     <a href="/" class="custom-logo-link" rel="home" style="font-size: 30px">
                         <strong>Trang chủ</strong> <i class="footer-newsletter-icon tm tm-newsletter"></i>
                     </a>
-
                     <!-- /.custom-logo-link -->
                 </div>
                 <!-- /.site-branding -->
@@ -83,26 +81,25 @@
                 <!-- .header-wishlist -->
                 <ul id="site-header-cart" class="site-header-cart menu">
                     <li class="animate-dropdown dropdown ">
-                        <a class="cart-contents" href="/cart" data-toggle="dropdown" title="View your shopping cart">
-                            <i class="tm tm-shopping-bag"></i>
-                            <span class="count">
-                                <%=totalQty%></span>
+                        <a class="cart-contents" href="cart.html" data-toggle="dropdown" title="View your shopping cart">
+                            <i class="tm tm-shopping-bag divtoBlink"></i>
+                            <span class="count update-totalQty">
+                                <%= totalQty %></span>
                             <span class="amount">
-                                <span class="price-label">Giỏ hàng</span>
-                                <%=formatNumber(totalPrice,'.',',')%>
-                                ₫</span>
+                                <span class="price-label ">Giỏ hàng</span><span class="update-totalPrice">
+                                    <%=formatNumber(totalPrice,'.',',')%>₫</span></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-mini-cart">
                             <li>
                                 <div class="widget woocommerce widget_shopping_cart">
                                     <div class="widget_shopping_cart_content">
-                                        <ul class="woocommerce-mini-cart cart_list product_list_widget ">
-                                            <%products.forEach(function(itc){
-                                                    %>
+                                        <ul class="woocommerce-mini-cart cart_list product_list_widget update-products">
+                                            <%products.forEach(function(itc){ %>
                                             <li class="woocommerce-mini-cart-item mini_cart_item">
-                                                <a href="/deletecart/<%=itc.item._bookID%>" class="remove" aria-label="Remove this item"
+                                                <a onclick="deleteCartItem('<%=itc.item._bookID%>')" class="remove"
+                                                    style="cursor: pointer;" aria-label="Remove this item"
                                                     data-product_id="65" data-product_sku="">×</a>
-                                                <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
+                                                <a href="/chitiet/<%=itc.item.linkseo%>-<%=itc.item._bookID%>">
                                                     <img src="<%=itc.item.hinhanh[0]%>" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image"
                                                         alt="">
                                                     <%=itc.item.tieude%>
@@ -117,13 +114,14 @@
                                         </ul>
                                         <!-- .cart_list -->
                                         <p class="woocommerce-mini-cart__total total">
-                                            <strong>Tổng tiền:</strong>
+                                            <strong>Subtotal:</strong>
                                             <span class="woocommerce-Price-amount amount">
-                                                <%=formatNumber(totalPrice,'.',',')%> <span class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                <span class="woocommerce-Price-currencySymbol update-totalPrice">
+                                                    <%=formatNumber(totalPrice,'.',',')%></span></span>
                                         </p>
                                         <p class="woocommerce-mini-cart__buttons buttons">
                                             <a href="/cart" class="button wc-forward">Xem giỏ hàng</a>
-                                            <a href="/check_out" class="button checkout wc-forward">Đặt hàng</a>
+                                            <a href="/check_out" class="button checkout wc-forward">Checkout</a>
                                         </p>
                                     </div>
                                     <!-- .widget_shopping_cart_content -->
@@ -199,10 +197,10 @@
                         <!-- .widget -->
                     </div>
                     <!-- .site-search -->
-                    <a class="handheld-header-cart-link has-icon" href="/cart" title="View your shopping cart">
-                        <i class="tm tm-shopping-bag"></i>
-                        <span class="count">
-                            <%=totalQty%></span>
+                    <a class="handheld-header-cart-link has-icon" href="/cart" title="Xem giỏ hàng">
+                        <i class="tm tm-shopping-bag divtoBlink"></i>
+                        <span class="count update-totalQty">
+                            <%= totalQty %></span>
                     </a>
                 </div>
                 <!-- /.row -->
@@ -213,5 +211,65 @@
     </div>
     <!-- .handheld-only -->
 </header>
+
+<script>
+    function formatNumber(nStr, decSeperate, groupSeperate) {
+        nStr += '';
+        x = nStr.split(decSeperate);
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+        }
+        return x1 + x2;
+    }
+
+    $('#site-header-cart').on("click", ".dropdown-menu-mini-cart", function (e) {
+        $(this).parent().is(".show") && e.stopPropagation();
+    });
+
+    function deleteCartItem(id) {
+        $.ajax({
+            type: "GET",
+            url: "/deletecart/" + id,
+            dataType: "json",
+            success: function (data) {
+                //alert('đã thêm vào giỏ hàng' + data.totalPrice);
+                $('.update-totalPrice').html(formatNumber(data.totalPrice, '.', ',') + '₫');
+                $('.update-totalQty').html(data.totalQty);
+
+                var update = '';
+                data.products.forEach(itc => {
+                    update += '<li class="woocommerce-mini-cart-item mini_cart_item">';
+                    update += '<a onclick="deleteCartItem(\'' + itc.item._bookID +
+                        '\')" class="remove" aria-label="Remove this item"';
+                    update += 'data-product_id="65" data-product_sku="">×</a>';
+                    update += '<a href="/product/' + itc.item.linkseo + '_' + itc.item._bookID +
+                        '">';
+                    update += '<img src="' + itc.item.hinhanh[0] +
+                        '" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image" alt="">';
+                    update += itc.item.tieude + '</a><span class="quantity"> ' + itc.qty + '×';
+                    update += '<span class="woocommerce-Price-amount amount">';
+                    update += formatNumber(itc.item.gia, '.', ',') +
+                        '<span class="woocommerce-Price-currencySymbol">₫</span></span>';
+                    update += '</span> </li>';
+                });
+
+                $('.update-products').html(update);
+
+                var $div2blink = $(".divtoBlink"); // Save reference, only look this item up once, then save
+                var backgroundInterval = setInterval(function () {
+                    $div2blink.toggleClass("backgroundRed");
+                }, 500);
+
+                setTimeout(function () {
+                    window.clearInterval(backgroundInterval);
+                }, 2000)
+            },
+            error: function () {}
+        });
+    }
+</script>
 <!-- .header-v3 -->
 <!-- ============================================================= Header End ============================================================= -->

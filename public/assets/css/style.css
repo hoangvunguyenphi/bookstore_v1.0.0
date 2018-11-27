@@ -39360,3 +39360,19 @@ form.track_order input[type="submit"] {
   left: auto !important;
   top: 130% !important;
 }
+
+.backgroundRed {
+  background: #F00;
+  border-radius: 25px;
+  padding: 5px;
+}
+
+.divtoBlink {
+  -webkit-transition: background 1.0s;
+  border-radius: 25px;
+  padding: 7px;
+}
+
+.remove {
+  cursor: pointer;
+}
