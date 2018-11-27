@@ -38,7 +38,10 @@ router.get("/cart", Cart_controller.get_items_cart);
 //Update số lượng sp trong giỏ
 router.post("/updatecart", Cart_controller.update_cart);
 
-//Xoá sp trong giỏ
+//Xoá sp trong giỏ menu
 router.get("/deletecart/:id", Cart_controller.delete_cart_item);
+
+//Xoá sp trong giỏ
+router.get("/deletecart2/:id", Cart_controller.delete_cart_item2);
 
 module.exports = router;

@@ -208,13 +208,12 @@
                                     </ul>
                                     <!-- /.ec-tabs -->
                                     <div class="tab-content">
-                                        <div class="tab-pane " id="tab-accessories" role="tabpanel">
+                                        <div class="tab-pane" id="tab-accessories" role="tabpanel">
                                             <div class="accessories">
                                                 Cac sp lien quan
                                             </div>
                                         </div>
                                         <div class="tab-pane active" id="tab-description" role="tabpanel">
-                                            <h2>Chi tiết</h2>
                                             <h1 style="text-align: center;">
                                                 <%=item.tieude%>
                                             </h1>
@@ -222,26 +221,6 @@
                                                 id="dvMoTa">
                                                 <%-item.mota%>
                                             </div>
-                                            <!-- <div style="text-align: center;">
-                                                        <iframe width="854" height="480" allowfullscreen="allowfullscreen" src="https://www.youtube.com/embed/K5OGs8a3vlM?ecver=1"></iframe>
-                                                    </div>
-                                                    <div class="outer-wrap">
-                                                        <div class="content-info">
-                                                            <h1 style="text-align: left;">Dynamic brightness
-                                                                <br> reveals hidden details</h1>
-                                                            <p style="text-align: left;">Nullam dignissim elit ut urna rutrum,
-                                                                a fermentum mi auctor. Mauris efficitur magna orci, et dignissim
-                                                                lacus
-                                                                <br> scelerisque sit amet. Proin malesuada tincidunt nisl
-                                                                ac commodo. Vivamus eleifend porttitor ex sit amet suscipit.
-                                                                <br> Vestibulum at ullamcorper lacus, vel facilisis arcu.
-                                                                Aliquam erat volutpat.</p>
-                                                        </div>-->
-                                            <!-- 
-                                                    <div class="image-info">
-                                                        <img src="/assets/images/products/des1.png" alt="">
-                                                    </div>.content-info -->
-                                            <!-- .image-info -->
                                         </div>
                                         <!-- .outer-wrap -->
                                         <div class="tab-pane" id="tab-specification" role="tabpanel">
@@ -362,7 +341,6 @@
         $(function () {
             $('form').on('submit', function (e) {
                 e.preventDefault(); // using this page stop being refreshing 
-
                 $.ajax({
                     type: 'POST',
                     data: $('form').serialize(),
@@ -372,7 +350,6 @@
                         $('.update-totalPrice').html(formatNumber(data.totalPrice, '.', ',') +
                             '₫');
                         $('.update-totalQty').html(data.totalQty);
-
                         var update = '';
                         data.products.forEach(itc => {
                             update +=

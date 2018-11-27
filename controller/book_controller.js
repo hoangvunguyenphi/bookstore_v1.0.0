@@ -20,7 +20,7 @@ let docClient = new AWS.DynamoDB.DocumentClient();
 exports.get_all_book = function (req, res, next) {
   var params = {
     TableName: "DA2Book",
-    Limit: 50
+    Limit: 40
   };
   //DUYET TAT CA COLLECTIONS TREN TABLE
   docClient.scan(params, function (err, data) {

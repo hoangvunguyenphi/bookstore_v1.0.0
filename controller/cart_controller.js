@@ -124,9 +124,18 @@ exports.delete_cart_item = function (req, res, next) {
   });
 };
 
+exports.delete_cart_item2 = function (req, res, next) {
+  var productId = req.params.id;
+  var cart = new Cart(req.session.cart ? req.session.cart : {});
+  cart.removeItem(productId);
+  req.session.cart = cart;
+  return res.redirect("/cart");
+};
+
+
 //Module get các item trong cart
 exports.check_out = function (req, res, next) {
-  if (!req.session.cart) {
+  if (!req.session.cart || req.session.cart == null) {
     return res.render("../views/site/page/cart", {
       products: [],
       totalPrice: 0,
@@ -134,7 +143,7 @@ exports.check_out = function (req, res, next) {
     });
   }
   var cart = new Cart(req.session.cart);
-  res.render("../views/site/page/checkout", {
+  return res.render("../views/site/page/checkout", {
     products: cart.generateArray(),
     totalPrice: cart.totalPrice,
     totalQty: cart.totalQty
