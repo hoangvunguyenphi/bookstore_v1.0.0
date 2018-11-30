@@ -4,6 +4,7 @@ var Book_controller = require("../controller/book_controller");
 let date = require("date-and-time");
 var AWS = require("aws-sdk");
 var renameModule = require("../controller/edit_name");
+let authen_controller = require("../controller/authentication_controller");
 
 const UUID = require("uuid/v4");
 var multer = require("multer");
@@ -27,6 +28,12 @@ let docClient = new AWS.DynamoDB.DocumentClient();
 router.get("/", Book_controller.get_all_book2);
 
 router.get("/addNew", function (req, res) {
+  /**
+   * @author N.T.Sơn
+   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+   */
+  authen_controller.check_session_auth(req, res);
+
   res.render("../views/admin/page/addNewBook.ejs");
 });
 
@@ -95,6 +102,12 @@ var upload = multer({
 });
 //upload.single("newImgUpload")
 router.post("/saveNewBook", function (req, res) {
+  /**
+   * @author N.T.Sơn
+   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+   */
+  authen_controller.check_session_auth(req, res);
+  
   var table = "DA2Book";
   var buket = "da2-book";
   var now = date.format(new Date(), "DD/MM/YYYY");

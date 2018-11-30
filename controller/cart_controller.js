@@ -8,7 +8,8 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  region
+  region,
+  endpoint
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
 

@@ -5,6 +5,7 @@ var UUID = require("uuid/v4");
 var date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
 var awsconfig = require("../../aws-config.json");
+let authen_controller = require("../controller/authentication_controller");
 var accessKeyId = awsconfig.AWS.accessKeyId;
 var secretAccessKey = awsconfig.AWS.secretAccessKey;
 var region = awsconfig.AWS.region;
@@ -12,7 +13,8 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  region
+  region,
+  endpoint
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
 
@@ -94,6 +96,15 @@ exports.get_detail_product = function (req, res, next) {
 };
 
 exports.edit_book = function (req, res, next) {
+
+  /**
+   * @author N.T.Sơn
+   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+   * Nếu bị redirect thì _headerSent là true và ngược lại.
+   */
+  authen_controller.check_session_auth(req, res);
+  if(res._headerSent) return;
+  
   var bookid = req.params.id;
   console.log(req.body.newTinhTrang);
   var editBook = {
@@ -163,6 +174,15 @@ exports.edit_book = function (req, res, next) {
 };
 
 exports.delete_book = function (req, res, next) {
+
+  /**
+   * @author N.T.Sơn
+   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+   * Nếu bị redirect thì _headerSent là true và ngược lại.
+   */
+  authen_controller.check_session_auth(req, res);
+  if(res._headerSent) return;
+  
   var bookID = req.params.id;
   console.log("\nRemoved book ID: " + bookID);
   var params = {
@@ -182,6 +202,15 @@ exports.delete_book = function (req, res, next) {
 };
 
 exports.admin_search_book = function (req, res, next) {
+
+  /**
+   * @author N.T.Sơn
+   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+   * Nếu bị redirect thì _headerSent là true và ngược lại.
+   */
+  authen_controller.check_session_auth(req, res);
+  if(res._headerSent) return;
+  
   var keySearch = req.body.txtSearch123123;
   console.log("__" + keySearch);
   if (keySearch.length != 0) {
@@ -298,6 +327,16 @@ exports.search_book = function (req, res) {
 
 //GET ALL BOOK ADMIN
 exports.get_all_book2 = function (req, res, next) {
+
+  /**
+   * @author N.T.Sơn
+   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+   * Nếu bị redirect thì _headerSent là true và ngược lại.
+   */
+  authen_controller.check_session_auth(req, res);
+  if(res._headerSent) return;
+
+  console.log("Countinue!");
   var params = {
     TableName: "DA2Book"
   };
@@ -319,6 +358,15 @@ exports.get_all_book2 = function (req, res, next) {
 };
 
 exports.get_detail_product2 = function (req, res) {
+
+  /**
+   * @author N.T.Sơn
+   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+   * Nếu bị redirect thì _headerSent là true và ngược lại.
+   */
+  authen_controller.check_session_auth(req, res);
+  if(res._headerSent) return;
+
   var sachID = req.params.id;
   console.log("\n_________" + sachID);
 

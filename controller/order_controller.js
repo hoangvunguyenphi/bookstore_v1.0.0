@@ -12,7 +12,8 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  region
+  region,
+  endpoint
 });
 
 var ses = new AWS.SES();
