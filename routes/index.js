@@ -44,4 +44,9 @@ router.get("/deletecart/:id", Cart_controller.delete_cart_item);
 //Xoá sp trong giỏ
 router.get("/deletecart2/:id", Cart_controller.delete_cart_item2);
 
+//khách hàng kiểm tra thông tin đơn hàng
+router.get("/trackOrder",Order_controller.trackOrder);
+
+//router.get("*", Cart_controller.handleError1 );
+
 module.exports = router;

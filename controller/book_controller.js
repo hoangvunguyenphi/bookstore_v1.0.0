@@ -1,6 +1,6 @@
 var AWS = require("aws-sdk");
 var Cart = require("./cart");
-var fs = require('fs');
+var fs = require("fs");
 var UUID = require("uuid/v4");
 var date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
@@ -13,19 +13,18 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  region,
-  endpoint
+  region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
 
 //GET ALL BOOK
-exports.get_all_book = function (req, res, next) {
+exports.get_all_book = function(req, res, next) {
   var params = {
     TableName: "DA2Book",
     Limit: 40
   };
   //DUYET TAT CA COLLECTIONS TREN TABLE
-  docClient.scan(params, function (err, data) {
+  docClient.scan(params, function(err, data) {
     if (err) {
       console.log(
         "\nUnable to scan the table. Error JSON:",
@@ -52,10 +51,10 @@ exports.get_all_book = function (req, res, next) {
         totalQty: cart.totalQty
       });
     }
-  })
+  });
 };
 //GET CHI TIET SPs
-exports.get_detail_product = function (req, res, next) {
+exports.get_detail_product = function(req, res, next) {
   var sachID = req.params.id;
   console.log("\n_________" + sachID);
 
@@ -70,7 +69,7 @@ exports.get_detail_product = function (req, res, next) {
     }
   };
   //Thực hiện query object theo id lấy từ req.params
-  docClient.query(params, function (err, data) {
+  docClient.query(params, function(err, data) {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
@@ -95,16 +94,15 @@ exports.get_detail_product = function (req, res, next) {
   });
 };
 
-exports.edit_book = function (req, res, next) {
-
+exports.edit_book = function(req, res, next) {
   /**
    * @author N.T.Sơn
    * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
    * Nếu bị redirect thì _headerSent là true và ngược lại.
    */
   authen_controller.check_session_auth(req, res);
-  if(res._headerSent) return;
-  
+  if (res._headerSent) return;
+
   var bookid = req.params.id;
   console.log(req.body.newTinhTrang);
   var editBook = {
@@ -130,7 +128,8 @@ exports.edit_book = function (req, res, next) {
     Key: {
       _bookID: bookid
     },
-    UpdateExpression: "set #sku=:sk, #tieude=:td, #tacgia=:tg, #dichgia=:dg, #theloai=:tl,#tinhtrang=:tt,#ngonngu=:nn,#ngayxuatban=:txb,#nhaxuatban=:nxb,#sotrang=:st,#mota=:mt,#danhdau=:dd,#gia=:g",
+    UpdateExpression:
+      "set #sku=:sk, #tieude=:td, #tacgia=:tg, #dichgia=:dg, #theloai=:tl,#tinhtrang=:tt,#ngonngu=:nn,#ngayxuatban=:txb,#nhaxuatban=:nxb,#sotrang=:st,#mota=:mt,#danhdau=:dd,#gia=:g",
     ExpressionAttributeValues: {
       ":sk": editBook.SKU,
       ":td": editBook.tieude,
@@ -163,7 +162,7 @@ exports.edit_book = function (req, res, next) {
     },
     ReturnValues: "UPDATED_NEW"
   };
-  docClient.update(params, function (err, data) {
+  docClient.update(params, function(err, data) {
     if (err) {
       console.log("users::update::error - " + JSON.stringify(err, null, 2));
     } else {
@@ -173,16 +172,15 @@ exports.edit_book = function (req, res, next) {
   });
 };
 
-exports.delete_book = function (req, res, next) {
-
+exports.delete_book = function(req, res, next) {
   /**
    * @author N.T.Sơn
    * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
    * Nếu bị redirect thì _headerSent là true và ngược lại.
    */
   authen_controller.check_session_auth(req, res);
-  if(res._headerSent) return;
-  
+  if (res._headerSent) return;
+
   var bookID = req.params.id;
   console.log("\nRemoved book ID: " + bookID);
   var params = {
@@ -191,26 +189,25 @@ exports.delete_book = function (req, res, next) {
       _bookID: bookID
     }
   };
-  docClient.delete(params, function (err, data) {
+  docClient.delete(params, function(err, data) {
     if (err) {
       console.log("users::delete::error - " + JSON.stringify(err, null, 2));
     } else {
       console.log("users::delete::success");
-      res.redirect("/admin");
+      res.redirect("/admin/product");
     }
   });
 };
 
-exports.admin_search_book = function (req, res, next) {
-
+exports.admin_search_book = function(req, res, next) {
   /**
    * @author N.T.Sơn
    * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
    * Nếu bị redirect thì _headerSent là true và ngược lại.
    */
   authen_controller.check_session_auth(req, res);
-  if(res._headerSent) return;
-  
+  if (res._headerSent) return;
+
   var keySearch = req.body.txtSearch123123;
   console.log("__" + keySearch);
   if (keySearch.length != 0) {
@@ -227,7 +224,7 @@ exports.admin_search_book = function (req, res, next) {
       }
     };
 
-    docClient.scan(params, function (err, data) {
+    docClient.scan(params, function(err, data) {
       if (err) {
         console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
       } else {
@@ -243,7 +240,7 @@ exports.admin_search_book = function (req, res, next) {
   }
 };
 
-exports.show_list_cat = function (req, res) {
+exports.show_list_cat = function(req, res) {
   var category = req.params.theloai;
   console.log(category);
   var params = {
@@ -257,7 +254,7 @@ exports.show_list_cat = function (req, res) {
     }
   };
 
-  docClient.scan(params, function (err, data) {
+  docClient.scan(params, function(err, data) {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
@@ -281,7 +278,7 @@ exports.show_list_cat = function (req, res) {
     }
   });
 };
-exports.search_book = function (req, res) {
+exports.search_book = function(req, res) {
   var keySearch = req.body.stieude;
   var sltTheloai = req.body.product_cat;
   console.log(keySearch + "-" + sltTheloai);
@@ -298,7 +295,7 @@ exports.search_book = function (req, res) {
         "#tl": "theloai"
       }
     };
-    docClient.scan(params, function (err, data) {
+    docClient.scan(params, function(err, data) {
       if (err) {
         console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
       } else {
@@ -323,18 +320,17 @@ exports.search_book = function (req, res) {
   } else {
     res.redirect("/");
   }
-}
+};
 
 //GET ALL BOOK ADMIN
-exports.get_all_book2 = function (req, res, next) {
-
+exports.get_all_book2 = function(req, res, next) {
   /**
    * @author N.T.Sơn
    * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
    * Nếu bị redirect thì _headerSent là true và ngược lại.
    */
   authen_controller.check_session_auth(req, res);
-  if(res._headerSent) return;
+  if (res._headerSent) return;
 
   console.log("Countinue!");
   var params = {
@@ -357,15 +353,14 @@ exports.get_all_book2 = function (req, res, next) {
   }
 };
 
-exports.get_detail_product2 = function (req, res) {
-
+exports.get_detail_product2 = function(req, res) {
   /**
    * @author N.T.Sơn
    * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
    * Nếu bị redirect thì _headerSent là true và ngược lại.
    */
   authen_controller.check_session_auth(req, res);
-  if(res._headerSent) return;
+  if (res._headerSent) return;
 
   var sachID = req.params.id;
   console.log("\n_________" + sachID);
@@ -380,16 +375,16 @@ exports.get_detail_product2 = function (req, res) {
       ":id": sachID
     }
   };
-  docClient.query(params, function (err, data) {
+  docClient.query(params, function(err, data) {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
       res.render("../views/admin/page/bookDetail.ejs", {
-        sachDetail: data.Items,
-      })
+        sachDetail: data.Items
+      });
     }
   });
-}
+};
 // var multer = require("multer");
 // var multerS3 = require("multer-s3");
 // var path = require("path");

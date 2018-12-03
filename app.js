@@ -66,7 +66,7 @@ app.use(function (err, req, res, next) {
     });
   }
   var cart = new Cart(req.session.cart);
-  res.render("../views/error.ejs", {
+  res.render("../views/404.ejs", {
     allBooks: [],
     products: cart.generateArray(),
     totalPrice: cart.totalPrice,
