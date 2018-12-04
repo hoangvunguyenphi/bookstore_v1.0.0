@@ -116,7 +116,7 @@
                                                 <td style="width: 14%; ">
                                                         <%
                                                         var tagdd="";
-                                                        switch (b.tinhtrang) {
+                                                        switch (b.tinhtranghienhanh) {
                                                         case 'Bị huỷ':
                                                             tagdd="btn-danger";
                                                             break;
@@ -146,30 +146,15 @@
                                                         type="button"
                                                         class="btn <%=tagdd%> btn-flat btn-xs"
                                                     >
-                                                        <%=b.tinhtrang%>
+                                                        <%=b.tinhtranghienhanh%>
                                                     </button>
                                                 </td>
                                                 <td style="width: 25%">
                                                     <%=b.lydohuy%>
                                                 </td>
                                                 <td style="width: 17%;">
-                                                    <a
-                                                        href="/admin/order/rejectOrder/<%=b._orderID%>"
-                                                        title="Từ chối"
-                                                        class="delete btn btn-sm btn-danger pull-right"
-                                                        ><i
-                                                            class="fa fa-trash-o"
-                                                            onclick="return confirm('Bạn chắc chắn từ chối đơn hàng này?')"
-                                                        ></i
-                                                    ></a>
-                                                    <a
-                                                        href="/admin/order/confirmOrderDetail/<%=b._orderID%>"
-                                                        title="Xem chi tiết"
-                                                        class="view btn btn-sm btn-info pull-right"
-                                                        ><i
-                                                            class="fa fa-eye"
-                                                        ></i
-                                                    ></a>
+                                                        <a href="/admin/order/confirmOrderDetail/<%=b._orderID%>" title="Xem chi tiết"
+                                                            class="view btn btn-sm btn-primary pull-right"><i class="fa fa-eye"></i> Xem chi tiết</a>
                                                 </td>
                                             </tr>
                                             <% })%>

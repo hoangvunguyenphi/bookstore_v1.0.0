@@ -133,8 +133,7 @@ body .progress_inner__step:hover:before {
 }
 
 body .progress_inner {
-  height: 200px;
-  width: 700px;
+  width: 600px;
 }
 body .progress_inner #step-5:checked + div {
   width: 80%;
@@ -215,7 +214,6 @@ body .progress_inner__tabs .tab {
   text-align: center;
   margin-top: 80px;
   box-shadow: 0px 2px 1px #80b7d5;
-  padding: 30px;
   background: white;
   border-radius: 10px;
   -webkit-transition: all .2s;

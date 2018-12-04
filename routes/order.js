@@ -28,6 +28,8 @@ router.get("/confirmOrder/:id", OrderController.confirmOrder);
 //admin/update/id cập nhật thông tin và tình trạng order
 router.post("/update/:id", OrderController.update_order);
 
+//admin/update/id cập nhật thông tin và tình trạng order
+router.post("/updatetinhtrang/:id", OrderController.update_tinhtrang_order);
 
 
 

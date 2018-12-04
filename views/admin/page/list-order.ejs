@@ -98,7 +98,7 @@
                                             <td style="width: 14%; ">
                                                 <%
                             var tagdd="";
-                                switch (b.tinhtrang) {
+                                switch (b.tinhtranghienhanh) {
                                 case 'Bị huỷ':
                                     tagdd="btn-danger";
                                     break;
@@ -125,12 +125,10 @@
                                 }
                             %>
                                                 <button type="button" class="btn <%=tagdd%> btn-flat btn-xs">
-                                                    <%=b.tinhtrang%></button>
+                                                    <%=b.tinhtranghienhanh%></button>
 
                                             </td>
                                             <td style="width: 17%;">
-                                                <!-- <a href="/admin/order/delete/<%=b._orderID%>" title="Xoá" class="delete btn btn-sm btn-danger pull-right"><i
-                                                        class="fa fa-trash-o" onclick="return confirm('Bạn chắc chắn xoá đơn hàng này?')"></i></a> -->
                                                 <a href="/admin/order/detail/<%=b._orderID%>" title="Xem chi tiết"
                                                     class="view btn btn-sm btn-primary pull-right"><i class="fa fa-eye"></i> Xem chi tiết</a>
                                             </td>

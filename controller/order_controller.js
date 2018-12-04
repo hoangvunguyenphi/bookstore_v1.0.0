@@ -31,6 +31,12 @@ exports.add_order = function(req, res, next) {
     }
     var cart = new Cart(req.session.cart);
     var now = date.format(new Date(), "DD/MM/YYYY");
+    var tt0 = {
+        tentinhtrang: "Chờ xác nhận",
+        thoigian: now.toString(),
+        motatt:
+            "Đơn hàng đang ở trạng thái chờ được khách hàng xác nhận (Thư xác nhận được gửi vào email của khách hàng)."
+    };
     var params = {
         TableName: "DA2Order",
         Item: {
@@ -44,13 +50,13 @@ exports.add_order = function(req, res, next) {
             tienship: 1111,
             items: cart.generateArray(),
             tongtienthanhtoan: cart.totalPrice,
-            tinhtrang: "Chờ xác nhận",
-            ngaythanhtoan: " ",
-            lydohuy: " ",
+            tinhtranghienhanh: tt0.tentinhtrang,
+            lichsutinhtrang: [tt0],
             codeDef: UUID(),
-            ipClient: req.body.ipClient // có thể sẽ check ip customer để tránh spam, thêm condition Expression limit đơn đặt hàng trong 1 khoảng time// chưa làm
+            ipClient: req.body.ipClient
         }
     };
+    console.log(params);
     var bodymail = `<table border="1"  style="width:100%;border-collapse: collapse;"><tr>
   <th>Sản phẩm</th>
   <th>Giá</th>
@@ -188,20 +194,31 @@ exports.xacNhanOrder = function(req, res) {
             );
         } else {
             data.Items.forEach(function(tt) {
-                console.log(tt.tinhtrang);
+                var orderID = tt._orderID;
+                var now = date.format(new Date(), "DD/MM/YYYY");
+                var tt = {
+                    tentinhtrang: "Đã xác nhận",
+                    thoigian: now.toString(),
+                    motatt:
+                        "Đơn hàng đã được xác nhận bởi khách hàng, chuyển sang trạng thái chờ chấp nhận từ quản trị."
+                };
                 var params = {
                     TableName: "DA2Order",
                     Key: {
-                        _orderID: tt._orderID
+                        _orderID: orderID
                     },
-                    UpdateExpression: "set #tinhtrang=:ttr",
+                    ReturnValues: "ALL_NEW",
+                    UpdateExpression:
+                        "set  #tthh=:hh, #lstt= list_append(if_not_exists(#lstt, :empty_list), :ls)",
                     ExpressionAttributeValues: {
-                        ":ttr": "Đã xác nhận"
+                        ":hh": tt.tentinhtrang,
+                        ":ls": [tt],
+                        ":empty_list": []
                     },
                     ExpressionAttributeNames: {
-                        "#tinhtrang": "tinhtrang"
-                    },
-                    ReturnValues: "UPDATED_NEW"
+                        "#tthh": "tinhtranghienhanh",
+                        "#lstt": "lichsutinhtrang"
+                    }
                 };
                 docClient.update(params, function(err, data) {
                     if (err) {
@@ -226,19 +243,30 @@ exports.xacNhanOrder = function(req, res) {
 // Chấp nhận đơn hàng, cập nhật tình trạng là "Chấp nhận đơn hàng và đóng gói sản phẩm"
 exports.confirmOrder = function(req, res) {
     var orderID = req.params.id;
+    var now = date.format(new Date(), "DD/MM/YYYY");
+    var tt = {
+        tentinhtrang: "Chấp nhận đơn hàng",
+        thoigian: now.toString(),
+        motatt:
+            "Đơn hàng đã được quản trị chấp nhận và chuẩn bị tiến hành các bước đóng gói sản phẩm và giao hàng"
+    };
     var params = {
         TableName: "DA2Order",
         Key: {
             _orderID: orderID
         },
-        UpdateExpression: "set #tinhtrang=:tt ",
+        ReturnValues: "ALL_NEW",
+        UpdateExpression:
+            "set  #tthh=:hh, #lstt= list_append(if_not_exists(#lstt, :empty_list), :ls)",
         ExpressionAttributeValues: {
-            ":tt": "Chấp nhận đơn hàng"
+            ":hh": tt.tentinhtrang,
+            ":ls": [tt],
+            ":empty_list": []
         },
         ExpressionAttributeNames: {
-            "#tinhtrang": "tinhtrang"
-        },
-        ReturnValues: "UPDATED_NEW"
+            "#tthh": "tinhtranghienhanh",
+            "#lstt": "lichsutinhtrang"
+        }
     };
     docClient.update(params, function(err, data) {
         if (err) {
@@ -257,24 +285,29 @@ exports.confirmOrder = function(req, res) {
 // Từ chối order, cập nhật tình trạng là "ĐÃ bị từ chối"
 exports.rejectOrder = function(req, res) {
     var orderID = req.params.id;
-    console.log(orderID);
-    var lydo = req.body.txtLyDo || " ";
-    console.log(lydo);
+    var now = date.format(new Date(), "DD/MM/YYYY");
+    var tt = {
+        tentinhtrang: "Bị huỷ",
+        thoigian: now.toString(),
+        motatt: req.body.txtLyDo || " "
+    };
     var params = {
         TableName: "DA2Order",
         Key: {
             _orderID: orderID
         },
-        UpdateExpression: "set #tinhtrang=:tt, #lydo=:ld ",
+        ReturnValues: "ALL_NEW",
+        UpdateExpression:
+            "set  #tthh=:hh, #lstt= list_append(if_not_exists(#lstt, :empty_list), :ls)",
         ExpressionAttributeValues: {
-            ":tt": "Bị huỷ",
-            ":ld": lydo
+            ":hh": tt.tentinhtrang,
+            ":ls": [tt],
+            ":empty_list": []
         },
         ExpressionAttributeNames: {
-            "#tinhtrang": "tinhtrang",
-            "#lydo": "lydohuy"
-        },
-        ReturnValues: "UPDATED_NEW"
+            "#tthh": "tinhtranghienhanh",
+            "#lstt": "lichsutinhtrang"
+        }
     };
     docClient.update(params, function(err, data) {
         if (err) {
@@ -294,7 +327,7 @@ exports.getAllOrder = function(req, res) {
     var params = {
         TableName: "DA2Order",
         FilterExpression:
-            "contains (tinhtrang, :tt1) OR contains (tinhtrang, :tt2) OR contains (tinhtrang, :tt3) OR contains (tinhtrang, :tt4)",
+            "contains (tinhtranghienhanh, :tt1) OR contains (tinhtranghienhanh, :tt2) OR contains (tinhtranghienhanh, :tt3) OR contains (tinhtranghienhanh, :tt4)",
         ExpressionAttributeValues: {
             ":tt1": "Chấp nhận đơn hàng",
             ":tt2": "Đang đóng gói sản phẩm",
@@ -324,12 +357,9 @@ exports.getAllOrder = function(req, res) {
 exports.getNewOrders = function(req, res) {
     var params = {
         TableName: "DA2Order",
-        FilterExpression: "#tt = :cd",
+        FilterExpression: "tinhtranghienhanh = :cd",
         ExpressionAttributeValues: {
             ":cd": "Đã xác nhận"
-        },
-        ExpressionAttributeNames: {
-            "#tt": "tinhtrang"
         }
     };
     docClient.scan(params, onScan);
@@ -353,12 +383,9 @@ exports.getNewOrders = function(req, res) {
 exports.getRejectOrders = function(req, res) {
     var params = {
         TableName: "DA2Order",
-        FilterExpression: "#tt = :cd",
+        FilterExpression: "tinhtranghienhanh = :cd",
         ExpressionAttributeValues: {
             ":cd": "Bị huỷ"
-        },
-        ExpressionAttributeNames: {
-            "#tt": "tinhtrang"
         }
     };
     docClient.scan(params, onScan);
@@ -382,12 +409,9 @@ exports.getRejectOrders = function(req, res) {
 exports.getUnAuthenOrders = function(req, res) {
     var params = {
         TableName: "DA2Order",
-        FilterExpression: "#tt = :cd",
+        FilterExpression: "tinhtranghienhanh= :tt ",
         ExpressionAttributeValues: {
-            ":cd": "Chờ xác nhận"
-        },
-        ExpressionAttributeNames: {
-            "#tt": "tinhtrang"
+            ":tt": "Chờ xác nhận"
         }
     };
     docClient.scan(params, onScan);
@@ -455,9 +479,6 @@ exports.getDetailOrderNew = function(req, res) {
                 "Unable to query. Error:",
                 JSON.stringify(err, null, 2)
             );
-            res.render("../views/admin/page/confirmOrderDetail.ejs", {
-                orderDetail: data.Items
-            });
         } else {
             res.render("../views/admin/page/confirmOrderDetail.ejs", {
                 orderDetail: data.Items
@@ -467,26 +488,17 @@ exports.getDetailOrderNew = function(req, res) {
 };
 
 //===============================================================================================================================
-// Lấy cập nhật thông tin order
+// Lấy cập nhật thông tin giao hàng order
 exports.update_order = function(req, res) {
     var orderID = req.params.id;
     var order = {
         TableName: "DA2Order",
         Item: {
             _orderID: orderID,
-            ngaylaphoadon: req.body.editNgayLap,
             tennguoinhan: req.body.editHoTen,
             sodienthoai: req.body.editSDT,
-            email: req.body.editEmail,
             diachi: req.body.editDiaChi,
-            ghichu: req.body.editGhichu || " ",
-            // tienship: 1111,
-            // items: cart.generateArray(),
-            // tongtienthanhtoan: cart.totalPrice,
-            tinhtrang: req.body.editTinhTrang,
-            ngaythanhtoan: req.body.editNgayThanhToan || " "
-            // codeDef: UUID(),
-            //ipClient: req.body.ipClient // có thể sẽ check ip customer để tránh spam, thêm condition Expression limit đơn đặt hàng trong 1 khoảng time// chưa làm
+            ghichu: req.body.editGhichu || " "
         }
     };
     console.log(order);
@@ -497,28 +509,18 @@ exports.update_order = function(req, res) {
             _orderID: orderID
         },
         UpdateExpression:
-            "set #ngaylap=:nl, #nguoinhan=:nn, #sdt=:sdt, #email=:e, #diachi=:dc, #ghichu=:gc, #tinhtrang=:tt, #ngaytt=:ntt, #lydo=:ld",
+            "set  #nguoinhan=:nn, #sdt=:sdt, #diachi=:dc, #ghichu=:gc",
         ExpressionAttributeValues: {
-            ":nl": order.Item.ngaylaphoadon,
             ":nn": order.Item.tennguoinhan,
             ":sdt": order.Item.sodienthoai,
-            ":e": order.Item.email,
             ":dc": order.Item.diachi,
-            ":gc": order.Item.ghichu,
-            ":tt": order.Item.tinhtrang,
-            ":ntt": order.Item.ngaythanhtoan,
-            ":ld": " "
+            ":gc": order.Item.ghichu
         },
         ExpressionAttributeNames: {
-            "#ngaylap": "ngaylaphoadon",
             "#nguoinhan": "tennguoinhan",
             "#sdt": "sodienthoai",
-            "#email": "email",
             "#diachi": "diachi",
-            "#ghichu": "ghichu",
-            "#tinhtrang": "tinhtrang",
-            "#ngaytt": "ngaythanhtoan",
-            "#lydo": "lydohuy"
+            "#ghichu": "ghichu"
         },
         ReturnValues: "UPDATED_NEW"
     };
@@ -534,6 +536,48 @@ exports.update_order = function(req, res) {
     });
 };
 
+//===============================================================================================================================
+// Lấy cập nhật thông tin giao hàng order
+exports.update_tinhtrang_order = function(req, res) {
+    var orderID = req.params.id;
+    var now = date.format(new Date(), "DD/MM/YYYY");
+    var tt = {
+        tentinhtrang: req.body.editTinhTrang,
+        thoigian: now.toString(),
+        motatt: req.body.editMoTaTT || " "
+    };
+    console.log(tt);
+    var params = {
+        TableName: "DA2Order",
+        Key: {
+            _orderID: orderID
+        },
+        ReturnValues: "ALL_NEW",
+        UpdateExpression:
+            "set  #tthh=:hh, #lstt= list_append(if_not_exists(#lstt, :empty_list), :ls)",
+        ExpressionAttributeValues: {
+            ":hh": tt.tentinhtrang,
+            ":ls": [tt],
+            ":empty_list": []
+        },
+        ExpressionAttributeNames: {
+            "#tthh": "tinhtranghienhanh",
+            "#lstt": "lichsutinhtrang"
+        }
+    };
+    docClient.update(params, function(err, data) {
+        if (err) {
+            console.log(
+                "users::update::error - " + JSON.stringify(err, null, 2)
+            );
+        } else {
+            // console.log("users::update::success " + JSON.stringify(data));
+            res.redirect("/admin/order/detail/" + orderID);
+        }
+    });
+};
+
+//===============================================================================================================================
 exports.trackOrder = function(req, res) {
     if (!req.session.cart) {
         return res.render("../views/site/page/track-your-order.ejs", {

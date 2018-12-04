@@ -52,32 +52,46 @@ app.use("/admin/product", productRouter);
 app.use("/admin/order", orderRouter);
 app.use("/admin/category", categoryRouter);
 
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//     next(createError(404));
+// });
+
+// app.use(function(err, req, res, next) {
+//     res.locals.message = err.message;
+//     res.locals.error = req.app.get("env") === "development" ? err : {};
+//     res.status(err.status || 500);
+//     var Cart = require("./controller/cart");
+//     if (!req.session.cart) {
+//         return res.render("../views/404.ejs", {
+//             allBooks: [],
+//             products: [],
+//             totalPrice: 0,
+//             totalQty: 0
+//         });
+//     }
+//     var cart = new Cart(req.session.cart);
+//     res.render("../views/404.ejs", {
+//         allBooks: [],
+//         products: cart.generateArray(),
+//         totalPrice: cart.totalPrice,
+//         totalQty: cart.totalQty
+//     });
+// });
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
 });
 
+// error handler
 app.use(function(err, req, res, next) {
+    // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
+
+    // render the error page
     res.status(err.status || 500);
-    console.log(err.stack);
-    var Cart = require("./controller/cart");
-    if (!req.session.cart) {
-        return res.render("../views/404.ejs", {
-            allBooks: [],
-            products: [],
-            totalPrice: 0,
-            totalQty: 0
-        });
-    }
-    var cart = new Cart(req.session.cart);
-    res.render("../views/404.ejs", {
-        allBooks: [],
-        products: cart.generateArray(),
-        totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
-    });
+    res.render("error");
 });
 
 app.locals.cat = require("./db/test/category/category_data.json");

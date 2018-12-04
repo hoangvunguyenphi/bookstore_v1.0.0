@@ -67,7 +67,8 @@
         "sodienthoai": "0962282962",
         "tennguoinhan": "Hoàng Vũ",
         "tienship": 1111,
-        "tinhtrang":[
+        "tinhtranghienhanh":"Đã xác nhận",
+        "lichsutinhtrang":[
             {
                 "thoigian":"2018-11-09 10:26:23",
                 "trangthai":"Chờ xác nhận",
