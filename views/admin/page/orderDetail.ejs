@@ -172,7 +172,7 @@
                                                 </div>
                                                 <div class="form-group col-xs-1">
                                                         <label for="btnReset">_</label>
-                                                        <input class="form-control" type="button" value="Reset" id="btnReset">
+                                                        <input class="form-control btn-primary" type="button" value="Reset" id="btnReset">
                                                 </div>
                                                 <div class="form-group col-xs-2">
                                                     <label for="editNgayThanhToan">Thời gian</label>
@@ -373,7 +373,7 @@
         //         $('#editNgayThanhToan').prop('disabled', true);
         //     }
         // }).change();
-        
+        $('#editTinhTrang option[value*="' +"Bị huỷ"+ '"]').prop('disabled',true);
         $('#editTinhTrang').change(function () {
             if (this.value == "Chờ xác nhận") {
                 $('#editTinhTrang option[value*="' +this.value+ '"]').prop('disabled',true);
