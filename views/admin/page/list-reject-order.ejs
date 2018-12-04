@@ -59,7 +59,7 @@
                                 ><i class="fa fa-dashboard"></i> Admin</a
                             >
                         </li>
-                        <li class="active">Đơn hàng mới</li>
+                        <li class="active">Đơn hàng bị huỷ</li>
                     </ol>
                 </section>
                 <!-- Main content -->
@@ -70,7 +70,7 @@
                                 <div class="col-md-6">
                                     <h4>
                                         <i class="fa fa-list"></i> &nbsp; Danh
-                                        sách đơn hàng mới
+                                        sách đơn hàng bị huỷ
                                     </h4>
                                 </div>
                             </div>
@@ -89,10 +89,9 @@
                                                 <th>#</th>
                                                 <th>Mã đơn hàng</th>
                                                 <th>Ngày lập</th>
-                                                <th>Tên người nhận</th>
                                                 <th>Email</th>
-                                                <th>Tổng tiền</th>
                                                 <th>Tình trạng</th>
+                                                <th>Lý do</th>
                                                 <th>Lựa chọn</th>
                                             </tr>
                                         </thead>
@@ -111,43 +110,37 @@
                                                 <td style="width: 10%">
                                                     <%=b.ngaylaphoadon%>
                                                 </td>
-                                                <td style="width: 17%">
-                                                    <%=b.tennguoinhan%>
-                                                </td>
                                                 <td style="width: 20%">
                                                     <%=b.email%>
-                                                </td>
-                                                <td style="width: 10%">
-                                                    <%=b.tongtienthanhtoan%>
                                                 </td>
                                                 <td style="width: 14%; ">
                                                         <%
                                                         var tagdd="";
-                                switch (b.tinhtrang) {
-                                case 'Bị huỷ':
-                                    tagdd="btn-danger";
-                                    break;
-                                case 'Chờ xác nhận':
-                                    tagdd="btn-gray";
-                                    break;
-                                case 'Đã xác nhận':
-                                    tagdd="bg-teal-active color-palette";
-                                    break;
-                                case 'Chấp nhận đơn hàng':
-                                    tagdd="btn-primary";
-                                    break;
-                                case 'Đang đóng gói sản phẩm':
-                                    tagdd="bg-purple-active color-palette";
-                                    break;
-                                case 'Đang giao hàng':
-                                    tagdd="btn-warning";
-                                    break;
-                                case 'Hoàn tất':
-                                    tagdd="btn-success";
-                                    break;
-                                default:
-                                    break;
-                                }
+                                                        switch (b.tinhtrang) {
+                                                        case 'Bị huỷ':
+                                                            tagdd="btn-danger";
+                                                            break;
+                                                        case 'Chờ xác nhận':
+                                                            tagdd="btn-gray";
+                                                            break;
+                                                        case 'Đã xác nhận':
+                                                            tagdd="bg-teal-active color-palette";
+                                                            break;
+                                                        case 'Chấp nhận đơn hàng':
+                                                            tagdd="btn-primary";
+                                                            break;
+                                                        case 'Đang đóng gói sản phẩm':
+                                                            tagdd="bg-purple-active color-palette";
+                                                            break;
+                                                        case 'Đang giao hàng':
+                                                            tagdd="btn-warning";
+                                                            break;
+                                                        case 'Hoàn tất':
+                                                            tagdd="btn-success";
+                                                            break;
+                                                        default:
+                                                            break;
+                                                        }
                                                         %>
                                                     <button
                                                         type="button"
@@ -156,8 +149,11 @@
                                                         <%=b.tinhtrang%>
                                                     </button>
                                                 </td>
+                                                <td style="width: 25%">
+                                                    <%=b.lydohuy%>
+                                                </td>
                                                 <td style="width: 17%;">
-                                                    <!-- <a
+                                                    <a
                                                         href="/admin/order/rejectOrder/<%=b._orderID%>"
                                                         title="Từ chối"
                                                         class="delete btn btn-sm btn-danger pull-right"
@@ -165,30 +161,29 @@
                                                             class="fa fa-trash-o"
                                                             onclick="return confirm('Bạn chắc chắn từ chối đơn hàng này?')"
                                                         ></i
-                                                    ></a> -->
+                                                    ></a>
                                                     <a
                                                         href="/admin/order/confirmOrderDetail/<%=b._orderID%>"
                                                         title="Xem chi tiết"
-                                                        class="view btn btn-sm btn-primary pull-right"
+                                                        class="view btn btn-sm btn-info pull-right"
                                                         ><i
                                                             class="fa fa-eye"
                                                         ></i
-                                                    > Xem chi tiết</a>
+                                                    ></a>
                                                 </td>
                                             </tr>
                                             <% })%>
                                         </tbody>
                                         <tfoot>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Mã đơn hàng</th>
-                                                <th>Ngày lập</th>
-                                                <th>Tên người nhận</th>
-                                                <th>Email</th>
-                                                <th>Tổng tiền</th>
-                                                <th>Tình trạng</th>
-                                                <th>Lựa chọn</th>
-                                            </tr>
+                                                <tr>
+                                                        <th>#</th>
+                                                        <th>Mã đơn hàng</th>
+                                                        <th>Ngày lập</th>
+                                                        <th>Email</th>
+                                                        <th>Tình trạng</th>
+                                                        <th>Lý do</th>
+                                                        <th>Lựa chọn</th>
+                                                    </tr>
                                         </tfoot>
                                     </table>
                                 </div>

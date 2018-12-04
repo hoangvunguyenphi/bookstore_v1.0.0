@@ -33,7 +33,8 @@
     <link rel="stylesheet" href="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
     <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="/assets/css/tinhtrangorder.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,6 +45,7 @@
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -55,12 +57,11 @@
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <section class="content-header">
-                <h1>
-                </h1>
+                <h1>ĐƠN HÀNG <small>quản lý</small></h1>
                 <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li><a href="#">Forms</a></li>
-                    <li class="active">General Elements</li>
+                    <li><a href="/admin"><i class="fa fa-dashboard"></i> Admin</a></li>
+                    <li><a href="/admin/order">Đơn hàng xử lý</a></li>
+                    <li class="active">Thông tin đơn hàng</li>
                 </ol>
             </section>
             <!-- Main content -->
@@ -91,17 +92,17 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="form-group col-xs-12">
+                                            <div class="form-group col-xs-4">
                                                 <label for="editHoTen">Họ tên</label>
                                                 <input type="text" class="form-control" id="editHoTen" value="<%=b.tennguoinhan%>"
                                                     name="editHoTen" required>
                                             </div>
-                                            <div class="form-group col-xs-6">
+                                            <div class="form-group col-xs-5">
                                                 <label for="editEmail">Email</label>
                                                 <input type="text" class="form-control" id="editEmail" value="<%=b.email%>"
                                                     name="editEmail" required>
                                             </div>
-                                            <div class="form-group col-xs-6">
+                                            <div class="form-group col-xs-3">
                                                 <label for="editSDT">Số điện thoại</label>
                                                 <input type="text" class="form-control" id="editSDT" value="<%=b.sodienthoai%>"
                                                     name="editSDT" required>
@@ -115,58 +116,95 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="form-group col-xs-12">
+                                            <div class="form-group col-xs-3">
                                                 <label for="editOrderID">Mã đơn hàng</label>
                                                 <input type="text" class="form-control" id="editOrderID" value="<%=b._orderID%>"
                                                     readonly name="editOrderID" required>
                                             </div>
-                                            <div class="form-group col-xs-4">
+                                            <div class="form-group col-xs-2">
                                                 <label for="editNgayLap">Ngày lập đơn hàng</label>
                                                 <input type="text" class="form-control" id="editNgayLap" value="<%=b.ngaylaphoadon%>"
                                                     readonly name="editNgayLap" required>
                                             </div>
-                                            <div class="form-group col-xs-4">
-                                                <label for="editTinhTrang">Tình trạng đơn hàng</label>
-                                                <select class="form-control" id="editTinhTrang" name="editTinhTrang">
-                                                    <%
-                                                        var a=['Chờ xác nhận','Đã xác nhận','Chấp nhận đơn hàng và đóng gói sản phẩm','Đang giao hàng','Hoàn tất'];
-                                                        for(var i =0; i < a.length ; i++){
-                                                            if(a[i]==b.tinhtrang){
-                                                                a.splice(i,1);
-                                                        }
-                                                    }
-                                                    %>
-                                                    <option id="<%=b.tinhtrang%>" name="<%=b.tinhtrang%>" value="<%=b.tinhtrang%>"
-                                                        selected>
-                                                        <%=b.tinhtrang%>
-                                                    </option>
-                                                    <%
-                                                    a.forEach(function(ab){
-                                                        %>
-                                                    <option id="<%=ab%>" name="<%=ab%>" value="<%=ab%>">
-                                                        <%=ab%>
-                                                    </option>
-                                                    <%
-                                                    })%>
-                                                </select>
-                                            </div>
-                                            <div class="form-group col-xs-4">
-                                                <label for="editNgayThanhToan">Ngày thanh toán</label>
-                                                <input type="text" class="form-control" id="editNgayThanhToan" value="<%=b.ngaythanhtoan%>"
-                                                    name="editNgayThanhToan" required>
-                                            </div>
-                                            <div class="form-group col-xs-12">
+                                            <div class="form-group col-xs-7">
                                                 <label for="editDiaChi">Địa chỉ nhận hàng</label>
                                                 <input type="text" class="form-control" id="editDiaChi" value="<%=b.diachi%>"
                                                     name="editDiaChi" required>
                                             </div>
                                             <div class="form-group col-xs-12">
                                                 <label>Ghi chú đơn hàng</label>
-                                                <textarea class="form-control" rows="3" id="editGhichu" name="editGhichu"
+                                                <textarea style="max-height: 70px;" class="form-control" rows="3" id="editGhichu" name="editGhichu"
                                                     placeholder="Ghi chú đơn hàng của khách"><%=b.ghichu%></textarea>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="box box-default" >
+                                        <div class="box-header with-border">
+                                                <h3 class="box-title"><i class="fa   fa-list-ol"></i> Tình trạng đơn hàng</h3>
+                                        </div>
+                                        <div class="row" style="height:300px;">
+                                            <div class="col-md-12">
+                                                <div class="form-group col-xs-4">
+                                                    <label for="editTinhTrang">Tình trạng đơn hàng</label>
+                                                    <select class="form-control" id="editTinhTrang" name="editTinhTrang">
+                                                        <%
+                                                            var a=['Bị huỷ','Chờ xác nhận','Đã xác nhận','Chấp nhận đơn hàng','Đang đóng gói sản phẩm','Đang giao hàng','Hoàn tất'];
+                                                            for(var i =0; i < a.length ; i++){
+                                                                if(a[i]==b.tinhtrang){
+                                                                    a.splice(i,1);
+                                                            }
+                                                        }
+                                                        %>
+                                                        <option id="<%=b.tinhtrang%>" name="<%=b.tinhtrang%>" value="<%=b.tinhtrang%>"
+                                                            selected>
+                                                            <%=b.tinhtrang%>
+                                                        </option>
+                                                        <%
+                                                        a.forEach(function(ab){
+                                                            %>
+                                                        <option id="<%=ab%>" name="<%=ab%>" value="<%=ab%>">
+                                                            <%=ab%>
+                                                        </option>
+                                                        <%
+                                                        })%>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-xs-1">
+                                                        <label for="btnReset">_</label>
+                                                        <input class="form-control" type="button" value="Reset" id="btnReset">
+                                                </div>
+                                                <div class="form-group col-xs-2">
+                                                    <label for="editNgayThanhToan">Thời gian</label>
+                                                    <input type="text" class="form-control" id="editNgayThanhToan" value="<%=b.ngaythanhtoan%>"
+                                                        name="editNgayThanhToan" required>
+                                                </div>
+                                                <div class="form-group col-xs-5">
+                                                    <label for="editMoTaTT">Mô tả tình trạng</label>
+                                                    <input type="text" class="form-control" id="editMoTaTT" value="<%=b.ngaythanhtoan%>"
+                                                        name="editMoTaTT" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="checkout-wrap">
+                                                        <ul class="checkout-bar">
+                                                            <li class="visited first">
+                                                                <a href="#">Xác nhận người mua</a>
+                                                            </li>
+                                                            <li class="previous visited">Chấp nhận đơn hàng</li>
+                                                            <li class="active">Đóng gói sản phẩm</li>
+                                                            <li class="next">Vận chuyển</li>
+                                                            <li class="">Hoàn tất</li>
+                                                        </ul>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12" style="margin: 80px auto" align="center">
+                                                <div class="callout callout-success" style="width: 40%">
+                                                        <h4>Kiện hàng của bạn đã được hoàn tất đóng gói và sẵn sàng bàn giao cho đơn vị vận chuyển</h4>
+                                                        <p>Thời gian: 2018-11-09 10:26:23</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                 </div>
                                 <div class="box box-success">
                                     <div class="box-header with-border">
@@ -249,14 +287,38 @@
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer ">
+                                        <a  style="float:right; margin-left: 10px;"  class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><b>Huỷ đơn hàng</b></a>
                                     <input type="submit" style="float:right" id="btnAdd" class="btn btn-primary col-lg-3 "
                                         value="Cập nhật" />
                                 </div>
                             </form>
+                            <div class="modal fade" id="exampleModal" style="z-index: 99999;" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <form method="POST" action="/admin/order/rejectOrder/<%=b._orderID%>" >
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title">Xác nhận huỷ đơn hàng</h4>
+                                                </div> 
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="message-text" class="col-form-label">Lý do huỷ:</label>
+                                                        <textarea class="form-control" name="txtLyDo" id="message-text"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                                    <input type="submit" style="float:right" id="btnAdd" class="btn btn-warning col-lg-3 "
+                                                    value="Xác nhận huỷ order" />
+                                                </div>
+                                            </div>
+                                        </form>  
+                                    </div>
+                            </div>
                         </div>
                         <%
                             })%>
-
                     </div>
                     <!--/.col (right) -->
                 </div>
@@ -303,14 +365,73 @@
             "setDate": new Date(),
             format: 'dd/mm/yyyy'
         })
+        // $('#editTinhTrang').change(function () {
+        //     if (this.value == "Hoàn tất") {
+        //         $('#editNgayThanhToan').prop('disabled', false);
+        //     } else {
+        //         $('#editNgayThanhToan').val(" ");
+        //         $('#editNgayThanhToan').prop('disabled', true);
+        //     }
+        // }).change();
+        
         $('#editTinhTrang').change(function () {
-            if (this.value == "Hoàn tất") {
-                $('#editNgayThanhToan').prop('disabled', false);
+            if (this.value == "Chờ xác nhận") {
+                $('#editTinhTrang option[value*="' +this.value+ '"]').prop('disabled',true);
             } else {
-                $('#editNgayThanhToan').val(" ");
-                $('#editNgayThanhToan').prop('disabled', true);
+                if (this.value == "Đã xác nhận") {
+                    $('#editTinhTrang option[value*="' +"Chờ xác nhận"+ '"]').prop('disabled',true);
+                    $('#editTinhTrang option[value*="' +this.value+ '"]').prop('disabled',true);
+                } else {
+                    if (this.value == "Chấp nhận đơn hàng") {
+                        $('#editTinhTrang option[value*="' +"Chờ xác nhận"+ '"]').prop('disabled',true);
+                        $('#editTinhTrang option[value*="' +"Đã xác nhận"+ '"]').prop('disabled',true);
+                        $('#editTinhTrang option[value*="' +this.value+ '"]').prop('disabled',true);
+                    } else {
+                        if (this.value == "Đang đóng gói sản phẩm") {
+                            $('#editTinhTrang option[value*="' +"Chờ xác nhận"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đã xác nhận"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Chấp nhận đơn hàng"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +this.value+ '"]').prop('disabled',true);
+                        } else {
+                            if (this.value == "Đang giao hàng") {
+                            $('#editTinhTrang option[value*="' +"Chờ xác nhận"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đã xác nhận"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Chấp nhận đơn hàng"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đang đóng gói sản phẩm"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +this.value+ '"]').prop('disabled',true);
+                        } else {
+                            if (this.value == "Hoàn tất") {
+                            $('#editTinhTrang option[value*="' +"Chờ xác nhận"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đã xác nhận"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Chấp nhận đơn hàng"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đang đóng gói sản phẩm"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đang giao hàng"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +this.value+ '"]').prop('disabled',true);
+                        } else {
+                            if (this.value == "Bị huỷ") {
+                            $('#editTinhTrang option[value*="' +"Chờ xác nhận"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đã xác nhận"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Chấp nhận đơn hàng"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đang đóng gói sản phẩm"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Đang giao hàng"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +"Hoàn tất"+ '"]').prop('disabled',true);
+                            $('#editTinhTrang option[value*="' +this.value+ '"]').prop('disabled',true);
+                        } else {
+                            
+                        }
+                        }
+                        }
+                        }
+                    }
+                }
             }
         }).change();
+        $("#btnReset").click(function(){
+                $('#editTinhTrang option').prop('disabled', function() {
+                    $("#editTinhTrang").val("<%=orderDetail[0].tinhtrang%>").change();
+                    return this.defaultSelected;
+                });
+            });
     </script>
 </body>
 

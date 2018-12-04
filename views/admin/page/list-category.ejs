@@ -53,6 +53,9 @@
                             <div class="col-md-6">
                                 <h4><i class="fa fa-list"></i> &nbsp; Danh sách đơn hàng</h4>
                             </div>
+                            <div class="col-md-6 text-right">
+                                <a  class="btn btn-success" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><b>Thêm mới thể loại</b></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -63,96 +66,63 @@
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Mã đơn hàng</th>
-                                            <th>Ngày lập</th>
-                                            <th>Tên người nhận</th>
-                                            <th>Email</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Tình trạng</th>
-                                            <th>Lựa chọn</th>
+                                            <th>Mã thể loại</th>
+                                            <th>Tên thể loại</th>
+                                            <!-- <th>Lựa chọn</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <%allOrder.forEach(function(b){
+                                        <%allCategory.forEach(function(c){
                                         %>
                                         <tr>
-                                            <th scope="row" style="width: 2%">
-                                                <%=allOrder.indexOf(b)%>
-                                            </th>
-                                            <td style="width: 20%">
-                                                <%=b._orderID%>
+                                            <td >
+                                                <%=c._categoryID%>
                                             </td>
-                                            <td style="width: 10%">
-                                                <%=b.ngaylaphoadon%>
+                                            <td >
+                                                <%=c.tentheloai%>
                                             </td>
-                                            <td style="width: 17%">
-                                                <%=b.tennguoinhan%>
-                                            </td>
-                                            <td style="width: 20%">
-                                                <%=b.email%>
-                                            </td>
-                                            <td style="width: 10%">
-                                                <%=b.tongtienthanhtoan%>
-                                            </td>
-                                            <td style="width: 14%; ">
-                                                <%
-                            var tagdd="";
-                                switch (b.tinhtrang) {
-                                case 'Bị huỷ':
-                                    tagdd="btn-danger";
-                                    break;
-                                case 'Chờ xác nhận':
-                                    tagdd="btn-gray";
-                                    break;
-                                case 'Đã xác nhận':
-                                    tagdd="bg-teal-active color-palette";
-                                    break;
-                                case 'Chấp nhận đơn hàng':
-                                    tagdd="btn-primary";
-                                    break;
-                                case 'Đang đóng gói sản phẩm':
-                                    tagdd="bg-purple-active color-palette";
-                                    break;
-                                case 'Đang giao hàng':
-                                    tagdd="btn-warning";
-                                    break;
-                                case 'Hoàn tất':
-                                    tagdd="btn-success";
-                                    break;
-                                default:
-                                    break;
-                                }
-                            %>
-                                                <button type="button" class="btn <%=tagdd%> btn-flat btn-xs">
-                                                    <%=b.tinhtrang%></button>
-
-                                            </td>
-                                            <td style="width: 17%;">
-                                                <!-- <a href="/admin/order/delete/<%=b._orderID%>" title="Xoá" class="delete btn btn-sm btn-danger pull-right"><i
-                                                        class="fa fa-trash-o" onclick="return confirm('Bạn chắc chắn xoá đơn hàng này?')"></i></a> -->
-                                                <a href="/admin/order/detail/<%=b._orderID%>" title="Xem chi tiết"
-                                                    class="view btn btn-sm btn-primary pull-right"><i class="fa fa-eye"></i> Xem chi tiết</a>
-                                            </td>
+                                            <!-- <td >
+                                               <a href="/admin/category%>" title="Xem chi tiết"
+                                                    class="view btn btn-sm btn-danger pull-right"><i class="fa fa-remove"></i> Xoá</a>
+                                            </td> -->
                                         </tr>
                                         <%
                     })%>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Mã đơn hàng</th>
-                                            <th>Ngày lập</th>
-                                            <th>Tên người nhận</th>
-                                            <th>Email</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Tình trạng</th>
-                                            <th>Lựa chọn</th>
+                                            <th>Mã thể loại</th>
+                                            <th>Tên thể loại</th>
+                                            <!-- <th>Lựa chọn</th> -->
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
                             <!-- /.box-body -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <form method="POST" action="/admin/category/addNew"  >
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title">Thêm mới thể loại</h4>
+                                            </div> 
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="txtTenTheLoai" class="col-form-label">Tên thể loại:</label>
+                                                    <input class="form-control" name="txtTenTheLoai" id="txtTenTheLoai"/>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                                <input type="submit" style="float:right" id="btnAdd" class="btn btn-warning col-lg-3 "
+                                                value="Xác nhận huỷ order" />
+                                            </div>
+                                        </div>
+                                    </form>  
+                                </div>
+                            </div>
                         </div>
                         <!-- /.box -->
                     </div>

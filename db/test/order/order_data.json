@@ -67,7 +67,15 @@
         "sodienthoai": "0962282962",
         "tennguoinhan": "Hoàng Vũ",
         "tienship": 1111,
-        "tinhtrang": "Chờ xác nhận",
+        "tinhtrang": [
+            {
+                "level0":{
+                    "trangthai":"Chờ xác nhận",
+                    "thoigian":"2018-11-09 10:26:23",
+                    "motatrangthai":"Vui lòng kiểm tra email để xác nhận đơn hàng"
+                }
+            }
+        ],
         "tongtienthanhtoan": 388000
     }
 ]

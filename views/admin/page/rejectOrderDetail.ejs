@@ -31,7 +31,6 @@
 
     <!-- bootstrap wysihtml5 - text editor -->
     <link rel="stylesheet" href="/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-    <link rel="stylesheet" href="/assets/css/processbarorder.css">
 
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
@@ -170,75 +169,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="box box-default" >
-                                    <div class="box-header with-border">
-                                            <h3 class="box-title"><i class="fa   fa-list-ol"></i> Tình trạng đơn hàng</h3>
-                                    </div>
-                                    <div class="row" >
-                                        <div class="col-md-12" style="height:380px;">
-                                            <div class='progress'>
-                                                <div class='progress_inner'>
-                                                  <div class='progress_inner__step'>
-                                                    <label for='step-1'>Xác nhận đơn hàng</label>
-                                                  </div>
-                                                  <div class='progress_inner__step'>
-                                                    <label for='step-2'>Chấp nhận đơn hàng</label>
-                                                  </div>
-                                                  <div class='progress_inner__step'>
-                                                    <label for='step-3'>Đóng gói sản phẩm</label>
-                                                  </div>
-                                                  <div class='progress_inner__step'>
-                                                    <label for='step-4'>Giao hàng</label>
-                                                  </div>
-                                                  <div class='progress_inner__step'>
-                                                    <label for='step-5'>Hoàn tất</label>
-                                                  </div>
-                                                  <input checked='checked' id='step-1' name='step' type='radio'>
-                                                  <input id='step-2' name='step' type='radio'>
-                                                  <input id='step-3' name='step' type='radio'>
-                                                  <input id='step-4' name='step' type='radio'>
-                                                  <input id='step-5' name='step' type='radio'>
-                                                  <div class='progress_inner__bar'></div>
-                                                  <div class='progress_inner__bar--set'></div>
-                                                  <div class='progress_inner__tabs'>
-                                                    <div class='tab tab-0'>
-                                                      <h1>Start order</h1>
-                                                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tortor ipsum, eleifend vitae massa non, dignissim finibus eros. Maecenas non eros tristique nisl maximus sollicitudin.</p>
-                                                    </div>
-                                                    <div class='tab tab-1'>
-                                                      <h1>Prepare gift</h1>
-                                                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tortor ipsum, eleifend vitae massa non, dignissim finibus eros. Maecenas non eros tristique nisl maximus sollicitudin.</p>
-                                                    </div>
-                                                    <div class='tab tab-2'>
-                                                      <h1>Pack gift</h1>
-                                                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tortor ipsum, eleifend vitae massa non, dignissim finibus eros. Maecenas non eros tristique nisl maximus sollicitudin.</p>
-                                                    </div>
-                                                    <div class='tab tab-3'>
-                                                      <h1>Decorate box</h1>
-                                                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tortor ipsum, eleifend vitae massa non, dignissim finibus eros. Maecenas non eros tristique nisl maximus sollicitudin.</p>
-                                                    </div>
-                                                    <div class='tab tab-4'>
-                                                      <h1>Send gift</h1>
-                                                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tortor ipsum, eleifend vitae massa non, dignissim finibus eros. Maecenas non eros tristique nisl maximus sollicitudin.</p>
-                                                    </div>
-                                                  </div>
-                                                  <div class='progress_inner__status'>
-                                                    <div class='box_base'></div>
-                                                    <div class='box_lid'></div>
-                                                    <div class='box_ribbon'></div>
-                                                    <div class='box_bow'>
-                                                      <div class='box_bow__left'></div>
-                                                      <div class='box_bow__right'></div>
-                                                    </div>
-                                                    <div class='box_item'></div>
-                                                    <div class='box_tag'></div>
-                                                    <div class='box_string'></div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="box box-success">
                                     <div class="box-header with-border">
                                         <h3 class="box-title"><i class="fa   fa-list-ol"></i> Danh sách sản phẩm</h3>
@@ -316,35 +246,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- /.box-body -->
-                                <div class="box-footer ">
-                                    <a  style="float:right; margin-left: 10px;"  class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo"><b>Từ chối</b></a>
-                                    <a style="float:right;"  href="/admin/order/confirmOrder/<%=b._orderID%>" class="btn btn-primary"><b>Chấp nhận</b></a>
-                                </div>
-                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <form method="POST" action="/admin/order/rejectOrder/<%=b._orderID%>" >
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span></button>
-                                                        <h4 class="modal-title">Xác nhận huỷ đơn hàng</h4>
-                                                </div> 
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="message-text" class="col-form-label">Lý do huỷ:</label>
-                                                        <textarea class="form-control" name="txtLyDo" id="message-text"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                                    <input type="submit" style="float:right" id="btnAdd" class="btn btn-warning col-lg-3 "
-                                                    value="Xác nhận huỷ order" />
-                                                </div>
-                                            </div>
-                                        </form>  
                                     </div>
                                 </div>
                         </div>
