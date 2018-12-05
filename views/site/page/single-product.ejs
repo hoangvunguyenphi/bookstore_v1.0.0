@@ -171,7 +171,7 @@
                                                     </ins>
                                                 </p>
                                                 <!-- .single-product-header -->
-                                                <form method="POST" class="cart" enctype="multipart/form-data">
+                                                <form id="formThem" method="POST" class="cart">
                                                     <div class="quantity">
                                                         <label for="quantity-input">Số lượng</label>
                                                         <input type="number" size="4" class="input-text qty text" title="Qty"
@@ -322,9 +322,6 @@
         <!-- .site-footer -->
     </div>
     <script>
-        function loadMoTa() {
-            document.getElementById('dvMoTa').innerHTML = "<%=sachDetail[0].mota%>"
-        }
 
         function formatNumber(nStr, decSeperate, groupSeperate) {
             nStr += '';
@@ -339,11 +336,11 @@
         }
 
         $(function () {
-            $('form').on('submit', function (e) {
+            $('#formThem').on('submit', function (e) {
                 e.preventDefault(); // using this page stop being refreshing 
                 $.ajax({
                     type: 'POST',
-                    data: $('form').serialize(),
+                    data: $('#formThem').serialize(),
                     dataType: 'json',
                     success: function (data) {
                         //alert('form was submitted'+data);
