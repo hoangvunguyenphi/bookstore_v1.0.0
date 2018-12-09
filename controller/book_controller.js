@@ -21,7 +21,23 @@ let docClient = new AWS.DynamoDB.DocumentClient();
 exports.get_all_book = function(req, res, next) {
   var params = {
     TableName: "DA2Book",
+    ProjectionExpression: '#bookID, theloai, tieude, hinhanh, gia, danhdau, linkseo',
+    ExpressionAttributeNames: {
+      '#bookID': '_bookID'
+    },
     Limit: 40
+    /*
+    Limit: 50
+    FilterExpression: 'contains(#d, :d1) or contains(#d, :d2) or contains(#d, :d3)',
+    ExpressionAttributeNames: {
+      '#bookID': '_bookID',
+      '#d': 'danhdau'
+    },
+    ExpressionAttributeValues: {
+      ':d1': 'new',
+      ':d2': 'weekdeal',
+      ":d3": 'popular'
+    }*/
   };
   //DUYET TAT CA COLLECTIONS TREN TABLE
   docClient.scan(params, function(err, data) {
@@ -278,48 +294,100 @@ exports.show_list_cat = function(req, res) {
     }
   });
 };
-exports.search_book = function(req, res) {
-  var keySearch = req.body.stieude;
-  var sltTheloai = req.body.product_cat;
-  console.log(keySearch + "-" + sltTheloai);
-  if (keySearch.length != 0) {
+
+exports.show_list_cat2 = function (req, res, next) {
+  var dd = req.params.danhdau;
+  console.log(dd);
+  var params = {
+    TableName: "DA2Book",
+    FilterExpression: 'contains(#dd, :danhdau)',
+    ExpressionAttributeValues: {
+      ":danhdau": dd
+    },
+    ExpressionAttributeNames: {
+      "#dd": "danhdau"
+    }
+  };
+
+  docClient.scan(params, function (err, data) {
+    if (err) {
+      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+      console.log("\nSố lượng tìm dc=" + data.Count);
+      if (!req.session.cart) {
+        return res.render("site/page/list-book-cat", {
+          products: [],
+          allBooks: data.Items,
+          totalPrice: 0,
+          totalQty: 0
+        });
+      }
+      //ngược lại đang trong phiên session
+      var cart = new Cart(req.session.cart);
+      res.render("site/page/list-book-cat", {
+        allBooks: data.Items,
+        products: cart.generateArray(),
+        totalPrice: cart.totalPrice,
+        totalQty: cart.totalQty
+      });
+    }
+  });
+};
+
+exports.search_book = function (req, res, next) {
+  var q = req.query.q;
+  var cat = req.query.cat;
+
+  q = renameModule.editName(q);
+
+  //console.log(q);
+  //console.log(cat);
+
+  if (typeof(cat) === 'undefined' || cat === 'cat0') {
     var params = {
       TableName: "DA2Book",
-      FilterExpression: "contains(#key, :key) and contains(#tl, :tl) ",
+      FilterExpression: "contains(linkseo, :ls)",
       ExpressionAttributeValues: {
-        ":key": String(keySearch).trim() || " ",
-        ":tl": String(sltTheloai).trim()
+        ":ls": q
+      }
+    };
+  } else {
+    var params = {
+      TableName: "DA2Book",
+      FilterExpression: "contains(linkseo, :ls) and #tl=:tloai",
+      ExpressionAttributeValues: {
+        ":tloai": cat,
+        ":ls": q
       },
       ExpressionAttributeNames: {
-        "#key": "tieude",
         "#tl": "theloai"
       }
     };
-    docClient.scan(params, function(err, data) {
-      if (err) {
-        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
-      } else {
-        if (!req.session.cart) {
-          return res.render("../views/site/page/list-book-cat.ejs", {
-            products: [],
-            allBooks: data.Items,
-            totalPrice: 0,
-            totalQty: 0
-          });
-        }
-        //ngược lại đang trong phiên session
-        var cart = new Cart(req.session.cart);
-        res.render("../views/site/page/list-book-cat.ejs", {
+  }
+
+  docClient.scan(params, function (err, data) {
+    if (err) {
+      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+    } else {
+      console.log("\nSố lượng tìm dc=" + data.Count);
+      if (!req.session.cart) {
+        return res.render("site/page/list-book-cat", {
+          products: [],
           allBooks: data.Items,
-          products: cart.generateArray(),
-          totalPrice: cart.totalPrice,
-          totalQty: cart.totalQty
+          totalPrice: 0,
+          totalQty: 0
         });
       }
-    });
-  } else {
-    res.redirect("/");
-  }
+      //ngược lại đang trong phiên session
+      var cart = new Cart(req.session.cart);
+      res.render("site/page/list-book-cat", {
+        allBooks: data.Items,
+        products: cart.generateArray(),
+        totalPrice: cart.totalPrice,
+        totalQty: cart.totalQty
+      });
+    }
+  });
 };
 
 //GET ALL BOOK ADMIN
