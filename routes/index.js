@@ -3,7 +3,7 @@ var router = express.Router();
 var Order_controller = require("../controller/order_controller");
 var Book_controller = require("../controller/book_controller");
 var Cart_controller = require("../controller/cart_controller");
-
+var editName = require("../controller/edit_name");
 //Trang chủ
 router.get("/", Book_controller.get_all_book);
 
@@ -47,6 +47,16 @@ router.get("/deletecart2/:id", Cart_controller.delete_cart_item2);
 //khách hàng kiểm tra thông tin đơn hàng
 router.get("/trackOrder", Order_controller.trackOrder);
 
+//tìm kiếm đơn hàng trackorder
+router.post("/trackOrder", Order_controller.searchOrder);
 //router.get("*", Cart_controller.handleError1 );
+
+router.get("/trackOrder/:id/:mail", Order_controller.getOrderTrack);
+
+router.get("/getAllTinhTP", editName.getAllTinhTP);
+
+router.get("/getAllHuyenByTinhID/:id", editName.getAllHuyenByTinhID);
+
+router.get("/getAllXaByHuyenID/:id", editName.getAllXaByHuyenID);
 
 module.exports = router;

@@ -17,9 +17,7 @@
     <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="assets/css/colors/green.css" media="all" />
 
-    <!-- Google Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
-    <link rel="shortcut icon" href="assets/images/fav-icon.png">
+ <link rel="shortcut icon" href="assets/images/fav-icon.png">
 </head>
 
 <body class="woocommerce-active page-template-default woocommerce-checkout woocommerce-page can-uppercase">
@@ -39,6 +37,10 @@
                     </nav>
                     <!-- .woocommerce-breadcrumb -->
                     <div class="content-area" id="primary">
+                        
+        <p id="anotherElement"></p>
+
+      
                         <main class="site-main" id="main">
                             <div class="type-page hentry">
                                 <div class="entry-content">
@@ -51,7 +53,7 @@
                                                         <h3>Chi tiết giao hàng</h3>
                                                         <div class="woocommerce-billing-fields__field-wrapper-outer">
                                                             <div class="woocommerce-billing-fields__field-wrapper">
-                                                                <p id="billing_first_name_field" class="form-row form-row-first validate-required woocommerce-invalid woocommerce-invalid-required-field">
+                                                                <p id="billing_first_name_field" class="form-row">
                                                                     <label class="" for="billing_first_name">Tên người
                                                                         nhận
                                                                         <abbr title="required" class="required">*</abbr>
@@ -60,26 +62,34 @@
                                                                         required name="tennguoinhan" class="input-text ">
                                                                 </p>
                                                                 <div class="clear"></div>
-                                                                <p id="billing_company_field" class="form-row form-row-wide">
-                                                                    <label class="" for="billing_company">Tên địa điểm
-                                                                        ở gần</label>
-                                                                    <input type="text" value="" placeholder="tên công ty, trường học, trụ sở, công viên..."
-                                                                        id="billing_company" name="tendiachi" class="input-text ">
-                                                                </p>
-                                                                <p id="billing_country_field" class="form-row form-row-wide validate-required validate-email">
-                                                                    <label class="" for="billing_country">Tỉnh thành
-                                                                        <abbr title="required" class="required">*</abbr>
-                                                                    </label>
-                                                                    <select autocomplete="country" class="country_to_state country_select select2-hidden-accessible"
-                                                                        id="billing_country" name="tinhthanh" tabindex="-1"
-                                                                        required aria-hidden="true">
-                                                                        <option value="">Chọn tỉnh thành..</option>
-                                                                        <option value="HCM">Hồ chí minh</option>
-                                                                        <option value="DN">Đà nẵng</option>
-                                                                        <option value="HN">Hà nội</option>
-                                                                        <option value="TN">Thái nguyên</option>
-                                                                    </select>
-                                                                </p>
+                                                                <div class="form-row">
+                                                                    <div class="col-xs-12 col-md-4"> 
+                                                                        <label>Tỉnh thành
+                                                                                    <abbr title="required" class="required">*</abbr>
+                                                                        </label>
+                                                                        <select name="tinh" id="tinh" class="" required>
+                                                                                <option value="" >Chọn tỉnh/thành phố</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-md-4"> 
+                                                                            <label>Quận huyện
+                                                                                <abbr title="required" class="required">*</abbr>
+                                                                            </label>
+                                                                            <select name="huyen" id="huyen" class="" required>
+                                                                                    <option value="">Chọn quận/huyện</option>
+                                                                            </select>
+                                                                    </div>
+                                                                    <div class="col-xs-12 col-md-4"> 
+                                                                                <label>Phường xã
+                                                                                    <abbr title="required" class="required">*</abbr>
+                                                                                </label>
+                                                                                <select name="xa" id="xa" class="" required>
+                                                                                        <option value="">Chọn xã/phường</option>
+                                                                                </select>
+                                                                    </div>
+                                                                    <input hidden  type="text" value="" id="edtTienship"
+                                                                         name="tienship" class="input-text ">
+                                                                </div>
                                                                 <div class="clear"></div>
                                                                 <p id="billing_address_1_field" class="form-row form-row-wide address-field validate-required">
                                                                     <label class="" for="billing_address_1">Địa chỉ cụ
@@ -163,12 +173,17 @@
                                                                         <%=totalPrice%>
                                                                         <span class="woocommerce-Price-currencySymbol">đồng</span></span>
                                                                 </td>
-                                                            </tr>
+                                                            </tr><tr class="cart-subtotal">
+                                                                    <th>Tiền ship</th>
+                                                                    <td>
+                                                                        <span class="woocommerce-Price-amount amount" id="tienshiptxt">Chưa xác định</span>
+                                                                    </td>
+                                                                </tr>
                                                             <tr class="order-total">
                                                                 <th>Thành tiền</th>
                                                                 <td>
                                                                     <strong>
-                                                                        <span class="woocommerce-Price-amount amount">
+                                                                        <span class="woocommerce-Price-amount amount" id="txtTongTien">
                                                                             <%=totalPrice%>
                                                                             <span class="woocommerce-Price-currencySymbol">đồng</span></span>
                                                                     </strong>
@@ -228,7 +243,125 @@ findIP.then(ip => document.getElementById('ipClient').value = ip).catch(e => con
     <script type="text/javascript" src="assets/js/pace.min.js"></script>
     <script type="text/javascript" src="assets/js/slick.min.js"></script>
     <script type="text/javascript" src="assets/js/scripts.js"></script>
+    <script>
+            $(document).ready(function(){
+                $('#huyen').prop('disabled',true);
+                $('#xa').prop('disabled',true);
 
+                _getAllTinh();
+                $('#tinh').on('change',function(){
+                    if(this.value==''){
+                        $('#huyen').prop('disabled',true);
+                        $('#xa').prop('disabled',true);
+                    }
+                    else{
+                        $('#huyen').prop('disabled',false);
+                        var id=$(this).val();
+                        if(id!=undefined && id!=""){
+                            _getHuyenByTinh(id);
+                        }
+                    }
+                    
+                });  
+                $('#huyen').on('change',function(){
+                    if(this.value==''){
+                        $('#xa').prop('disabled',true);
+                    }
+                    else{
+                        $('#xa').prop('disabled',false);
+                        var id=$(this).val();
+                        if(id!=undefined && id!=""){
+                            _getXaByHuyen(id);
+                        }
+                    }
+                    
+                });  
+            });
+            $('#tinh').on('change',function(){
+                if(this.value==""){
+                    $('#tienshiptxt').html(`Chưa xác định`); 
+                    $('#txtTongTien').html(`<%=totalPrice%> <span class="woocommerce-Price-currencySymbol">đồng</span>`);
+                    $('#edtTienship').val(0);
+                    
+                }else{
+                    if(Number(this.value) < 401){
+                        
+                        $('#tienshiptxt').html(`33,000 <span class="woocommerce-Price-currencySymbol">đồng</span>`);
+                        $('#txtTongTien').html(`<%=totalPrice +33000%> <span class="woocommerce-Price-currencySymbol">đồng</span>`);
+                        $('#edtTienship').val(33000);
+                    }
+                    else{
+                        if(Number(this.value) <606){
+                            $('#tienshiptxt').html(`21,000 <span class="woocommerce-Price-currencySymbol">đồng</span>`);
+                            $('#txtTongTien').html(`<%=totalPrice +21000%> <span class="woocommerce-Price-currencySymbol">đồng</span>`);
+                            $('#edtTienship').val(21000);
+                        }
+                        else{
+                            $('#tienshiptxt').html(`13,000 <span class="woocommerce-Price-currencySymbol">đồng</span>`);
+                            $('#txtTongTien').html(`<%=totalPrice +13000%> <span class="woocommerce-Price-currencySymbol">đồng</span>`);
+                            $('#edtTienship').val(13000);
+                        }
+                    }
+                }
+            });
+            function _getAllTinh() {
+                $.ajax({
+                    type: "GET",
+                    url: '/getAllTinhTP',
+                    dataType: "json",
+                    success: function (data) {
+                        if (data != null && data != undefined && data.length) {
+                            var html = '';
+                            html += '<option value="">Chọn tỉnh/thành phố</option>';
+                            data.forEach(function(item){
+                                console.log(item);
+                                html += '<option value=' + item.id + '>' + item.value + '</option>';
+                            })
+                            $("#tinh").html(html);
+                        }
+                    }
+                });
+            };
+            function _getHuyenByTinh(id) {
+                    $.ajax({
+                    type: "GET",
+                    url: '/getAllHuyenByTinhID/'+id,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if (data != null && data != undefined && data.length) {
+                            var html = '';
+                            html += '<option value="">Chọn quận/huyện</option>';
+                            data.forEach(function(item){
+                                html += '<option value=' + item.id + '>' + item.value + '</option>';
+                            });
+                            $("#huyen").html(html);
+                        }
+                    }
+                });
+                
+            } 
+            function _getXaByHuyen(id) {
+                    $.ajax({
+                    type: "GET",
+                    url: '/getAllXaByHuyenID/'+id,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        if (data != null && data != undefined && data.length) {
+                            var html = '';
+                            html += '<option value="">Chọn xã phường</option>';
+                            data.forEach(function(item){
+                                html += '<option value=' + item.id + '>' + item.value + '</option>';
+                            });
+                            $("#xa").html(html);
+                        }
+                    }
+                });
+                
+            }
+            
+        </script>
 </body>
 
 </html>

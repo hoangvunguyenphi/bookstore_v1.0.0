@@ -4,7 +4,7 @@ var Cart = require("./cart");
 const UUID = require("uuid/v4");
 let date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
-var awsconfig = require("../../aws-config.json");
+var awsconfig = require("../aws-config.json");
 var sio = require("../socket/socketio");
 const accessKeyId = awsconfig.AWS.accessKeyId;
 const secretAccessKey = awsconfig.AWS.secretAccessKey;
@@ -26,7 +26,8 @@ exports.add_order = function(req, res, next) {
         return res.render("../views/site/page/cart", {
             products: [],
             totalPrice: 0,
-            totalQty: 0
+            totalQty: 0,
+            title: "Giỏ hàng"
         });
     }
     var cart = new Cart(req.session.cart);
@@ -160,9 +161,9 @@ exports.add_order = function(req, res, next) {
             res.render("../views/site/page/order-received.ejs", {
                 recieved_order: params.Item,
                 products: [],
-                totalPrice: params.Item.tongtienthanhtoan,
-                tienship: params.Item.tienship,
-                totalQty: 0
+                totalPrice: 0,
+                totalQty: 0,
+                title: "Thông tin đơn hàng"
             });
             //   }
             // });
@@ -231,7 +232,7 @@ exports.xacNhanOrder = function(req, res) {
                             "order - tinhtrang ::update::success " +
                                 JSON.stringify(data)
                         );
-                        res.render("../views/site/page/trac.ejs");
+                        res.render("../views/site/page/trac.ejs"); ///track order
                     }
                 });
             });
@@ -583,13 +584,174 @@ exports.trackOrder = function(req, res) {
         return res.render("../views/site/page/track-your-order.ejs", {
             products: [],
             totalPrice: 0,
-            totalQty: 0
+            totalQty: 0,
+            title: "Tra cứu đơn hàng",
+            ketquatim: " "
         });
     }
     var cart = new Cart(req.session.cart);
     res.render("../views/site/page/track-your-order.ejs", {
         products: cart.generateArray(),
         totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
+        totalQty: cart.totalQty,
+        title: "Tra cứu đơn hàng",
+        ketquatim: " "
+    });
+};
+
+exports.searchOrder = function(req, res) {
+    var orderID = req.body.orderidd;
+    var emaill = req.body.order_emaill;
+    var params = {
+        TableName: "DA2Order",
+        FilterExpression: "#ma = :id and #email = :em",
+        ExpressionAttributeNames: {
+            "#ma": "_orderID",
+            "#email": "email"
+        },
+        ExpressionAttributeValues: {
+            ":id": orderID,
+            ":em": emaill
+        }
+    };
+    docClient.scan(params, function(err, data) {
+        if (err) {
+            console.log(
+                "Unable to query. Error:",
+                JSON.stringify(err, null, 2)
+            );
+        } else {
+            console.log(data);
+            if (data.Count == 0) {
+                if (!req.session.cart) {
+                    return res.render(
+                        "../views/site/page/track-your-order.ejs",
+                        {
+                            products: [],
+                            totalPrice: 0,
+                            totalQty: 0,
+                            title: "Tra cứu đơn hàng",
+                            ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
+                        }
+                    );
+                }
+                var cart = new Cart(req.session.cart);
+                res.render("../views/site/page/track-your-order.ejs", {
+                    products: cart.generateArray(),
+                    totalPrice: cart.totalPrice,
+                    totalQty: cart.totalQty,
+                    title: "Tra cứu đơn hàng",
+                    ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
+                });
+            } else {
+                if (!req.session.cart) {
+                    return res.render(
+                        "../views/site/page/result-track-order.ejs",
+                        {
+                            products: [],
+                            totalPrice: 0,
+                            totalQty: 0,
+                            title: "Tra cứu đơn hàng",
+                            orderDetail: data.Items
+                        }
+                    );
+                }
+                var cart = new Cart(req.session.cart);
+                res.render("../views/site/page/result-track-order.ejs", {
+                    products: cart.generateArray(),
+                    totalPrice: cart.totalPrice,
+                    totalQty: cart.totalQty,
+                    title: "Tra cứu đơn hàng",
+                    orderDetail: data.Items
+                });
+            }
+        }
+    });
+};
+
+exports.getOrderTrack = function(req, res) {
+    var orderID = req.params.id;
+    var emaill = req.params.mail;
+    var params = {
+        TableName: "DA2Order",
+        FilterExpression: "#ma = :id and #email = :em",
+        ExpressionAttributeNames: {
+            "#ma": "_orderID",
+            "#email": "email"
+        },
+        ExpressionAttributeValues: {
+            ":id": orderID,
+            ":em": emaill
+        }
+    };
+    docClient.scan(params, function(err, data) {
+        if (err) {
+            console.log(
+                "Unable to query. Error:",
+                JSON.stringify(err, null, 2)
+            );
+            if (!req.session.cart) {
+                return res.render("../views/site/page/track-your-order.ejs", {
+                    products: [],
+                    totalPrice: 0,
+                    totalQty: 0,
+                    title: "Tra cứu đơn hàng",
+                    ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
+                });
+            }
+            var cart = new Cart(req.session.cart);
+            res.render("../views/site/page/track-your-order.ejs", {
+                products: cart.generateArray(),
+                totalPrice: cart.totalPrice,
+                totalQty: cart.totalQty,
+                title: "Tra cứu đơn hàng",
+                ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
+            });
+        } else {
+            console.log(data);
+            if (data.Count == 0) {
+                if (!req.session.cart) {
+                    return res.render(
+                        "../views/site/page/track-your-order.ejs",
+                        {
+                            products: [],
+                            totalPrice: 0,
+                            totalQty: 0,
+                            title: "Tra cứu đơn hàng",
+                            ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
+                        }
+                    );
+                }
+                var cart = new Cart(req.session.cart);
+                res.render("../views/site/page/track-your-order.ejs", {
+                    products: cart.generateArray(),
+                    totalPrice: cart.totalPrice,
+                    totalQty: cart.totalQty,
+                    title: "Tra cứu đơn hàng",
+                    ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
+                });
+            } else {
+                if (!req.session.cart) {
+                    return res.render(
+                        "../views/site/page/result-track-order.ejs",
+                        {
+                            products: [],
+                            totalPrice: 0,
+                            totalQty: 0,
+                            title: "Tra cứu đơn hàng",
+                            orderDetail: data.Items
+                        }
+                    );
+                }
+                var cart = new Cart(req.session.cart);
+                res.render("../views/site/page/result-track-order.ejs", {
+                    products: cart.generateArray(),
+                    totalPrice: cart.totalPrice,
+                    totalQty: cart.totalQty,
+                    title: "Tra cứu đơn hàng",
+                    orderDetail: data.Items
+                });
+            }
+        }
     });
 };

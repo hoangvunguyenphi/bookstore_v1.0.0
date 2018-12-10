@@ -4,386 +4,413 @@ var fs = require("fs");
 var UUID = require("uuid/v4");
 var date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
-var awsconfig = require("../../aws-config.json");
+var awsconfig = require("../aws-config.json");
 let authen_controller = require("../controller/authentication_controller");
 var accessKeyId = awsconfig.AWS.accessKeyId;
 var secretAccessKey = awsconfig.AWS.secretAccessKey;
 var region = awsconfig.AWS.region;
 var endpoint = "http://localhost:8000";
 AWS.config.update({
-  accessKeyId,
-  secretAccessKey,
-  region
+    accessKeyId,
+    secretAccessKey,
+    region
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
 
 //GET ALL BOOK
 exports.get_all_book = function(req, res, next) {
-  var params = {
-    TableName: "DA2Book",
-    Limit: 40
-  };
-  //DUYET TAT CA COLLECTIONS TREN TABLE
-  docClient.scan(params, function(err, data) {
-    if (err) {
-      console.log(
-        "\nUnable to scan the table. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-      res.render("error");
-    } else {
-      console.log(data.Count);
-      //nếu session rỗng
-      if (!req.session.cart) {
-        return res.render("../views/site/page/index", {
-          products: [], //cartItem
-          allBooks: data.Items,
-          totalPrice: 0,
-          totalQty: 0
-        });
-      }
-      //ngược lại đang trong phiên session
-      var cart = new Cart(req.session.cart);
-      res.render("../views/site/page/index", {
-        products: cart.generateArray(),
-        allBooks: data.Items,
-        totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
-      });
-    }
-  });
+    var params = {
+        TableName: "DA2Book",
+        Limit: 40
+    };
+    //DUYET TAT CA COLLECTIONS TREN TABLE
+    docClient.scan(params, function(err, data) {
+        if (err) {
+            console.log(
+                "\nUnable to scan the table. Error JSON:",
+                JSON.stringify(err, null, 2)
+            );
+            res.render("error");
+        } else {
+            console.log(data.Count);
+            //nếu session rỗng
+            if (!req.session.cart) {
+                return res.render("../views/site/page/index", {
+                    products: [], //cartItem
+                    allBooks: data.Items,
+                    totalPrice: 0,
+                    totalQty: 0,
+                    title: "Trang chủ"
+                });
+            }
+            //ngược lại đang trong phiên session
+            var cart = new Cart(req.session.cart);
+            res.render("../views/site/page/index", {
+                products: cart.generateArray(),
+                allBooks: data.Items,
+                totalPrice: cart.totalPrice,
+                totalQty: cart.totalQty,
+                title: "Trang chủ"
+            });
+        }
+    });
 };
 //GET CHI TIET SPs
 exports.get_detail_product = function(req, res, next) {
-  var sachID = req.params.id;
-  console.log("\n_________" + sachID);
+    var sachID = req.params.id;
+    console.log("\n_________" + sachID);
 
-  var params = {
-    TableName: "DA2Book",
-    KeyConditionExpression: "#ma = :id",
-    ExpressionAttributeNames: {
-      "#ma": "_bookID"
-    },
-    ExpressionAttributeValues: {
-      ":id": sachID
-    }
-  };
-  //Thực hiện query object theo id lấy từ req.params
-  docClient.query(params, function(err, data) {
-    if (err) {
-      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
-    } else {
-      if (!req.session.cart) {
-        return res.render("../views/site/page/single-product", {
-          sachDetail: data.Items,
-          products: [],
-          allBooks: data.Items,
-          totalPrice: 0,
-          totalQty: 0
-        });
-      }
-      var cart = new Cart(req.session.cart);
-      res.render("../views/site/page/single-product", {
-        sachDetail: data.Items,
-        allBooks: data.Items,
-        products: cart.generateArray(),
-        totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
-      });
-    }
-  });
+    var params = {
+        TableName: "DA2Book",
+        KeyConditionExpression: "#ma = :id",
+        ExpressionAttributeNames: {
+            "#ma": "_bookID"
+        },
+        ExpressionAttributeValues: {
+            ":id": sachID
+        }
+    };
+    //Thực hiện query object theo id lấy từ req.params
+    docClient.query(params, function(err, data) {
+        if (err) {
+            console.log(
+                "Unable to query. Error:",
+                JSON.stringify(err, null, 2)
+            );
+        } else {
+            if (!req.session.cart) {
+                return res.render("../views/site/page/single-product", {
+                    sachDetail: data.Items,
+                    products: [],
+                    allBooks: data.Items,
+                    totalPrice: 0,
+                    totalQty: 0,
+                    title: data.Items.tieude
+                });
+            }
+            var cart = new Cart(req.session.cart);
+            res.render("../views/site/page/single-product", {
+                sachDetail: data.Items,
+                allBooks: data.Items,
+                products: cart.generateArray(),
+                totalPrice: cart.totalPrice,
+                totalQty: cart.totalQty,
+                title: data.Items.tieude
+            });
+        }
+    });
 };
 
 exports.edit_book = function(req, res, next) {
-  /**
-   * @author N.T.Sơn
-   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
-   * Nếu bị redirect thì _headerSent là true và ngược lại.
-   */
-  authen_controller.check_session_auth(req, res);
-  if (res._headerSent) return;
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
 
-  var bookid = req.params.id;
-  console.log(req.body.newTinhTrang);
-  var editBook = {
-    tacgia: renameModule.splitList(req.body.newTacGia),
-    tieude: req.body.newTieuDe,
-    theloai: String(req.body.newTheLoai),
-    SKU: req.body.newSKU,
-    ngayxuatban: req.body.newNgayXuatBan,
-    nhaxuatban: req.body.newNhaXuatBan,
-    kichthuoc: req.body.newKichThuoc,
-    mota: req.body.newMoTa,
-    dichgia: renameModule.splitList(req.body.newDichGia),
-    ngonngu: req.body.newNgonNgu,
-    tinhtrang: renameModule.splitList(req.body.newTinhTrang) || [],
-    danhdau: renameModule.splitList(req.body.newDanhDau) || [],
-    linkseo: req.body.newLinkSeo,
-    sotrang: parseInt(req.body.newSoTrang),
-    gia: parseFloat(req.body.newGia)
-  };
-  console.log(editBook);
-  var params = {
-    TableName: "DA2Book",
-    Key: {
-      _bookID: bookid
-    },
-    UpdateExpression:
-      "set #sku=:sk, #tieude=:td, #tacgia=:tg, #dichgia=:dg, #theloai=:tl,#tinhtrang=:tt,#ngonngu=:nn,#ngayxuatban=:txb,#nhaxuatban=:nxb,#sotrang=:st,#mota=:mt,#danhdau=:dd,#gia=:g",
-    ExpressionAttributeValues: {
-      ":sk": editBook.SKU,
-      ":td": editBook.tieude,
-      ":tg": editBook.tacgia,
-      ":dg": editBook.dichgia,
-      ":tl": editBook.theloai,
-      ":tt": editBook.tinhtrang,
-      ":nn": editBook.ngonngu,
-      ":txb": editBook.ngayxuatban,
-      ":nxb": editBook.nhaxuatban,
-      ":st": editBook.sotrang,
-      ":mt": editBook.mota,
-      ":dd": editBook.danhdau,
-      ":g": editBook.gia
-    },
-    ExpressionAttributeNames: {
-      "#sku": "SKU",
-      "#tieude": "tieude",
-      "#tacgia": "tacgia",
-      "#dichgia": "dichgia",
-      "#theloai": "theloai",
-      "#tinhtrang": "tinhtrang",
-      "#ngonngu": "ngonngu",
-      "#ngayxuatban": "ngayxuatban",
-      "#nhaxuatban": "nhaxuatban",
-      "#sotrang": "sotrang",
-      "#mota": "mota",
-      "#danhdau": "danhdau",
-      "#gia": "gia"
-    },
-    ReturnValues: "UPDATED_NEW"
-  };
-  docClient.update(params, function(err, data) {
-    if (err) {
-      console.log("users::update::error - " + JSON.stringify(err, null, 2));
-    } else {
-      // console.log("users::update::success " + JSON.stringify(data));
-      res.redirect("/admin/product/detail/" + bookid);
-    }
-  });
+    var bookid = req.params.id;
+    console.log(req.body.newTinhTrang);
+    var editBook = {
+        tacgia: renameModule.splitList(req.body.newTacGia),
+        tieude: req.body.newTieuDe,
+        theloai: String(req.body.newTheLoai),
+        SKU: req.body.newSKU,
+        ngayxuatban: req.body.newNgayXuatBan,
+        nhaxuatban: req.body.newNhaXuatBan,
+        kichthuoc: req.body.newKichThuoc,
+        mota: req.body.newMoTa,
+        dichgia: renameModule.splitList(req.body.newDichGia),
+        ngonngu: req.body.newNgonNgu,
+        tinhtrang: renameModule.splitList(req.body.newTinhTrang) || [],
+        danhdau: renameModule.splitList(req.body.newDanhDau) || [],
+        linkseo: req.body.newLinkSeo,
+        sotrang: parseInt(req.body.newSoTrang),
+        gia: parseFloat(req.body.newGia)
+    };
+    console.log(editBook);
+    var params = {
+        TableName: "DA2Book",
+        Key: {
+            _bookID: bookid
+        },
+        UpdateExpression:
+            "set #sku=:sk, #tieude=:td, #tacgia=:tg, #dichgia=:dg, #theloai=:tl,#tinhtrang=:tt,#ngonngu=:nn,#ngayxuatban=:txb,#nhaxuatban=:nxb,#sotrang=:st,#mota=:mt,#danhdau=:dd,#gia=:g",
+        ExpressionAttributeValues: {
+            ":sk": editBook.SKU,
+            ":td": editBook.tieude,
+            ":tg": editBook.tacgia,
+            ":dg": editBook.dichgia,
+            ":tl": editBook.theloai,
+            ":tt": editBook.tinhtrang,
+            ":nn": editBook.ngonngu,
+            ":txb": editBook.ngayxuatban,
+            ":nxb": editBook.nhaxuatban,
+            ":st": editBook.sotrang,
+            ":mt": editBook.mota,
+            ":dd": editBook.danhdau,
+            ":g": editBook.gia
+        },
+        ExpressionAttributeNames: {
+            "#sku": "SKU",
+            "#tieude": "tieude",
+            "#tacgia": "tacgia",
+            "#dichgia": "dichgia",
+            "#theloai": "theloai",
+            "#tinhtrang": "tinhtrang",
+            "#ngonngu": "ngonngu",
+            "#ngayxuatban": "ngayxuatban",
+            "#nhaxuatban": "nhaxuatban",
+            "#sotrang": "sotrang",
+            "#mota": "mota",
+            "#danhdau": "danhdau",
+            "#gia": "gia"
+        },
+        ReturnValues: "UPDATED_NEW"
+    };
+    docClient.update(params, function(err, data) {
+        if (err) {
+            console.log(
+                "users::update::error - " + JSON.stringify(err, null, 2)
+            );
+        } else {
+            // console.log("users::update::success " + JSON.stringify(data));
+            res.redirect("/admin/product/detail/" + bookid);
+        }
+    });
 };
 
 exports.delete_book = function(req, res, next) {
-  /**
-   * @author N.T.Sơn
-   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
-   * Nếu bị redirect thì _headerSent là true và ngược lại.
-   */
-  authen_controller.check_session_auth(req, res);
-  if (res._headerSent) return;
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
 
-  var bookID = req.params.id;
-  console.log("\nRemoved book ID: " + bookID);
-  var params = {
-    TableName: "DA2Book",
-    Key: {
-      _bookID: bookID
-    }
-  };
-  docClient.delete(params, function(err, data) {
-    if (err) {
-      console.log("users::delete::error - " + JSON.stringify(err, null, 2));
-    } else {
-      console.log("users::delete::success");
-      res.redirect("/admin/product");
-    }
-  });
+    var bookID = req.params.id;
+    console.log("\nRemoved book ID: " + bookID);
+    var params = {
+        TableName: "DA2Book",
+        Key: {
+            _bookID: bookID
+        }
+    };
+    docClient.delete(params, function(err, data) {
+        if (err) {
+            console.log(
+                "users::delete::error - " + JSON.stringify(err, null, 2)
+            );
+        } else {
+            console.log("users::delete::success");
+            res.redirect("/admin/product");
+        }
+    });
 };
 
 exports.admin_search_book = function(req, res, next) {
-  /**
-   * @author N.T.Sơn
-   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
-   * Nếu bị redirect thì _headerSent là true và ngược lại.
-   */
-  authen_controller.check_session_auth(req, res);
-  if (res._headerSent) return;
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
 
-  var keySearch = req.body.txtSearch123123;
-  console.log("__" + keySearch);
-  if (keySearch.length != 0) {
-    var params = {
-      TableName: "DA2Book",
-      FilterExpression: "contains(#id, :i) or contains(#tieude, :n) ",
-      ExpressionAttributeValues: {
-        ":i": keySearch,
-        ":n": keySearch
-      },
-      ExpressionAttributeNames: {
-        "#tieude": "tieude",
-        "#id": "_bookID"
-      }
-    };
+    var keySearch = req.body.txtSearch123123;
+    console.log("__" + keySearch);
+    if (keySearch.length != 0) {
+        var params = {
+            TableName: "DA2Book",
+            FilterExpression: "contains(#id, :i) or contains(#tieude, :n) ",
+            ExpressionAttributeValues: {
+                ":i": keySearch,
+                ":n": keySearch
+            },
+            ExpressionAttributeNames: {
+                "#tieude": "tieude",
+                "#id": "_bookID"
+            }
+        };
 
-    docClient.scan(params, function(err, data) {
-      if (err) {
-        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
-      } else {
-        console.log("Query succeeded.");
-        console.log(data.Items);
-        res.render("../views/admin/page/ahome.ejs", {
-          allBooks: data.Items
+        docClient.scan(params, function(err, data) {
+            if (err) {
+                console.log(
+                    "Unable to query. Error:",
+                    JSON.stringify(err, null, 2)
+                );
+            } else {
+                console.log("Query succeeded.");
+                console.log(data.Items);
+                res.render("../views/admin/page/ahome.ejs", {
+                    allBooks: data.Items
+                });
+            }
         });
-      }
-    });
-  } else {
-    res.redirect("/admin");
-  }
+    } else {
+        res.redirect("/admin");
+    }
 };
 
 exports.show_list_cat = function(req, res) {
-  var category = req.params.theloai;
-  console.log(category);
-  var params = {
-    TableName: "DA2Book",
-    FilterExpression: "#tl=:tloai",
-    ExpressionAttributeValues: {
-      ":tloai": category
-    },
-    ExpressionAttributeNames: {
-      "#tl": "theloai"
-    }
-  };
+    var category = req.params.theloai;
+    console.log(category);
+    var params = {
+        TableName: "DA2Book",
+        FilterExpression: "#tl=:tloai",
+        ExpressionAttributeValues: {
+            ":tloai": category
+        },
+        ExpressionAttributeNames: {
+            "#tl": "theloai"
+        }
+    };
 
-  docClient.scan(params, function(err, data) {
-    if (err) {
-      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
-    } else {
-      console.log("\nSố lượng tìm dc=" + data.Count);
-      if (!req.session.cart) {
-        return res.render("../views/site/page/list-book-cat.ejs", {
-          products: [],
-          allBooks: data.Items,
-          totalPrice: 0,
-          totalQty: 0
-        });
-      }
-      //ngược lại đang trong phiên session
-      var cart = new Cart(req.session.cart);
-      res.render("../views/site/page/list-book-cat.ejs", {
-        allBooks: data.Items,
-        products: cart.generateArray(),
-        totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
-      });
-    }
-  });
+    docClient.scan(params, function(err, data) {
+        if (err) {
+            console.log(
+                "Unable to query. Error:",
+                JSON.stringify(err, null, 2)
+            );
+        } else {
+            console.log("\nSố lượng tìm dc=" + data.Count);
+            if (!req.session.cart) {
+                return res.render("../views/site/page/list-book-cat.ejs", {
+                    products: [],
+                    allBooks: data.Items,
+                    totalPrice: 0,
+                    totalQty: 0,
+                    title: category
+                });
+            }
+            //ngược lại đang trong phiên session
+            var cart = new Cart(req.session.cart);
+            res.render("../views/site/page/list-book-cat.ejs", {
+                allBooks: data.Items,
+                products: cart.generateArray(),
+                totalPrice: cart.totalPrice,
+                totalQty: cart.totalQty,
+                title: category
+            });
+        }
+    });
 };
 exports.search_book = function(req, res) {
-  var keySearch = req.body.stieude;
-  var sltTheloai = req.body.product_cat;
-  console.log(keySearch + "-" + sltTheloai);
-  if (keySearch.length != 0) {
-    var params = {
-      TableName: "DA2Book",
-      FilterExpression: "contains(#key, :key) and contains(#tl, :tl) ",
-      ExpressionAttributeValues: {
-        ":key": String(keySearch).trim() || " ",
-        ":tl": String(sltTheloai).trim()
-      },
-      ExpressionAttributeNames: {
-        "#key": "tieude",
-        "#tl": "theloai"
-      }
-    };
-    docClient.scan(params, function(err, data) {
-      if (err) {
-        console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
-      } else {
-        if (!req.session.cart) {
-          return res.render("../views/site/page/list-book-cat.ejs", {
-            products: [],
-            allBooks: data.Items,
-            totalPrice: 0,
-            totalQty: 0
-          });
-        }
-        //ngược lại đang trong phiên session
-        var cart = new Cart(req.session.cart);
-        res.render("../views/site/page/list-book-cat.ejs", {
-          allBooks: data.Items,
-          products: cart.generateArray(),
-          totalPrice: cart.totalPrice,
-          totalQty: cart.totalQty
+    var keySearch = req.body.stieude;
+    var sltTheloai = req.body.product_cat;
+    console.log(keySearch + "-" + sltTheloai);
+    if (keySearch.length != 0) {
+        var params = {
+            TableName: "DA2Book",
+            FilterExpression: "contains(#key, :key) and contains(#tl, :tl) ",
+            ExpressionAttributeValues: {
+                ":key": String(keySearch).trim() || " ",
+                ":tl": String(sltTheloai).trim()
+            },
+            ExpressionAttributeNames: {
+                "#key": "tieude",
+                "#tl": "theloai"
+            }
+        };
+        docClient.scan(params, function(err, data) {
+            if (err) {
+                console.log(
+                    "Unable to query. Error:",
+                    JSON.stringify(err, null, 2)
+                );
+            } else {
+                if (!req.session.cart) {
+                    return res.render("../views/site/page/list-book-cat.ejs", {
+                        products: [],
+                        allBooks: data.Items,
+                        totalPrice: 0,
+                        totalQty: 0,
+                        title: "Tìm kiếm"
+                    });
+                }
+                //ngược lại đang trong phiên session
+                var cart = new Cart(req.session.cart);
+                res.render("../views/site/page/list-book-cat.ejs", {
+                    allBooks: data.Items,
+                    products: cart.generateArray(),
+                    totalPrice: cart.totalPrice,
+                    totalQty: cart.totalQty,
+                    title: "Tìm kiếm"
+                });
+            }
         });
-      }
-    });
-  } else {
-    res.redirect("/");
-  }
+    } else {
+        res.redirect("/");
+    }
 };
 
 //GET ALL BOOK ADMIN
 exports.get_all_book2 = function(req, res, next) {
-  /**
-   * @author N.T.Sơn
-   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
-   * Nếu bị redirect thì _headerSent là true và ngược lại.
-   */
-  authen_controller.check_session_auth(req, res);
-  if (res._headerSent) return;
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
 
-  console.log("Countinue!");
-  var params = {
-    TableName: "DA2Book"
-  };
-  docClient.scan(params, onScan);
+    console.log("Countinue!");
+    var params = {
+        TableName: "DA2Book"
+    };
+    docClient.scan(params, onScan);
 
-  function onScan(err, data) {
-    if (err) {
-      console.log(
-        "\nUnable to scan the table. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      console.log(data.Items.length);
-      res.render("../views/admin/page/list-book.ejs", {
-        allBooks: data.Items
-      });
+    function onScan(err, data) {
+        if (err) {
+            console.log(
+                "\nUnable to scan the table. Error JSON:",
+                JSON.stringify(err, null, 2)
+            );
+        } else {
+            console.log(data.Items.length);
+            res.render("../views/admin/page/list-book.ejs", {
+                allBooks: data.Items
+            });
+        }
     }
-  }
 };
 
 exports.get_detail_product2 = function(req, res) {
-  /**
-   * @author N.T.Sơn
-   * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
-   * Nếu bị redirect thì _headerSent là true và ngược lại.
-   */
-  authen_controller.check_session_auth(req, res);
-  if (res._headerSent) return;
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
 
-  var sachID = req.params.id;
-  console.log("\n_________" + sachID);
+    var sachID = req.params.id;
+    console.log("\n_________" + sachID);
 
-  var params = {
-    TableName: "DA2Book",
-    KeyConditionExpression: "#ma = :id",
-    ExpressionAttributeNames: {
-      "#ma": "_bookID"
-    },
-    ExpressionAttributeValues: {
-      ":id": sachID
-    }
-  };
-  docClient.query(params, function(err, data) {
-    if (err) {
-      console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
-    } else {
-      res.render("../views/admin/page/bookDetail.ejs", {
-        sachDetail: data.Items
-      });
-    }
-  });
+    var params = {
+        TableName: "DA2Book",
+        KeyConditionExpression: "#ma = :id",
+        ExpressionAttributeNames: {
+            "#ma": "_bookID"
+        },
+        ExpressionAttributeValues: {
+            ":id": sachID
+        }
+    };
+    docClient.query(params, function(err, data) {
+        if (err) {
+            console.log(
+                "Unable to query. Error:",
+                JSON.stringify(err, null, 2)
+            );
+        } else {
+            res.render("../views/admin/page/bookDetail.ejs", {
+                sachDetail: data.Items
+            });
+        }
+    });
 };
 // var multer = require("multer");
 // var multerS3 = require("multer-s3");

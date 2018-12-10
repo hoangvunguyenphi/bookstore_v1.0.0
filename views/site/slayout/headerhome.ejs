@@ -2,17 +2,13 @@
     <div class="col-full">
         <ul id="menu-top-bar-right" class="nav menu-top-bar-right">
             <li class="menu-item animate-dropdown">
-                <a title="TechMarket eCommerce - Always free delivery" href="contact-v1.html">Nhà sách nhóm 11 &#8211;
+                <a  href="/">Nhà sách nhóm 11 &#8211;
                     luôn
                     bán sách cho bạn, chứ không bán cần</a>
             </li>
             <li class="hidden-sm-down menu-item animate-dropdown">
-                <a title="Track Your Order" href="track-your-order.html">
+                <a title="Track Your Order" href="/trackOrder">
                     <i class="tm tm-order-tracking"></i>Kiểm tra đơn đặt hàng</a>
-            </li>
-            <li class="menu-item">
-                <a title="My Account" href="login-and-register.html">
-                    <i class="tm tm-login-register"></i>Đăng ký hoặc đăng nhập</a>
             </li>
         </ul>
         <!-- .nav -->
@@ -79,6 +75,15 @@
                     <!-- .input-group -->
                 </form>
                 <!-- .header-wishlist -->
+                <%
+                if(title=="Giỏ hàng" || title=="Tiến hành đặt hàng"){
+                    %>
+                    <ul id="site-header-cart" class="site-header-cart menu">
+                    </ul>
+                    <%
+                }
+                else{
+                %>
                 <ul id="site-header-cart" class="site-header-cart menu">
                     <li class="animate-dropdown dropdown ">
                         <a class="cart-contents" href="cart.html" data-toggle="dropdown" title="View your shopping cart">
@@ -133,6 +138,10 @@
                     </li>
                 </ul>
                 <!-- .site-header-cart -->
+                <%
+                }
+            %>
+                
             </div>
             <!-- /.row -->
         </div>
