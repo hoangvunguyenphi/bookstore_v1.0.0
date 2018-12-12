@@ -248,18 +248,20 @@ exports.show_list_cat = function(req, res) {
         url:api_mapping.find_book_by_category.url + category,
         charset:"UTF-8"
     }
-    console.log(api_mapping.find_book_by_category.url + category);
+    console.log("show_list_cat :",api_mapping.find_book_by_category.url + category);
     request.get(api_mapping.find_book_by_category.url + encodeURI(category), { json: true }, (err, response, data) => {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
       console.log("\nSố lượng tìm dc=" + data.Count);
+      console.log(data);
       if (!req.session.cart) {
         return res.render("../views/site/page/list-book-cat.ejs", {
           products: [],
           allBooks: data.Items,
           totalPrice: 0,
-          totalQty: 0
+          totalQty: 0,
+          title: data.tieude
         });
       }
       //ngược lại đang trong phiên session
@@ -268,29 +270,38 @@ exports.show_list_cat = function(req, res) {
         allBooks: data.Items,
         products: cart.generateArray(),
         totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
+        totalQty: cart.totalQty,
+        title: data.tieude
       });
     }
   });
 };
-//TODO chưa map
-exports.show_list_cat2 = function (req, res, next) {
-    let dd = req.params.danhdau;
+//đã map xong
+exports.show_list_cat2 = function(req, res, next) {
+    var dd = req.params.danhdau;
     console.log(dd);
-    let params = {
-        TableName: "DA2Book",
-        FilterExpression: 'contains(#dd, :danhdau)',
-        ExpressionAttributeValues: {
-            ":danhdau": dd
-        },
-        ExpressionAttributeNames: {
-            "#dd": "danhdau"
-        }
-    };
-
-    docClient.scan(params, function (err, data) {
+    // var params = {
+    //     TableName: "DA2Book",
+    //     FilterExpression: "contains(#dd, :danhdau)",
+    //     ExpressionAttributeValues: {
+    //         ":danhdau": dd
+    //     },
+    //     ExpressionAttributeNames: {
+    //         "#dd": "danhdau"
+    //     }
+    // };
+    // docClient.scan(params, function(err, data) {
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     * Đã test thử
+     */
+    request.get(api_mapping.find_book_by_mark.url+encodeURI(dd), { json: true }, (err, response, data) => {
         if (err) {
-            console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+            console.log(
+                "From show_list_cat2 Unable to query. Error:",
+                JSON.stringify(err, null, 2)
+            );
         } else {
             console.log("\nSố lượng tìm dc=" + data.Count);
             if (!req.session.cart) {
@@ -298,16 +309,18 @@ exports.show_list_cat2 = function (req, res, next) {
                     products: [],
                     allBooks: data.Items,
                     totalPrice: 0,
-                    totalQty: 0
+                    totalQty: 0,
+                    title: dd
                 });
             }
             //ngược lại đang trong phiên session
-            let cart = new Cart(req.session.cart);
+            var cart = new Cart(req.session.cart);
             res.render("site/page/list-book-cat", {
                 allBooks: data.Items,
                 products: cart.generateArray(),
                 totalPrice: cart.totalPrice,
-                totalQty: cart.totalQty
+                totalQty: cart.totalQty,
+                title: dd
             });
         }
     });

@@ -39,6 +39,12 @@
         "description":"Lấy thông tin chi tiết của sp theo mã sp",
         "input":"bookId as Path Parameters. Exp: book/2"
     },
+    "find_book_by_mark": {
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/book/mark/",
+        "method":"get",
+        "description":"Lấy danh sách sp theo đánh dấu",
+        "input":"danhdau as Path Parameters. Exp: book/mark/hot"
+    },
     "edit_book":{
         "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/book/",
         "method":"put",

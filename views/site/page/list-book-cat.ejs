@@ -19,6 +19,20 @@
 
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,900" rel="stylesheet">
     <link rel="shortcut icon" href="/assets/images/fav-icon.png">
+    <style>
+            .bd-example-modal-lg .modal-dialog{
+            display: table;
+            position: relative;
+            margin: 0 auto;
+            top: calc(50% - 24px);
+          }
+        
+          .bd-example-modal-lg .modal-dialog .modal-content{
+            background-color: transparent;
+            border: none;
+          }
+          
+    </style>
 </head>
 
 <body class="woocommerce-active left-sidebar">
@@ -80,7 +94,14 @@
                                                     <div class="container-fluid">
                                                         <div class="woocommerce">
                                                             <div class="products">
-                                                                <% allBooks.forEach(function(book){ %>
+                                                                <% allBooks.forEach(function(book){ 
+                                                                    if(book.tinhtrang=='hết hàng'){
+                                                                        %>
+
+                                                                        <%
+                                                                    }
+                                                                    else{    
+                                                                %>
                                                                 <div class="product">
                                                                     <div class="yith-wcwl-add-to-wishlist">
                                                                         <a rel="nofollow" class="add_to_wishlist">
@@ -109,7 +130,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <!-- /.product-outer -->
-                                                                <% }) %>
+                                                                <% } }) %>
                                                             </div>
                                                             <!--<button style="float: right;" type="button" class="btn btn-success">Xem thêm</button>-->
                                                         </div>
@@ -200,7 +221,68 @@
         <%include ../slayout/footer.ejs %>
         <!-- .site-footer -->
     </div>
+    <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content" style="width: 48px;color:white">
+                    <span class="fa fa-spinner fa-spin fa-3x"></span>
+                </div>
+            </div>
+    </div>
+    <script>
+        function formatNumber(nStr, decSeperate, groupSeperate) {
+            nStr += '';
+            x = nStr.split(decSeperate);
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + groupSeperate + '$2');
+            }
+            return x1 + x2;
+        }
 
+        function addToCart(id) {
+            $('.modal').modal('show');
+            $.ajax({
+                type: "GET",
+                url: "/addtocart/" + id,
+                dataType: "json",
+                success: function (data) {
+                    //alert('đã thêm vào giỏ hàng' + data.totalPrice);
+                    $('.update-totalPrice').html(formatNumber(data.totalPrice, '.', ',') + '₫');
+                    $('.update-totalQty').html(data.totalQty);
+                    var update = '';
+                    data.products.forEach(itc => {
+                        update += '<li class="woocommerce-mini-cart-item mini_cart_item">';
+                        update += '<a onclick="deleteCartItem(\'' + itc.item._bookID +
+                            '\')" class="remove" aria-label="Remove this item"';
+                        update += 'data-product_id="65" data-product_sku="">×</a>';
+                        update += '<a href="/product/' + itc.item.linkseo + '_' + itc.item._bookID +
+                            '">';
+                        update += '<img src="' + itc.item.hinhanh[0] +
+                            '" class="attachment-shop_thumbnail size-shop_thumbnail wp-post-image" alt="">';
+                        update += itc.item.tieude + '</a><span class="quantity"> ' + itc.qty + '×';
+                        update += '<span class="woocommerce-Price-amount amount">';
+                        update += formatNumber(itc.item.gia, '.', ',') +
+                            '<span class="woocommerce-Price-currencySymbol">₫</span></span>';
+                        update += '</span> </li>';
+                    });
+                    $('.update-products').html(update);
+                    // hiệu ứng blinking ở cuối assets style.css
+                    var $div2blink = $(".divtoBlink");
+                    $('.modal').modal('hide');
+                     // Save reference, only look this item up once, then save
+                    var backgroundInterval = setInterval(function () {
+                        $div2blink.toggleClass("backgroundRed");
+                    }, 500);
+                    setTimeout(function () {
+                        window.clearInterval(backgroundInterval);
+                    }, 2200)
+                },
+                error: function () {}
+            });
+        }
+    </script>
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/tether.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>

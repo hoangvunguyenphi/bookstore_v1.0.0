@@ -19,6 +19,8 @@
     <!-- Google Font -->
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
     <link rel="shortcut icon" href="/assets/images/fav-icon.png">
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     <style>
     .bd-example-modal-lg .modal-dialog{
     display: table;
@@ -295,8 +297,14 @@
                                                         <div class="woocommerce">
                                                             <div class="products">
                                                                 <% allBooks.forEach(function(book){
-                                                                        book.danhdau.forEach(function(dd){
-                                                                            if(dd=='new'){
+                                                                        if(book.tinhtrang=='hết hàng'){
+                                                                            %>
+
+                                                                            <%
+                                                                        }
+                                                                        else{
+                                                                            book.danhdau.forEach(function(dd){
+                                                                                if(dd=='new'){
                                                                     %>
                                                                 <div class="product">
                                                                     <div class="yith-wcwl-add-to-wishlist">
@@ -326,7 +334,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <!-- /.product-outer -->
-                                                                <% } })
+                                                                <%  } }) }
                                                             }) %>
                                                             </div>
                                                         </div>
@@ -344,6 +352,12 @@
                                                         <div class="woocommerce">
                                                             <div class="products">
                                                                 <% allBooks.forEach(function(book){
+                                                                    if(book.tinhtrang=='hết hàng'){
+                                                                        %>
+
+                                                                        <%
+                                                                    }
+                                                                    else{
                                                                         book.danhdau.forEach(function(dd){
                                                                             if(dd=='sale'){
                                                                     %>
@@ -375,7 +389,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <!-- /.product-outer -->
-                                                                <% } })
+                                                                <% } }) }
                                                             }) %>
 
                                                             </div>
@@ -394,6 +408,12 @@
                                                         <div class="woocommerce">
                                                             <div class="products">
                                                                 <% allBooks.forEach(function(book){
+                                                                    if(book.tinhtrang=='hết hàng'){
+                                                                        %>
+
+                                                                        <%
+                                                                    }
+                                                                    else{
                                                                         book.danhdau.forEach(function(dd){
                                                                             if(dd=='hot'){
                                                                     %>
@@ -425,7 +445,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <!-- /.product-outer -->
-                                                                <% } })
+                                                                <% } }) }
                                                             }) %>
                                                             </div>
                                                         </div>
@@ -554,6 +574,12 @@
                                                     <div class="woocommerce columns-7">
                                                         <div class="products">
                                                             <% allBooks.forEach(function(book){
+                                                                if(book.tinhtrang=='hết hàng'){
+                                                                    %>
+
+                                                                    <%
+                                                                }
+                                                                else{
                                                                         if(book.theloai=='Kinh tế'){
                                                                             %>
                                                             <div class="product">
@@ -584,7 +610,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- /.product-outer -->
-                                                            <%}})%>
+                                                            <% } }}) %>
                                                         </div>
                                                     </div>
                                                     <!-- .woocommerce -->
@@ -601,6 +627,12 @@
                                                     <div class="woocommerce columns-5">
                                                         <div class="products">
                                                             <% allBooks.forEach(function(book){
+                                                                if(book.tinhtrang=='hết hàng'){
+                                                                    %>
+
+                                                                    <%
+                                                                }
+                                                                else{
                                                                     if(book.theloai=='Văn học'){
                                                                         %>
                                                             <div class="product">
@@ -631,7 +663,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- /.product-outer -->
-                                                            <%}})%>
+                                                            <%} }})%>
                                                         </div>
                                                     </div>
                                                     <!-- .woocommerce -->
@@ -648,6 +680,12 @@
                                                     <div class="woocommerce columns-5">
                                                         <div class="products">
                                                             <% allBooks.forEach(function(book){
+                                                                if(book.tinhtrang=='hết hàng'){
+                                                                    %>
+
+                                                                    <%
+                                                                }
+                                                                else{
                                                                     if(book.theloai=='Thiếu nhi'){
                                                                         %>
                                                             <div class="product">
@@ -678,7 +716,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- /.product-outer -->
-                                                            <%}})%>
+                                                            <% }}})%>
                                                         </div>
                                                     </div>
                                                     <!-- .woocommerce -->
@@ -694,7 +732,13 @@
                                                 <div class="container-fluid">
                                                     <div class="woocommerce columns-5">
                                                         <div class="products">
-                                                            <% allBooks.forEach(function(book){
+                                                            <% allBooks.forEach(function(book){ 
+                                                                if(book.tinhtrang=='hết hàng'){
+                                                                %>
+
+                                                                <%
+                                                            }
+                                                            else{
                                                                     if(book.theloai=='Kỹ năng - sống đẹp'){
                                                                         %>
                                                             <div class="product">
@@ -725,7 +769,7 @@
                                                                 </div>
                                                             </div>
                                                             <!-- /.product-outer -->
-                                                            <%}})%>
+                                                            <%} } })%>
                                                         </div>
                                                     </div>
                                                     <!-- .woocommerce -->
