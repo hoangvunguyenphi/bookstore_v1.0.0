@@ -151,8 +151,6 @@ exports.add_order = function(req, res, next) {
             );
         } else {
             req.session.cart = null;
-            sio.thongBao(params.Item._orderID);
-
             console.log(data);
             var eparam = {
                 Destination: {
@@ -852,7 +850,6 @@ exports.searchOrder = function(req, res) {
                 );
             } else {
                 console.log(data);
-                console.log(data.Items[0].items);
                 if (data.Count == 0) {
                     if (!req.session.cart) {
                         return res.render(

@@ -365,7 +365,7 @@ exports.show_list_cat2 = function(req, res, next) {
 exports.search_book = function(req, res, next) {
     let q = req.query.q;
     let cat = req.query.cat;
-
+    console.log(q + "-" + cat);
     q = renameModule.editName(q);
 
     /**

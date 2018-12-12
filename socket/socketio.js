@@ -15,6 +15,7 @@ exports.init = function(server) {
 };
 exports.thongBao = function(noiDung) {
     thongBao.push(noiDung);
+    console.log(thongBao);
 };
 exports.xoaThongBao = function(noiDung) {
     var indexNotifi = thongBao.indexOf(noiDung);

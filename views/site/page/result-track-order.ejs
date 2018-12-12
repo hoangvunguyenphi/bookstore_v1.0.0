@@ -50,6 +50,22 @@ strong{
 .text-muted {
     color: #777;
 }
+
+.callout {
+    color: white;
+    border-radius: 3px;
+    margin: 0 0 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid #eee;
+}
+.callout.callout-danger {
+    background-color: #dd4b39 !important;
+    border-color: #c23321;
+}
+.callout.callout-gray {
+    background-color: #777 !important;
+    border-color: rgb(42, 42, 42);
+}
     </style>
 </head>
 
@@ -221,7 +237,28 @@ strong{
                                               <div class="modal-dialog" role="document">
                                                       <div class="modal-content" style="width:700px">
                                                           <div class="modal-body col-md-12" style="height: 300px;" >
-                                                              <div class='progress'>
+                                                            <%
+                                                            if(b.tinhtranghienhanh=='Chờ xác nhận'){
+                                                                %>
+                                                                <div class="callout callout-gray">
+                                                                    <h4><%=b.tinhtranghienhanh%></h4>
+                                                                    <p>Mô tả: <%=b.lichsutinhtrang[b.lichsutinhtrang.length -1].motatt %></p>
+                                                                    <p>Thời gian: <%=b.lichsutinhtrang[b.lichsutinhtrang.length -1].thoigian %> </p>
+                                                                </div>
+                                                            <%
+                                                            }else{
+                                                                if(b.tinhtranghienhanh=='Bị huỷ'){
+                                                                    %>
+                                                                    <div class="callout callout-danger">
+                                                                            <h4><%=b.tinhtranghienhanh%></h4>
+                                                                            <p>Mô tả: <%=b.lichsutinhtrang[b.lichsutinhtrang.length -1].motatt %></p>
+                                                                            <p>Thời gian: <%=b.lichsutinhtrang[b.lichsutinhtrang.length -1].thoigian %> </p>
+                                                                        </div>
+                                                                    <%
+                                                                }
+                                                                else{
+                                                                %>
+                                                            <div class='progress'>
                                                               <div class='progress_inner'>
                                                                   <div class='progress_inner__step'>
                                                                       <label for='step-1'>Xác nhận đơn hàng</label>
@@ -300,6 +337,9 @@ strong{
                                                                   </div>
                                                               </div>
                                                           </div>
+                                                          <%
+                                                        }}
+                                                        %>  
                                                           </div>
                                                           <div class="modal-footer">
                                                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
