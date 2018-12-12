@@ -337,6 +337,10 @@ exports.search_book = function(req, res, next) {
      * Đã hoàn thành mapping theo code mới cập nhật 11/12
      * Chưa test lại
      */
+    if(q == undefined || q == null || q.trim() == "" || cat == undefined || cat == null || cat.trim() == "") {
+        res.redirect("/");
+        return;
+    }
     request.get(api_mapping.search_book.url+"?title="+q+"&category="+cat, { json: true }, (err, response, data) => {
         if (err) {
             console.log(

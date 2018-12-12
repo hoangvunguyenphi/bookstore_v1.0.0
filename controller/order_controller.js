@@ -817,7 +817,7 @@ exports.searchOrder = function(req, res) {
             );
         } else {
             console.log(data)
-            console.log(data.Items[0].items);
+            // console.log(data.Items[0].items);
             if (data.Count == 0) {
                 if (!req.session.cart) {
                     return res.render(
