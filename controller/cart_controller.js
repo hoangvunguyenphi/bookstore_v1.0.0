@@ -1,33 +1,37 @@
-const AWS = require("aws-sdk");
+// const AWS = require("aws-sdk");
 const Cart = require("./cart");
-var awsconfig = require("../../aws-config.json");
-const accessKeyId = awsconfig.AWS.accessKeyId;
-const secretAccessKey = awsconfig.AWS.secretAccessKey;
-const region = awsconfig.AWS.region;
-var endpoint = "http://localhost:8000";
-AWS.config.update({
-  accessKeyId,
-  secretAccessKey,
-  region
-});
-let docClient = new AWS.DynamoDB.DocumentClient();
+// var awsconfig = require("../../aws-config.json");
+// const accessKeyId = awsconfig.AWS.accessKeyId;
+// const secretAccessKey = awsconfig.AWS.secretAccessKey;
+// const region = awsconfig.AWS.region;
+// var endpoint = "http://localhost:8000";
+// AWS.config.update({
+//   accessKeyId,
+//   secretAccessKey,
+//   region
+// });
+// let docClient = new AWS.DynamoDB.DocumentClient();
+
+/**
+ * @author Nguyễn Thế Sơn
+ * Cập nhật thêm module request
+ */
+
+ let request = require('request');
+ let api_mapping = require('./api-mapping.json');
 
 //Module thêm vào shopping cart
 exports.add_to_cart = function (req, res, next) {
   var sachID = req.params.id;
   //kiểm tra session ,khởi tạo Cart,
   var cart = new Cart(req.session.cart ? req.session.cart : {});
-  var params = {
-    TableName: "DA2Book",
-    KeyConditionExpression: "#ma = :id",
-    ExpressionAttributeNames: {
-      "#ma": "_bookID"
-    },
-    ExpressionAttributeValues: {
-      ":id": sachID
-    }
-  };
-  docClient.query(params, function (err, data) {
+
+  /**
+   * @author Nguyễn Thế Sơn
+   * Hoàn thành mapping
+   * Chưa tiest lạ
+   */
+  request.get(api_mapping.get_book_detail.url + sachID, { json: true }, (err, response, data) => {
     if (err) {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
@@ -49,17 +53,22 @@ exports.add_to_cart2 = function (req, res, next) {
   var soluong = Number(req.body.abasdjuwas);
   console.log("______sl:" + soluong);
   var cart = new Cart(req.session.cart ? req.session.cart : {});
-  var params = {
-    TableName: "DA2Book",
-    KeyConditionExpression: "#ma = :id",
-    ExpressionAttributeNames: {
-      "#ma": "_bookID"
-    },
-    ExpressionAttributeValues: {
-      ":id": sachID
-    }
-  };
-  docClient.query(params, function (err, data) {
+  // var params = {
+  //   TableName: "DA2Book",
+  //   KeyConditionExpression: "#ma = :id",
+  //   ExpressionAttributeNames: {
+  //     "#ma": "_bookID"
+  //   },
+  //   ExpressionAttributeValues: {
+  //     ":id": sachID
+  //   }
+  // };
+  /**
+   * @author Nguyễn Thế Sơn
+   * Hoàn thành mapping
+   * Chưa test lại
+   */
+  request.get(api_mapping.get_book_detail.url + sachID, { json: true }, (err, response, data) => {
     if (err) {
       console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {

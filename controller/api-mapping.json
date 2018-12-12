@@ -1,0 +1,78 @@
+{
+    "client_get_all_book":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/book",
+        "method":"get",
+        "descripton":"Lấy danh sách sản phẩm phía client"
+    },
+    "admin_get_all_book":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/admin/book",
+        "method":"get",
+        "description":"Lấy danh sách sản phẩm phía admin"
+    },
+    "admin_search_book":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/admin/book/search",
+        "method":"get",
+        "description":"Tìm kiếm sản phẩm phía admin",
+        "input": "Query String from Form"
+    },
+    "find_book_by_category":{
+        "url": "https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/book/category/",
+        "method":"get",
+        "description":"Lấy danh sách sản phẩm theo Category",
+        "input":"categoryId as Path Parameters. Exp book/category/Thiếu nhi"
+    },
+    "search_book":{
+        "url": "https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/book/search",
+        "method": "get",
+        "description": "Tìm kiếm sản phẩm phía client",
+        "input": "Query String from Form"
+    },
+    "delete_book":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/book/",
+        "method":"delete",
+        "description":"Xóa sản phẩm theo mã",
+        "input": "bookId as Path Parameters. Exp: book/2"
+    },
+    "get_book_detail":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/book/",
+        "method": "get",
+        "description":"Lấy thông tin chi tiết của sp theo mã sp",
+        "input":"bookId as Path Parameters. Exp: book/2"
+    },
+    "edit_book":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/book/",
+        "method":"put",
+        "description":"Cập nhật thông tin sp theo mã sp",
+        "input":"bookId as Path Parameters and Input from Form. Exp: book/2"
+    },
+    "get_order_by":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/order",
+        "method":"get",
+        "description":"Lấy danh sách Order theo params. Params là params được quy định theo dynamodb. Lệnh truy vấn sẽ dựa vào param được truyền đi",
+        "input":"Input from Form"
+    },
+    "add_order":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/order",
+        "method":"post",
+        "description":"Thêm mới Order",
+        "input": "Input from Form"
+    },
+    "confirm_order":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/order/confirm/",
+        "method":"put",
+        "description":"Xác nhận Order",
+        "input":"orderId as Path Parameter. Exp: order/confirm/2"
+    },
+    "update_order":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/order/",
+        "method":"put",
+        "description":"Cập nhật thông tin order. Cũng được sử dung cho chức năng cập nhật trạng thái",
+        "input":"OrderId as Path Parameter and from Form. Exp: order/2"
+    },"find_order_by_id":{
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/order/",
+        "method":"get",
+        "description":"Tìm kiếm order theo id",
+        "input":"OrderId as Path Parameter. Exp: order/2"
+    }
+
+}

@@ -17,30 +17,22 @@ AWS.config.update({
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
 
+/**
+ * @author Nguyễn Thế Sơn
+ * Cập nhật thư viện request và cập nhật file api-mapping.json
+ */
+let request = require('request');
+let api_mapping = require('./api-mapping.json');
+
 //GET ALL BOOK
 exports.get_all_book = function(req, res, next) {
-  var params = {
-    TableName: "DA2Book",
-    ProjectionExpression: '#bookID, theloai, tieude, hinhanh, gia, danhdau, linkseo',
-    ExpressionAttributeNames: {
-      '#bookID': '_bookID'
-    },
-    Limit: 40
-    /*
-    Limit: 50
-    FilterExpression: 'contains(#d, :d1) or contains(#d, :d2) or contains(#d, :d3)',
-    ExpressionAttributeNames: {
-      '#bookID': '_bookID',
-      '#d': 'danhdau'
-    },
-    ExpressionAttributeValues: {
-      ':d1': 'new',
-      ':d2': 'weekdeal',
-      ":d3": 'popular'
-    }*/
-  };
-  //DUYET TAT CA COLLECTIONS TREN TABLE
-  docClient.scan(params, function(err, data) {
+
+  /**
+   * @author Nguyễn Thế Sơn
+   * Đã hoàn tất mapping api
+   * Chưa test lại
+   */
+  request.get(api_mapping.client_get_all_book.url, { json: true }, (err, response, data) => {
     if (err) {
       console.log(
         "\nUnable to scan the table. Error JSON:",
@@ -48,6 +40,7 @@ exports.get_all_book = function(req, res, next) {
       );
       res.render("error");
     } else {
+      console.log(data)
       console.log(data.Count);
       //nếu session rỗng
       if (!req.session.cart) {
@@ -74,18 +67,12 @@ exports.get_detail_product = function(req, res, next) {
   var sachID = req.params.id;
   console.log("\n_________" + sachID);
 
-  var params = {
-    TableName: "DA2Book",
-    KeyConditionExpression: "#ma = :id",
-    ExpressionAttributeNames: {
-      "#ma": "_bookID"
-    },
-    ExpressionAttributeValues: {
-      ":id": sachID
-    }
-  };
-  //Thực hiện query object theo id lấy từ req.params
-  docClient.query(params, function(err, data) {
+  /**
+   * @author Nguyễn Thế Sơn
+   * Đã hoàn thành mapping api
+   * Chưa test lại
+   */
+  request.get(api_mapping.get_book_detail.url + sachID, { json: true }, (err, response, data) => {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
@@ -121,7 +108,13 @@ exports.edit_book = function(req, res, next) {
 
   var bookid = req.params.id;
   console.log(req.body.newTinhTrang);
-  var editBook = {
+
+  /**
+   * @author Nguyễn Thế Sơn
+   * Đã hoàn thành mapping
+   * Chưa test lại
+   */
+  let formData = {
     tacgia: renameModule.splitList(req.body.newTacGia),
     tieude: req.body.newTieuDe,
     theloai: String(req.body.newTheLoai),
@@ -137,48 +130,19 @@ exports.edit_book = function(req, res, next) {
     linkseo: req.body.newLinkSeo,
     sotrang: parseInt(req.body.newSoTrang),
     gia: parseFloat(req.body.newGia)
-  };
-  console.log(editBook);
-  var params = {
-    TableName: "DA2Book",
-    Key: {
-      _bookID: bookid
-    },
-    UpdateExpression:
-      "set #sku=:sk, #tieude=:td, #tacgia=:tg, #dichgia=:dg, #theloai=:tl,#tinhtrang=:tt,#ngonngu=:nn,#ngayxuatban=:txb,#nhaxuatban=:nxb,#sotrang=:st,#mota=:mt,#danhdau=:dd,#gia=:g",
-    ExpressionAttributeValues: {
-      ":sk": editBook.SKU,
-      ":td": editBook.tieude,
-      ":tg": editBook.tacgia,
-      ":dg": editBook.dichgia,
-      ":tl": editBook.theloai,
-      ":tt": editBook.tinhtrang,
-      ":nn": editBook.ngonngu,
-      ":txb": editBook.ngayxuatban,
-      ":nxb": editBook.nhaxuatban,
-      ":st": editBook.sotrang,
-      ":mt": editBook.mota,
-      ":dd": editBook.danhdau,
-      ":g": editBook.gia
-    },
-    ExpressionAttributeNames: {
-      "#sku": "SKU",
-      "#tieude": "tieude",
-      "#tacgia": "tacgia",
-      "#dichgia": "dichgia",
-      "#theloai": "theloai",
-      "#tinhtrang": "tinhtrang",
-      "#ngonngu": "ngonngu",
-      "#ngayxuatban": "ngayxuatban",
-      "#nhaxuatban": "nhaxuatban",
-      "#sotrang": "sotrang",
-      "#mota": "mota",
-      "#danhdau": "danhdau",
-      "#gia": "gia"
-    },
-    ReturnValues: "UPDATED_NEW"
-  };
-  docClient.update(params, function(err, data) {
+  }
+
+  console.log(api_mapping.edit_book.url + bookid)
+  console.log(formData)
+
+  let option = { 
+    url: api_mapping.edit_book.url + bookid, 
+    form: encodeURI(JSON.stringify(formData))  
+  }
+
+  console.log(option)
+
+  request.put(option, (err, response, data) => {
     if (err) {
       console.log("users::update::error - " + JSON.stringify(err, null, 2));
     } else {
@@ -199,13 +163,13 @@ exports.delete_book = function(req, res, next) {
 
   var bookID = req.params.id;
   console.log("\nRemoved book ID: " + bookID);
-  var params = {
-    TableName: "DA2Book",
-    Key: {
-      _bookID: bookID
-    }
-  };
-  docClient.delete(params, function(err, data) {
+
+  /**
+   * @author Nguyễn Thế Sơn
+   * Đã hoàn thành mapping
+   * Chưa test lại
+   */
+  request.delete(api_mapping.delete_book.url + bookID, { json: true }, (err, response, data) => {
     if (err) {
       console.log("users::delete::error - " + JSON.stringify(err, null, 2));
     } else {
@@ -227,20 +191,30 @@ exports.admin_search_book = function(req, res, next) {
   var keySearch = req.body.txtSearch123123;
   console.log("__" + keySearch);
   if (keySearch.length != 0) {
-    var params = {
-      TableName: "DA2Book",
-      FilterExpression: "contains(#id, :i) or contains(#tieude, :n) ",
-      ExpressionAttributeValues: {
-        ":i": keySearch,
-        ":n": keySearch
-      },
-      ExpressionAttributeNames: {
-        "#tieude": "tieude",
-        "#id": "_bookID"
-      }
-    };
 
-    docClient.scan(params, function(err, data) {
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành maping
+     * Chưa test lại
+     * 
+     * TODO - Code chưa hoàn chỉnh - Phải map lại sau
+     * var keySearch = event.queryStringParameters.keySearch;
+
+
+    var params = {
+        TableName: "DA2Book",
+        FilterExpression: "contains(#id, :i) or contains(#tieude, :n) ",
+        ExpressionAttributeValues: {
+            ":i": keySearch,
+            ":n": keySearch
+        },
+        ExpressionAttributeNames: {
+            "#tieude": "tieude",
+            "#id": "_bookID"
+        }
+    };
+     */
+    request.get(pi_mapping.admin_search_book.url+"?keySearch="+keySearch, { json: true }, (err, response, data) => {
       if (err) {
         console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
       } else {
@@ -259,18 +233,18 @@ exports.admin_search_book = function(req, res, next) {
 exports.show_list_cat = function(req, res) {
   var category = req.params.theloai;
   console.log(category);
-  var params = {
-    TableName: "DA2Book",
-    FilterExpression: "#tl=:tloai",
-    ExpressionAttributeValues: {
-      ":tloai": category
-    },
-    ExpressionAttributeNames: {
-      "#tl": "theloai"
-    }
-  };
 
-  docClient.scan(params, function(err, data) {
+  /**
+   * @author Nguyễn Thế Sơn
+   * Đã hoàn thành mapping
+   * Chưa test lại
+   */
+  let options= {
+    url:api_mapping.find_book_by_category.url + category,
+    charset:"UTF-8"
+  }
+  console.log(api_mapping.find_book_by_category.url + category);
+  request.get(api_mapping.find_book_by_category.url + encodeURI(category), { json: true }, (err, response, data) => {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
@@ -295,6 +269,7 @@ exports.show_list_cat = function(req, res) {
   });
 };
 
+//TODO chưa map
 exports.show_list_cat2 = function (req, res, next) {
   var dd = req.params.danhdau;
   console.log(dd);
@@ -343,29 +318,12 @@ exports.search_book = function (req, res, next) {
   //console.log(q);
   //console.log(cat);
 
-  if (typeof(cat) === 'undefined' || cat === 'cat0') {
-    var params = {
-      TableName: "DA2Book",
-      FilterExpression: "contains(linkseo, :ls)",
-      ExpressionAttributeValues: {
-        ":ls": q
-      }
-    };
-  } else {
-    var params = {
-      TableName: "DA2Book",
-      FilterExpression: "contains(linkseo, :ls) and #tl=:tloai",
-      ExpressionAttributeValues: {
-        ":tloai": cat,
-        ":ls": q
-      },
-      ExpressionAttributeNames: {
-        "#tl": "theloai"
-      }
-    };
-  }
-
-  docClient.scan(params, function (err, data) {
+  /**
+   * @author Nguyễn Thế Sơn
+   * Đã hoàn thành mapping theo code mới cập nhật 11/12
+   * Chưa test lại
+   */
+  request.get(api_mapping.search_book.url+"?title="+q+"&category="+cat, { json: true }, (err, response, data) => {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
@@ -400,13 +358,12 @@ exports.get_all_book2 = function(req, res, next) {
   authen_controller.check_session_auth(req, res);
   if (res._headerSent) return;
 
-  console.log("Countinue!");
-  var params = {
-    TableName: "DA2Book"
-  };
-  docClient.scan(params, onScan);
-
-  function onScan(err, data) {
+  /**
+   * @author Nguyễn Thế Sơn
+   * Đã hoàn thành mapping
+   * Chưa test lại
+   */
+  request.get(api_mapping.admin_get_all_book.url, { json: true }, (err, response, data) => {
     if (err) {
       console.log(
         "\nUnable to scan the table. Error JSON:",
@@ -418,7 +375,7 @@ exports.get_all_book2 = function(req, res, next) {
         allBooks: data.Items
       });
     }
-  }
+  });
 };
 
 exports.get_detail_product2 = function(req, res) {
@@ -433,17 +390,12 @@ exports.get_detail_product2 = function(req, res) {
   var sachID = req.params.id;
   console.log("\n_________" + sachID);
 
-  var params = {
-    TableName: "DA2Book",
-    KeyConditionExpression: "#ma = :id",
-    ExpressionAttributeNames: {
-      "#ma": "_bookID"
-    },
-    ExpressionAttributeValues: {
-      ":id": sachID
-    }
-  };
-  docClient.query(params, function(err, data) {
+  /**
+   * @author Nguyễn Thế Sơn
+   * Đã hoàn thành mapping
+   * Chưa test lại
+   */
+  request.get(api_mapping.get_book_detail.url + sachID, { json: true }, (err, response, data) => {
     if (err) {
       console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
     } else {
