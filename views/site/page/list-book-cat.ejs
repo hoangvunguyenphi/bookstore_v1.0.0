@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Techmarket HTML</title>
+    <title><%=title%></title>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-grid.min.css" media="all" />
@@ -70,62 +70,62 @@
                                 <!-- .jumbotron -->
                             </div>
                             <!-- .shop-control-bar -->
-                            <div class="tab-content">
-                                <div id="grid" class="tab-pane active" role="tabpanel">
-                                    <div class="woocommerce columns-5">
-                                        <div class="products">
-                                            <% allBooks.forEach(function(book){
-                                                        %>
-                                            <div class="product">
-                                                <div class="yith-wcwl-add-to-wishlist">
-                                                    <a rel="nofollow" class="add_to_wishlist"> Add
-                                                        to Wishlist</a>
+                            <section class="column-2 section-products-carousel-tabs tab-carousel-1">
+                                    <div class="section-products-carousel-tabs-wrap">
+                                        <!-- .section-header -->
+                                        <div class="tab-content">
+                                            <div id="tab-5a0483f2e86980" class="tab-pane active" role="tabpanel">
+                                                <div class="products-carousel" data-ride="tm-slick-carousel" data-wrap=".products"
+                                                    data-slick="{&quot;infinite&quot;:false,&quot;rows&quot;:2,&quot;slidesPerRow&quot;:5,&quot;slidesToShow&quot;:1,&quot;slidesToScroll&quot;:1,&quot;dots&quot;:true,&quot;arrows&quot;:false,&quot;responsive&quot;:[{&quot;breakpoint&quot;:480,&quot;settings&quot;:{&quot;slidesPerRow&quot;:1}},{&quot;breakpoint&quot;:1023,&quot;settings&quot;:{&quot;slidesPerRow&quot;:2}},{&quot;breakpoint&quot;:1169,&quot;settings&quot;:{&quot;slidesPerRow&quot;:4}},{&quot;breakpoint&quot;:1400,&quot;settings&quot;:{&quot;slidesPerRow&quot;:3}}]}">
+                                                    <div class="container-fluid">
+                                                        <div class="woocommerce">
+                                                            <div class="products">
+                                                                <% allBooks.forEach(function(book){ %>
+                                                                <div class="product">
+                                                                    <div class="yith-wcwl-add-to-wishlist">
+                                                                        <a rel="nofollow" class="add_to_wishlist">
+                                                                            Add to Wishlist</a>
+                                                                    </div>
+                                                                    <a href="/product/<%=book.linkseo%>_<%=book._bookID%>"
+                                                                        class="woocommerce-LoopProduct-link">
+                                                                        <img src="<%=book.hinhanh[0]%>" class="wp-post-image"
+                                                                            alt="">
+                                                                        <span class="price">
+                                                                            <ins>
+                                                                                <span class="amount"> </span>
+                                                                            </ins>
+                                                                            <span class="amount">
+                                                                                <%=formatNumber(book.gia,'.',',')%><span
+                                                                                    class="woocommerce-Price-currencySymbol">₫</span></span>
+                                                                        </span>
+                                                                        <!-- /.price -->
+                                                                        <h2 class="woocommerce-loop-product__title">
+                                                                            <%=book.tieude %>
+                                                                        </h2>
+                                                                    </a>
+                                                                    <div class="hover-area">
+                                                                        <a class="button add_to_cart_button" onclick="addToCart('<%= book._bookID %>')"
+                                                                            rel="nofollow">Add to cart</a>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- /.product-outer -->
+                                                                <% }) %>
+                                                            </div>
+                                                            <!--<button style="float: right;" type="button" class="btn btn-success">Xem thêm</button>-->
+                                                        </div>
+                                                        <!-- .woocommerce -->
+                                                    </div>
+                                                    <!-- .container-fluid -->
                                                 </div>
-                                                <!-- .yith-wcwl-add-to-wishlist -->
-                                                <a class="woocommerce-LoopProduct-link woocommerce-loop-product__link"
-                                                    href="/product/<%=book.linkseo%>_<%=book._bookID%>">
-                                                    <img width="224" height="197" alt="" class="attachment-shop_catalog size-shop_catalog wp-post-image"
-                                                        src="<%=book.hinhanh[0]%>">
-                                                    <span class="price">
-                                                        <%=formatNumber(book.gia,'.',',')%><span class="woocommerce-Price-currencySymbol">₫</span></span>
-                                                    </span>
-                                                    <h2 class="woocommerce-loop-product__title">
-                                                        <%=book.tieude%>
-                                                    </h2>
-                                                </a>
-                                                <!-- .woocommerce-LoopProduct-link -->
-                                                <div class="hover-area">
-                                                    <a class="button" href="/addtocart/<%=book._bookID%>">Add to cart</a>
-                                                </div>
-                                                <!-- .hover-area -->
+                                                <!-- .products-carousel -->
                                             </div>
-                                            <!-- .product -->
-                                            <% })%>
+                                            <!-- .tab-pane -->
                                         </div>
-                                        <!-- .products -->
+                                        <!-- .tab-content -->
                                     </div>
-                                    <!-- .woocommerce -->
-                                </div>
-                                <!-- .tab-pane -->
-                            </div>
+                                    <!-- .section-products-carousel-tabs-wrap -->
+                                </section>
                             <!-- .tab-content -->
-                            <div class="shop-control-bar-bottom">
-                                <nav class="woocommerce-pagination">
-                                    <ul class="page-numbers">
-                                        <li>
-                                            <span class="page-numbers current">1</span>
-                                        </li>
-                                        <li><a href="#" class="page-numbers">2</a></li>
-                                        <li><a href="#" class="page-numbers">3</a></li>
-                                        <li><a href="#" class="page-numbers">4</a></li>
-                                        <li><a href="#" class="page-numbers">5</a></li>
-                                        <li><a href="#" class="next page-numbers">→</a></li>
-                                    </ul>
-                                    <!-- .page-numbers -->
-                                </nav>
-                                <!-- .woocommerce-pagination -->
-                            </div>
-                            <!-- .shop-control-bar-bottom -->
                         </main>
                         <!-- #main -->
                     </div>
@@ -135,28 +135,14 @@
                             id="techmarket_product_categories_widget-2">
                             <ul class="product-categories ">
                                 <li class="product_cat">
-                                    <span>Browse Categories</span>
+                                    <span>Danh mục sách</span>
                                     <ul>
-                                        <li class="cat-item">
-                                            <a href="product-category.html">
-                                                <span class="no-child"></span>Televisions</a>
-                                        </li>
-                                        <li class="cat-item">
-                                            <a href="product-category.html">
-                                                <span class="no-child"></span>Home Theater &amp; Audio</a>
-                                        </li>
-                                        <li class="cat-item">
-                                            <a href="product-category.html">
-                                                <span class="child-indicator">
-                                                    <i class="fa fa-angle-right"></i>
-                                                </span>Headphones</a>
-                                        </li>
-                                        <li class="cat-item">
-                                            <a href="product-category.html">
-                                                <span class="child-indicator">
-                                                    <i class="fa fa-angle-right"></i>
-                                                </span>Digital Cameras</a>
-                                        </li>
+                                        <% cat.forEach(function(ca){ %>
+                                          <li class="cat-item">
+                                              <a href="/product/<%=ca.tentheloai%>">
+                                                  <span class="no-child"></span><%= ca.tentheloai %></a>
+                                          </li>
+                                        <% }); %>
                                     </ul>
                                 </li>
                             </ul>

@@ -1,14 +1,21 @@
 var AWS = require("aws-sdk");
 //var upload_controller = require("../controller/upload_controller")
 var Cart = require("./cart");
+
 const UUID = require("uuid/v4");
+var nanoid = require("nanoid");
+
 let date = require("date-and-time");
+
 var renameModule = require("../controller/edit_name");
-var awsconfig = require("../aws-config.json");
+
 var sio = require("../socket/socketio");
+
+var awsconfig = require("../aws-config.json");
 const accessKeyId = awsconfig.AWS.accessKeyId;
 const secretAccessKey = awsconfig.AWS.secretAccessKey;
 const region = awsconfig.AWS.region;
+
 var endpoint = "http://localhost:8000";
 AWS.config.update({
     accessKeyId,
@@ -31,7 +38,7 @@ exports.add_order = function(req, res, next) {
         });
     }
     var cart = new Cart(req.session.cart);
-    var now = date.format(new Date(), "DD/MM/YYYY");
+    var now = date.format(new Date(), "DD/MM/YYYY HH:mm:ss");
     var tt0 = {
         tentinhtrang: "Chờ xác nhận",
         thoigian: now.toString(),
@@ -41,16 +48,23 @@ exports.add_order = function(req, res, next) {
     var params = {
         TableName: "DA2Order",
         Item: {
-            _orderID: UUID(),
+            _orderID: nanoid(10),
             ngaylaphoadon: now.toString(),
             tennguoinhan: req.body.tennguoinhan,
             sodienthoai: req.body.sodienthoai,
             email: req.body.diachiemail,
-            diachi: req.body.diachichitiet,
+            diachi: {
+                xa_phuong: req.body.xa,
+                quan_huyen: req.body.huyen,
+                tinh_thanhpho: req.body.tinh,
+                chitiet: req.body.diachichitiet
+            },
             ghichu: req.body.ghichu || " ",
-            tienship: 1111,
             items: cart.generateArray(),
-            tongtienthanhtoan: cart.totalPrice,
+            tienship: Number(req.body.edtTienship),
+            tongtien: Number(cart.totalPrice),
+            tongtienthanhtoan:
+                Number(cart.totalPrice) + Number(req.body.edtTienship),
             tinhtranghienhanh: tt0.tentinhtrang,
             lichsutinhtrang: [tt0],
             codeDef: UUID(),
@@ -58,6 +72,7 @@ exports.add_order = function(req, res, next) {
         }
     };
     console.log(params);
+    console.log(params.Item.items);
     var bodymail = `<table border="1"  style="width:100%;border-collapse: collapse;"><tr>
   <th>Sản phẩm</th>
   <th>Giá</th>

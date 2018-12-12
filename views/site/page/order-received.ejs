@@ -67,7 +67,7 @@
 
                                                 <li class="woocommerce-order-overview__total total">
                                                     Total:<strong><span class="woocommerce-Price-amount amount">
-                                                            <%=recieved_order.tongtienthanhtoan %><span class="woocommerce-Price-currencySymbol">đồng</span></span></strong>
+                                                            <%=editName.formatNumber(recieved_order.tongtienthanhtoan,'.',',')%><span class="woocommerce-Price-currencySymbol">đồng</span></span></strong>
                                                 </li>
 
                                                 <li class="woocommerce-order-overview__payment-method method">
@@ -104,7 +104,7 @@
                                                             </td>
                                                             <td class="woocommerce-table__product-total product-total">
                                                                 <span class="woocommerce-Price-amount amount">
-                                                                    <%=i.price%><span class="woocommerce-Price-currencySymbol">đồng</span></span>
+                                                                        <%=editName.formatNumber(i.price,'.',',')%><span class="woocommerce-Price-currencySymbol">₫</span></span>
                                                             </td>
                                                         </tr>
                                                         <%
@@ -115,14 +115,14 @@
                                                         <tr>
                                                             <th scope="row"><strong>Tổng tiền:</strong></th>
                                                             <td><span class="woocommerce-Price-amount amount">
-                                                                    <%=recieved_order.tongtienthanhtoan%><span class="woocommerce-Price-currencySymbol">
-                                                                        đồng</span></span></td>
+                                                                    <%=editName.formatNumber(recieved_order.tongtien,'.',',')%>
+                                                                    <span class="woocommerce-Price-currencySymbol">₫</span></span></td>
                                                         </tr>
                                                         <tr>
                                                             <th scope="row"><strong>Tiền vận chuyển:</strong></th>
                                                             <td><span class="woocommerce-Price-amount amount" >
-                                                                    <%=recieved_order.tienship%><span class="woocommerce-Price-currencySymbol">
-                                                                        đồng</span></span></td>
+                                                                    <%=editName.formatNumber(recieved_order.tienship,'.',',')%>
+                                                                <span class="woocommerce-Price-currencySymbol">₫</span></span></td>
                                                         </tr>
                                                         <tr>
                                                             <th scope="row"><strong>Phương thức thanh toán:</strong></th>
@@ -131,7 +131,8 @@
                                                         <tr>
                                                             <th scope="row"><strong>Tổng tiền thanh toán:</strong></th>
                                                             <td><span class="woocommerce-Price-amount amount" style="color:red">
-                                                                    <%=recieved_order.tongtienthanhtoan + recieved_order.tienship%><span class="woocommerce-Price-currencySymbol">
+                                                                    <%=editName.formatNumber(recieved_order.tongtienthanhtoan,'.',',')%>
+                                                                    <span class="woocommerce-Price-currencySymbol">
                                                                         đồng</span></span></td>
                                                         </tr>
                                                     </tfoot>

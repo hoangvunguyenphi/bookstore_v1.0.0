@@ -43,28 +43,21 @@
                 }
                 %>
                 <!-- .departments-menu -->
-                <form class="navbar-search" method="POST" action="/csearch_book">
-                    <label class="sr-only screen-reader-text" for="search">Tìm kiếm:</label>
+                <form class="navbar-search" method="get" action="/csearch_book">
+                    <label class="sr-only screen-reader-text" for="search">Tìm kiếm cho từ khoá:</label>
                     <div class="input-group">
-                        <input type="text" id="search" class="form-control search-field product-search-field" dir="ltr"
-                            value="" name="stieude" placeholder="Search for products" />
+                        <input type="text" id="search" class="form-control search-field product-search-field" dir="ltr" value="" name="q" placeholder="Tìm kiếm sách">
                         <div class="input-group-addon search-categories popover-header">
-                            <select name='product_cat' id='product_cat' class='postform resizeselect'>
-                                <option value=' ' selected='selected'>Tất cả các thể loại</option>
-                                <%cat.forEach(function(ca){
-                                                    %>
-                                <option class="level-0" value="<%=ca.tentheloai%>">
-                                    <%=ca.tentheloai%>
-                                </option>
-                                <%
-                                })
-                                %>
-                                <!-- .product-category -->
+                            <select name="cat" id="product_cat" class="postform resizeselect" style="width: 157.453px;">
+                              <option value="cat0" selected="selected">Tất cả thể loại</option>
+                              <% cat.forEach(function(ca){ %>
+                              <option value="<%= ca.tentheloai %>"><%= ca.tentheloai %></option>
+                              <% }); %>
                             </select>
                         </div>
                         <!-- .input-group-addon -->
                         <div class="input-group-btn input-group-append">
-                            <input type="hidden" id="search-param" name="post_type" value="product" />
+                            <input type="hidden" id="search-param">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-search"></i>
                                 <span class="search-btn">Tìm</span>

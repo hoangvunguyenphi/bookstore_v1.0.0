@@ -30,7 +30,7 @@ router.get("/xacNhanOrder/:codeDef", Order_controller.xacNhanOrder);
 router.get("/product/:theloai", Book_controller.show_list_cat);
 
 //Tìm kiếm sp
-router.post("/csearch_book", Book_controller.search_book);
+router.get("/csearch_book", Book_controller.search_book);
 
 //Xem giỏ hàng
 router.get("/cart", Cart_controller.get_items_cart);
