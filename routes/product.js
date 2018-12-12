@@ -77,7 +77,7 @@ router.post("/saveNewBook", upload.single("newImgUpload"), function(req, res) {
 
     var table = "DA2Book";
     var buket = "da2-book";
-    var now = date.format(new Date(), "DD/MM/YYYY");
+    var now = date.format(new Date(), "DD/MM/YYYY HH:mm:ss");
     var url =
         "https://" + buket + ".s3." + region + ".amazonaws.com/" + keyImgUpload;
     var params = {

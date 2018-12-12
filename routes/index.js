@@ -29,6 +29,8 @@ router.get("/xacNhanOrder/:codeDef", Order_controller.xacNhanOrder);
 //xem sp theo thể loại
 router.get("/product/:theloai", Book_controller.show_list_cat);
 
+//xem sp theo đánh dấu
+router.get("/dd/:danhdau", Book_controller.show_list_cat2);
 //Tìm kiếm sp
 router.get("/csearch_book", Book_controller.search_book);
 

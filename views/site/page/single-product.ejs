@@ -20,6 +20,20 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/colors/green.css" media="all" />
 
     <link rel="shortcut icon" href="/assets/images/fav-icon.png">
+    <style>
+            .bd-example-modal-lg .modal-dialog{
+            display: table;
+            position: relative;
+            margin: 0 auto;
+            top: calc(50% - 24px);
+          }
+        
+          .bd-example-modal-lg .modal-dialog .modal-content{
+            background-color: transparent;
+            border: none;
+          }
+          
+    </style>
 </head>
 
 <body class="woocommerce-active single-product full-width normal">
@@ -320,6 +334,13 @@
         <!-- #content -->
         <% include ../slayout/footer.ejs %>
         <!-- .site-footer -->
+    </div>  
+    <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content" style="width: 48px;color:white">
+                    <span class="fa fa-spinner fa-spin fa-3x"></span>
+                </div>
+            </div>
     </div>
     <script>
 
@@ -337,6 +358,7 @@
 
         $(function () {
             $('#formThem').on('submit', function (e) {
+                $('.modal').modal('show');
                 e.preventDefault(); // using this page stop being refreshing 
                 $.ajax({
                     type: 'POST',
@@ -371,6 +393,7 @@
                         $('.update-products').html(update);
 
                         var $div2blink = $(".divtoBlink"); // Save reference, only look this item up once, then save
+                        $('.modal').modal('hide');
                         var backgroundInterval = setInterval(function () {
                             $div2blink.toggleClass("backgroundRed");
                         }, 500);

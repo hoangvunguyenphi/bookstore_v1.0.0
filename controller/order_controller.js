@@ -115,7 +115,6 @@ exports.add_order = function(req, res, next) {
             );
         } else {
             req.session.cart = null;
-            sio.thongBao(params.Item._orderID);
             var eparam = {
                 Destination: {
                     ToAddresses: [params.Item.email]
@@ -169,19 +168,19 @@ exports.add_order = function(req, res, next) {
                 ReplyToAddresses: ["vitconse@gmail.com"],
                 ReturnPath: "vitconse@gmail.com"
             };
-            // ses.sendEmail(eparam, function(err, data) {
-            //   if (err) console.log(err);
-            //   else {
-            //    console.log(data);
-            res.render("../views/site/page/order-received.ejs", {
-                recieved_order: params.Item,
-                products: [],
-                totalPrice: 0,
-                totalQty: 0,
-                title: "Thông tin đơn hàng"
+            ses.sendEmail(eparam, function(err, data) {
+                if (err) console.log(err);
+                else {
+                    console.log(data);
+                    res.render("../views/site/page/order-received.ejs", {
+                        recieved_order: params.Item,
+                        products: [],
+                        totalPrice: 0,
+                        totalQty: 0,
+                        title: "Thông tin đơn hàng"
+                    });
+                }
             });
-            //   }
-            // });
         }
     });
 };
@@ -209,8 +208,10 @@ exports.xacNhanOrder = function(req, res) {
                 JSON.stringify(err, null, 2)
             );
         } else {
+            sio.thongBao(data.Items[0]._orderID);
             data.Items.forEach(function(tt) {
                 var orderID = tt._orderID;
+                var mail = tt.email;
                 var now = date.format(new Date(), "DD/MM/YYYY");
                 var tt = {
                     tentinhtrang: "Đã xác nhận",
@@ -247,7 +248,7 @@ exports.xacNhanOrder = function(req, res) {
                             "order - tinhtrang ::update::success " +
                                 JSON.stringify(data)
                         );
-                        res.render("../views/site/page/trac.ejs"); ///track order
+                        res.redirect("/trackOrder/" + orderID + "/" + mail);
                     }
                 });
             });
@@ -636,7 +637,7 @@ exports.searchOrder = function(req, res) {
                 JSON.stringify(err, null, 2)
             );
         } else {
-            console.log(data);
+            console.log(data.Items[0].items);
             if (data.Count == 0) {
                 if (!req.session.cart) {
                     return res.render(
