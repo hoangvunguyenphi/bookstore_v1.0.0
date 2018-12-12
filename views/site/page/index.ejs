@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>Trang chủ</title>
+    <title><%=title%></title>
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap-grid.min.css" media="all" />
@@ -16,10 +16,23 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/animate.min.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css" media="all" />
     <link rel="stylesheet" type="text/css" href="/assets/css/colors/green.css" media="all" />
-
     <!-- Google Font -->
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic"> -->
     <link rel="shortcut icon" href="/assets/images/fav-icon.png">
+    <style>
+    .bd-example-modal-lg .modal-dialog{
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    top: calc(50% - 24px);
+  }
+
+  .bd-example-modal-lg .modal-dialog .modal-content{
+    background-color: transparent;
+    border: none;
+  }
+  
+    </style>
 </head>
 
 <body class="organic-market page-template-template-homepage-v1 woocommerce-active">
@@ -820,6 +833,13 @@
         <% include ../slayout/footer.ejs %>
         <!-- .site-footer -->
     </div>
+    <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content" style="width: 48px;color:white">
+                    <span class="fa fa-spinner fa-spin fa-3x"></span>
+                </div>
+            </div>
+    </div>
     <script>
         function formatNumber(nStr, decSeperate, groupSeperate) {
             nStr += '';
@@ -834,6 +854,7 @@
         }
 
         function addToCart(id) {
+            $('.modal').modal('show');
             $.ajax({
                 type: "GET",
                 url: "/addtocart/" + id,
@@ -842,7 +863,6 @@
                     //alert('đã thêm vào giỏ hàng' + data.totalPrice);
                     $('.update-totalPrice').html(formatNumber(data.totalPrice, '.', ',') + '₫');
                     $('.update-totalQty').html(data.totalQty);
-
                     var update = '';
                     data.products.forEach(itc => {
                         update += '<li class="woocommerce-mini-cart-item mini_cart_item">';
@@ -861,7 +881,9 @@
                     });
                     $('.update-products').html(update);
                     // hiệu ứng blinking ở cuối assets style.css
-                    var $div2blink = $(".divtoBlink"); // Save reference, only look this item up once, then save
+                    var $div2blink = $(".divtoBlink");
+                    $('.modal').modal('hide');
+                     // Save reference, only look this item up once, then save
                     var backgroundInterval = setInterval(function () {
                         $div2blink.toggleClass("backgroundRed");
                     }, 500);
@@ -872,46 +894,6 @@
                 error: function () {}
             });
         }
-    </script>
-    <script type="text/javascript">
-        $('.add_to_cart_button').on('click', function () {
-            var cart = $('.shopping-cart');
-            var imgtodrag = $(this).parent('.item').find("img").eq(0);
-            if (imgtodrag) {
-                var imgclone = imgtodrag.clone()
-                    .offset({
-                        top: imgtodrag.offset().top,
-                        left: imgtodrag.offset().left
-                    })
-                    .css({
-                        'opacity': '0.5',
-                        'position': 'absolute',
-                        'height': '150px',
-                        'width': '150px',
-                        'z-index': '100'
-                    })
-                    .appendTo($('body'))
-                    .animate({
-                        'top': cart.offset().top + 10,
-                        'left': cart.offset().left + 10,
-                        'width': 75,
-                        'height': 75
-                    }, 1000, 'easeInOutExpo');
-
-                setTimeout(function () {
-                    cart.effect("shake", {
-                        times: 2
-                    }, 200);
-                }, 1500);
-
-                imgclone.animate({
-                    'width': 0,
-                    'height': 0
-                }, function () {
-                    $(this).detach()
-                });
-            }
-        });
     </script>
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script type="text/javascript" src="/assets/js/tether.min.js"></script>
