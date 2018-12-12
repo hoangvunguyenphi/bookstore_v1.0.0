@@ -10,18 +10,18 @@ let date = require("date-and-time");
 var renameModule = require("../controller/edit_name");
 var awsconfig = require("../../aws-config.json");
 var sio = require("../socket/socketio");
-// const accessKeyId = awsconfig.AWS.accessKeyId;
-// const secretAccessKey = awsconfig.AWS.secretAccessKey;
-// const region = awsconfig.AWS.region;
-// var endpoint = "http://localhost:8000";
-// AWS.config.update({
-//     accessKeyId,
-//     secretAccessKey,
-//     region
-// });
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+const region = awsconfig.AWS.region;
+var endpoint = "http://localhost:8000";
+AWS.config.update({
+    accessKeyId,
+    secretAccessKey,
+    region
+});
 
-// var ses = new AWS.SES();
-// let docClient = new AWS.DynamoDB.DocumentClient();
+var ses = new AWS.SES();
+let docClient = new AWS.DynamoDB.DocumentClient();
 
 /**
  * @author Nguyễn Thế Sơn
