@@ -67,7 +67,8 @@ app.use(function(err, req, res, next) {
             allBooks: [],
             products: [],
             totalPrice: 0,
-            totalQty: 0
+            totalQty: 0,
+            title: "Error 404"
         });
     }
     var cart = new Cart(req.session.cart);
@@ -75,7 +76,8 @@ app.use(function(err, req, res, next) {
         allBooks: [],
         products: cart.generateArray(),
         totalPrice: cart.totalPrice,
-        totalQty: cart.totalQty
+        totalQty: cart.totalQty,
+        title: "Error 404"
     });
 });
 // catch 404 and forward to error handler

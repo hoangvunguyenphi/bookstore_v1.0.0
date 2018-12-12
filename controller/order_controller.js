@@ -6,29 +6,29 @@ const UUID = require("uuid/v4");
 var nanoid = require("nanoid");
 
 let date = require("date-and-time");
-
+var editName = require("../controller/edit_name");
 var renameModule = require("../controller/edit_name");
-var awsconfig = require("../../aws-config.json");
+var awsconfig = require("../aws-config.json");
 var sio = require("../socket/socketio");
-// const accessKeyId = awsconfig.AWS.accessKeyId;
-// const secretAccessKey = awsconfig.AWS.secretAccessKey;
-// const region = awsconfig.AWS.region;
-// var endpoint = "http://localhost:8000";
-// AWS.config.update({
-//     accessKeyId,
-//     secretAccessKey,
-//     region
-// });
+const accessKeyId = awsconfig.AWS.accessKeyId;
+const secretAccessKey = awsconfig.AWS.secretAccessKey;
+const region = awsconfig.AWS.region;
+var endpoint = "http://localhost:8000";
+AWS.config.update({
+    accessKeyId,
+    secretAccessKey,
+    region
+});
 
-// var ses = new AWS.SES();
-// let docClient = new AWS.DynamoDB.DocumentClient();
+var ses = new AWS.SES();
+let docClient = new AWS.DynamoDB.DocumentClient();
 
 /**
  * @author Nguyễn Thế Sơn
  * Cập nhật module request
  */
-let request = require('request')
-let api_mapping = require('./api-mapping.json')
+let request = require("request");
+let api_mapping = require("./api-mapping.json");
 
 //===============================================================================================================================
 // Thêm mới order từ khách, gửi thông tin đơn hàng và link xác nhận sang email
@@ -78,15 +78,20 @@ exports.add_order = function(req, res, next) {
     console.log(params);
     console.log(params.Item.items);
     var bodymail = `<table border="1"  style="width:100%;border-collapse: collapse;"><tr>
+    <th>#</th>
   <th>Sản phẩm</th>
   <th>Giá</th>
   <th>Số lượng</th>
-  <th>Thành tiền</th>
+  <th>Thành tiền (đồng)</th>
 </tr>`;
 
     params.Item.items.forEach(function(it) {
         bodymail +=
-            `<tr>
+            `<tr><td>
+            ` +
+            Number(params.Item.items.indexOf(it) + 1) +
+            `
+        </td>
   <td>
     ` +
             it.item.tieude +
@@ -94,7 +99,7 @@ exports.add_order = function(req, res, next) {
   </td>
   <td>
   ` +
-            it.item.gia +
+            editName.formatNumber(it.item.gia, ".", ",") +
             `
   </td>
   <td>
@@ -104,11 +109,23 @@ exports.add_order = function(req, res, next) {
   </td>
   <td>
     ` +
-            it.price +
+            editName.formatNumber(it.price, ".", ",") +
             `
   </td>
 </tr>`;
     });
+    bodymail +=
+        `<tr><td></td><td></td><td></td><td></td><td><b>Tổng tiền:</b> ` +
+        editName.formatNumber(params.Item.tongtien, ".", ",") +
+        `</td></tr>`;
+    bodymail +=
+        `<tr><td></td><td></td><td></td><td></td><td><b>Tiền ship:</b> ` +
+        editName.formatNumber(params.Item.tienship, ".", ",") +
+        `</td></tr>`;
+    bodymail +=
+        `<tr><td></td><td></td><td></td><td></td><td><b>Tổng tiền thanh toán:</b> ` +
+        editName.formatNumber(params.Item.tongtienthanhtoan, ".", ",") +
+        `</td></tr>`;
     bodymail += "</table> ";
 
     /**
@@ -121,7 +138,7 @@ exports.add_order = function(req, res, next) {
         url: api_mapping.add_order.url,
         // url: "https://u5w3x3uko4.execute-api.us-west-2.amazonaws.com/test/test",
         form: JSON.stringify(params)
-    }
+    };
     console.log(params);
     console.log(option);
     request.post(option, (err, response, data) => {
@@ -136,7 +153,7 @@ exports.add_order = function(req, res, next) {
             req.session.cart = null;
             sio.thongBao(params.Item._orderID);
 
-            console.log(data)
+            console.log(data);
             var eparam = {
                 Destination: {
                     ToAddresses: [params.Item.email]
@@ -152,7 +169,7 @@ exports.add_order = function(req, res, next) {
                                 `<b><a style="font-size:25px" href="http://localhost:3000/xacNhanOrder/` +
                                 params.Item.codeDef +
                                 `
-                ">nhấn vào đây ✔✔</a> </b> để xác nhận đơn hàng !</p>` +
+                ">nhấn vào đây ✔✔</a> </b> để xác nhận và theo dõi đơn hàng !</p>` +
                                 `<p><b>Thông tin người nhận</b></p><table  border="1"  style="width:100%;border-collapse: collapse;"><tr>
                 <td>Mã đơn hàng</td><td>` +
                                 params.Item._orderID +
@@ -165,7 +182,7 @@ exports.add_order = function(req, res, next) {
                 </tr>
                 <tr>
                   <td>Địa chỉ nhận</td><td>` +
-                                params.Item.diachi +
+                                params.Item.diachi.chitiet +
                                 `</td>
                 </tr>
                 <tr>
@@ -219,66 +236,70 @@ exports.xacNhanOrder = function(req, res) {
      * Đã test lần 1. Cần test lại vs mail
      *
      */
-    request.put(api_mapping.confirm_order.url + codeDef, { json: true }, (err, response, data) => {
-        if (err) {
-            res.send("Đơn đặt hàng đã hết hạn!");
-            console.error(
-                "Unable to query. Error:",
-                JSON.stringify(err, null, 2)
-            );
-        } else {
-            sio.thongBao(data.Items[0]._orderID);
-            data.Items.forEach(function(tt) {
-                var orderID = tt._orderID;
-                var mail = tt.email;
-                var now = date.format(new Date(), "DD/MM/YYYY");
-                var tt = {
-                    tentinhtrang: "Đã xác nhận",
-                    thoigian: now.toString(),
-                    motatt:
-                        "Đơn hàng đã được xác nhận bởi khách hàng, chuyển sang trạng thái chờ chấp nhận từ quản trị."
-                };
-                var params = {
-                    TableName: "DA2Order",
-                    Key: {
-                        _orderID: orderID
-                    },
-                    ReturnValues: "ALL_NEW",
-                    UpdateExpression:
-                        "set  #tthh=:hh, #lstt= list_append(if_not_exists(#lstt, :empty_list), :ls)",
-                    ExpressionAttributeValues: {
-                        ":hh": tt.tentinhtrang,
-                        ":ls": [tt],
-                        ":empty_list": []
-                    },
-                    ExpressionAttributeNames: {
-                        "#tthh": "tinhtranghienhanh",
-                        "#lstt": "lichsutinhtrang"
-                    }
-                };
-                let option = {
-                    url : api_mapping.update_order.url + codeDef,
-                    form : JSON.stringify(params)
-                }
+    request.put(
+        api_mapping.confirm_order.url + codeDef,
+        { json: true },
+        (err, response, data) => {
+            if (err) {
+                res.send("Đơn đặt hàng đã hết hạn!");
+                console.error(
+                    "Unable to query. Error:",
+                    JSON.stringify(err, null, 2)
+                );
+            } else {
+                sio.thongBao(data.Items[0]._orderID);
+                data.Items.forEach(function(tt) {
+                    var orderID = tt._orderID;
+                    var mail = tt.email;
+                    var now = date.format(new Date(), "DD/MM/YYYY");
+                    var tt = {
+                        tentinhtrang: "Đã xác nhận",
+                        thoigian: now.toString(),
+                        motatt:
+                            "Đơn hàng đã được xác nhận bởi khách hàng, chuyển sang trạng thái chờ chấp nhận từ quản trị."
+                    };
+                    var params = {
+                        TableName: "DA2Order",
+                        Key: {
+                            _orderID: orderID
+                        },
+                        ReturnValues: "ALL_NEW",
+                        UpdateExpression:
+                            "set  #tthh=:hh, #lstt= list_append(if_not_exists(#lstt, :empty_list), :ls)",
+                        ExpressionAttributeValues: {
+                            ":hh": tt.tentinhtrang,
+                            ":ls": [tt],
+                            ":empty_list": []
+                        },
+                        ExpressionAttributeNames: {
+                            "#tthh": "tinhtranghienhanh",
+                            "#lstt": "lichsutinhtrang"
+                        }
+                    };
+                    let option = {
+                        url: api_mapping.update_order.url + codeDef,
+                        form: JSON.stringify(params)
+                    };
 
-                request.put(option, (err2, response2, data2) => {
-                    if (err2) {
-                        console.log(
-                            "order - tinhtrang ::update::error - " +
-                            JSON.stringify(err2, null, 2)
-                        );
-                    } else {
-                        data2 = JSON.parse(data2)
-                        console.log(
-                            "order - tinhtrang ::update::success " +
-                            JSON.stringify(data2)
-                        );
-                        res.redirect("/trackOrder/" + orderID + "/" + mail);
-                    }
+                    request.put(option, (err2, response2, data2) => {
+                        if (err2) {
+                            console.log(
+                                "order - tinhtrang ::update::error - " +
+                                    JSON.stringify(err2, null, 2)
+                            );
+                        } else {
+                            data2 = JSON.parse(data2);
+                            console.log(
+                                "order - tinhtrang ::update::success " +
+                                    JSON.stringify(data2)
+                            );
+                            res.redirect("/trackOrder/" + orderID + "/" + mail);
+                        }
+                    });
                 });
-            });
+            }
         }
-    });
+    );
 };
 
 //===============================================================================================================================
@@ -318,7 +339,7 @@ exports.confirmOrder = function(req, res) {
     let option = {
         url: api_mapping.update_order.url + orderID,
         form: JSON.stringify(params)
-    }
+    };
     request.put(option, (err, response, data) => {
         if (err) {
             console.log(
@@ -368,14 +389,14 @@ exports.rejectOrder = function(req, res) {
     let option = {
         url: api_mapping.update_order.url + orderID,
         form: JSON.stringify(params)
-    }
+    };
     request.put(option, (err, response, data) => {
         if (err) {
             console.log(
                 "users::update::error - " + JSON.stringify(err, null, 2)
             );
         } else {
-            console.log('Huy order oke', data)
+            console.log("Huy order oke", data);
             sio.xoaThongBao(orderID);
             res.redirect("/admin/order/new/");
         }
@@ -405,7 +426,7 @@ exports.getAllOrder = function(req, res) {
         url: api_mapping.get_order_by.url,
         // url: "https://u5w3x3uko4.execute-api.us-west-2.amazonaws.com/test/test",
         form: JSON.stringify(params)
-    }
+    };
 
     request.put(option, (err, response, data) => {
         if (err) {
@@ -415,9 +436,9 @@ exports.getAllOrder = function(req, res) {
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
-            console.log(data)
-            data = JSON.parse(data)
-            console.log(data)
+            console.log(data);
+            data = JSON.parse(data);
+            console.log(data);
 
             res.render("../views/admin/page/list-order.ejs", {
                 allOrder: data.Items
@@ -459,7 +480,7 @@ exports.getNewOrders = function(req, res) {
     let option = {
         url: api_mapping.get_order_by.url,
         form: JSON.stringify(params)
-    }
+    };
     request.put(option, (err, response, data) => {
         if (err) {
             console.error(
@@ -468,7 +489,7 @@ exports.getNewOrders = function(req, res) {
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
-            data = JSON.parse(data)
+            data = JSON.parse(data);
             res.render("../views/admin/page/list-new-order.ejs", {
                 allOrder: data.Items
             });
@@ -507,7 +528,7 @@ exports.getRejectOrders = function(req, res) {
     let option = {
         url: api_mapping.get_order_by.url,
         form: JSON.stringify(params)
-    }
+    };
 
     request.put(option, (err, response, data) => {
         if (err) {
@@ -517,9 +538,8 @@ exports.getRejectOrders = function(req, res) {
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
-
-            data = JSON.parse(data)
-            console.log(data)
+            data = JSON.parse(data);
+            console.log(data);
             res.render("../views/admin/page/list-reject-order.ejs", {
                 allOrder: data.Items
             });
@@ -558,7 +578,7 @@ exports.getUnAuthenOrders = function(req, res) {
     let option = {
         url: api_mapping.get_order_by.url,
         form: JSON.stringify(params)
-    }
+    };
     request.put(option, (err, response, data) => {
         if (err) {
             console.error(
@@ -567,7 +587,7 @@ exports.getUnAuthenOrders = function(req, res) {
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
-            data = JSON.parse(data)
+            data = JSON.parse(data);
             res.render("../views/admin/page/list-unauthen-order.ejs", {
                 allOrder: data.Items
             });
@@ -609,21 +629,25 @@ exports.getDetailOrder = function(req, res) {
      * Đã hoàn thành mapping
      * Chưa test lại - Không rõ gọi khi nào nên không test được
      */
-    request.get(api_mapping.find_order_by_id.url + orderID, { json: true }, (err, response, data) => {
-        if (err) {
-            console.log(
-                "Unable to query. Error:",
-                JSON.stringify(err, null, 2)
-            );
-            res.send(JSON.stringify(err, null, 2));
-        } else {
-            // data = JSON.parse(data)
-            // console.log(data)
-            res.render("../views/admin/page/orderDetail.ejs", {
-                orderDetail: data.Items
-            });
+    request.get(
+        api_mapping.find_order_by_id.url + orderID,
+        { json: true },
+        (err, response, data) => {
+            if (err) {
+                console.log(
+                    "Unable to query. Error:",
+                    JSON.stringify(err, null, 2)
+                );
+                res.send(JSON.stringify(err, null, 2));
+            } else {
+                // data = JSON.parse(data)
+                // console.log(data)
+                res.render("../views/admin/page/orderDetail.ejs", {
+                    orderDetail: data.Items
+                });
+            }
         }
-    });
+    );
 };
 
 //===============================================================================================================================
@@ -646,21 +670,25 @@ exports.getDetailOrderNew = function(req, res) {
      * @author Nguyễn Thế Sơn
      * Đã hoàn thành mapping
      */
-    request.get(api_mapping.find_order_by_id.url + orderID, { json: true }, (err, response, data) => {
-        if (err) {
-            console.log(
-                "Unable to query. Error:",
-                JSON.stringify(err, null, 2)
-            );
-        } else {
-            console.log(data)
-            // data = JSON.parse(data)
-            // console.log("Form new",data)
-            res.render("../views/admin/page/confirmOrderDetail.ejs", {
-                orderDetail: data.Items
-            });
+    request.get(
+        api_mapping.find_order_by_id.url + orderID,
+        { json: true },
+        (err, response, data) => {
+            if (err) {
+                console.log(
+                    "Unable to query. Error:",
+                    JSON.stringify(err, null, 2)
+                );
+            } else {
+                console.log(data);
+                // data = JSON.parse(data)
+                // console.log("Form new",data)
+                res.render("../views/admin/page/confirmOrderDetail.ejs", {
+                    orderDetail: data.Items
+                });
+            }
         }
-    });
+    );
 };
 
 //===============================================================================================================================
@@ -706,9 +734,9 @@ exports.update_order = function(req, res) {
      * Chưa test lại
      */
     let option = {
-        url: api_mapping.update_order.url+orderID,
+        url: api_mapping.update_order.url + orderID,
         form: encodeURI(JSON.stringify(params))
-    }
+    };
     // docClient.update(params, function (err, data) {
     request.put(option, { json: true }, (err, response, data) => {
         if (err) {
@@ -716,7 +744,7 @@ exports.update_order = function(req, res) {
                 "users::update::error - " + JSON.stringify(err, null, 2)
             );
         } else {
-            console.log("Cập nhạt thông tin giao hàng oke")
+            console.log("Cập nhạt thông tin giao hàng oke");
             // console.log("users::update::success " + JSON.stringify(data));
             res.redirect("/admin/order/detail/" + orderID);
         }
@@ -757,14 +785,15 @@ exports.update_tinhtrang_order = function(req, res) {
      * Đã hoàn thành mapping
      */
     let option = {
-        url: api_mapping.update_order.url+orderID,
+        url: api_mapping.update_order.url + orderID,
         form: encodeURI(JSON.stringify(params))
-    }
+    };
     // docClient.update(params, function (err, data) {
     request.put(option, (err, response, data) => {
         if (err) {
             console.log(
-                "From update_tinhtrang_order users::update::error - " + JSON.stringify(err, null, 2)
+                "From update_tinhtrang_order users::update::error - " +
+                    JSON.stringify(err, null, 2)
             );
         } else {
             // console.log("users::update::success " + JSON.stringify(data));
@@ -793,118 +822,114 @@ exports.trackOrder = function(req, res) {
         ketquatim: " "
     });
 };
-
 exports.searchOrder = function(req, res) {
     var orderID = req.body.orderidd;
     var emaill = req.body.order_emaill;
-    var params = {
-        TableName: "DA2Order",
-        FilterExpression: "#ma = :id and #email = :em",
-        ExpressionAttributeNames: {
-            "#ma": "_orderID",
-            "#email": "email"
-        },
-        ExpressionAttributeValues: {
-            ":id": orderID,
-            ":em": emaill
-        }
-    };
-    docClient.scan(params, function(err, data) {
-        if (err) {
-            console.log(
-                "Unable to query. Error:",
-                JSON.stringify(err, null, 2)
-            );
-        } else {
-            console.log(data.Items[0].items);
-            if (data.Count == 0) {
-                if (!req.session.cart) {
-                    return res.render(
-                        "../views/site/page/track-your-order.ejs",
-                        {
-                            products: [],
-                            totalPrice: 0,
-                            totalQty: 0,
-                            title: "Tra cứu đơn hàng",
-                            ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
-                        }
-                    );
-                }
-                var cart = new Cart(req.session.cart);
-                res.render("../views/site/page/track-your-order.ejs", {
-                    products: cart.generateArray(),
-                    totalPrice: cart.totalPrice,
-                    totalQty: cart.totalQty,
-                    title: "Tra cứu đơn hàng",
-                    ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
-                });
+    // var params = {
+    //     TableName: "DA2Order",
+    //     FilterExpression: "#ma = :id and #email = :em",
+    //     ExpressionAttributeNames: {
+    //         "#ma": "_orderID",
+    //         "#email": "email"
+    //     },
+    //     ExpressionAttributeValues: {
+    //         ":id": orderID,
+    //         ":em": emaill
+    //     }
+    // };
+    request.get(
+        api_mapping.find_order_to_track.url +
+            "?id=" +
+            encodeURI(orderID) +
+            "&email=" +
+            encodeURI(emaill),
+        { json: true },
+        (err, response, data) => {
+            if (err) {
+                console.log(
+                    "Unable to query. Error:",
+                    JSON.stringify(err, null, 2)
+                );
             } else {
-                if (!req.session.cart) {
-                    return res.render(
-                        "../views/site/page/result-track-order.ejs",
-                        {
-                            products: [],
-                            totalPrice: 0,
-                            totalQty: 0,
-                            title: "Tra cứu đơn hàng",
-                            orderDetail: data.Items
-                        }
-                    );
+                console.log(data);
+                console.log(data.Items[0].items);
+                if (data.Count == 0) {
+                    if (!req.session.cart) {
+                        return res.render(
+                            "../views/site/page/track-your-order.ejs",
+                            {
+                                products: [],
+                                totalPrice: 0,
+                                totalQty: 0,
+                                title: "Tra cứu đơn hàng",
+                                ketquatim:
+                                    "Không tìm thấy đơn hàng nào phù hợp !"
+                            }
+                        );
+                    }
+                    var cart = new Cart(req.session.cart);
+                    res.render("../views/site/page/track-your-order.ejs", {
+                        products: cart.generateArray(),
+                        totalPrice: cart.totalPrice,
+                        totalQty: cart.totalQty,
+                        title: "Tra cứu đơn hàng",
+                        ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
+                    });
+                } else {
+                    if (!req.session.cart) {
+                        return res.render(
+                            "../views/site/page/result-track-order.ejs",
+                            {
+                                products: [],
+                                totalPrice: 0,
+                                totalQty: 0,
+                                title: "Tra cứu đơn hàng",
+                                orderDetail: data.Items
+                            }
+                        );
+                    }
+                    var cart = new Cart(req.session.cart);
+                    res.render("../views/site/page/result-track-order.ejs", {
+                        products: cart.generateArray(),
+                        totalPrice: cart.totalPrice,
+                        totalQty: cart.totalQty,
+                        title: "Tra cứu đơn hàng",
+                        orderDetail: data.Items
+                    });
                 }
-                var cart = new Cart(req.session.cart);
-                res.render("../views/site/page/result-track-order.ejs", {
-                    products: cart.generateArray(),
-                    totalPrice: cart.totalPrice,
-                    totalQty: cart.totalQty,
-                    title: "Tra cứu đơn hàng",
-                    orderDetail: data.Items
-                });
             }
         }
-    });
+    );
 };
 
 exports.getOrderTrack = function(req, res) {
     var orderID = req.params.id;
     var emaill = req.params.mail;
-    var params = {
-        TableName: "DA2Order",
-        FilterExpression: "#ma = :id and #email = :em",
-        ExpressionAttributeNames: {
-            "#ma": "_orderID",
-            "#email": "email"
-        },
-        ExpressionAttributeValues: {
-            ":id": orderID,
-            ":em": emaill
-        }
-    };
-    docClient.scan(params, function(err, data) {
-        if (err) {
-            console.log(
-                "Unable to query. Error:",
-                JSON.stringify(err, null, 2)
-            );
-            if (!req.session.cart) {
-                return res.render("../views/site/page/track-your-order.ejs", {
-                    products: [],
-                    totalPrice: 0,
-                    totalQty: 0,
-                    title: "Tra cứu đơn hàng",
-                    ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
-                });
-            }
-            var cart = new Cart(req.session.cart);
-            res.render("../views/site/page/track-your-order.ejs", {
-                products: cart.generateArray(),
-                totalPrice: cart.totalPrice,
-                totalQty: cart.totalQty,
-                title: "Tra cứu đơn hàng",
-                ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
-            });
-        } else {
-            console.log(data);
-            if (data.Count == 0) {
+    // var params = {
+    //     TableName: "DA2Order",
+    //     FilterExpression: "#ma = :id and #email = :em",
+    //     ExpressionAttributeNames: {
+    //         "#ma": "_orderID",
+    //         "#email": "email"
+    //     },
+    //     ExpressionAttributeValues: {
+    //         ":id": orderID,
+    //         ":em": emaill
+    //     }
+    // };
+    request.get(
+        api_mapping.find_order_to_track.url +
+            "?id=" +
+            encodeURI(orderID) +
+            "&email=" +
+            encodeURI(emaill),
+        { json: true },
+        (err, response, data) => {
+            if (err) {
+                console.log(
+                    "Unable to query. Error:",
+                    JSON.stringify(err, null, 2)
+                );
                 if (!req.session.cart) {
                     return res.render(
                         "../views/site/page/track-your-order.ejs",
@@ -926,27 +951,52 @@ exports.getOrderTrack = function(req, res) {
                     ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
                 });
             } else {
-                if (!req.session.cart) {
-                    return res.render(
-                        "../views/site/page/result-track-order.ejs",
-                        {
-                            products: [],
-                            totalPrice: 0,
-                            totalQty: 0,
-                            title: "Tra cứu đơn hàng",
-                            orderDetail: data.Items
-                        }
-                    );
+                console.log(data);
+                if (data.Count == 0) {
+                    if (!req.session.cart) {
+                        return res.render(
+                            "../views/site/page/track-your-order.ejs",
+                            {
+                                products: [],
+                                totalPrice: 0,
+                                totalQty: 0,
+                                title: "Tra cứu đơn hàng",
+                                ketquatim:
+                                    "Không tìm thấy đơn hàng nào phù hợp !"
+                            }
+                        );
+                    }
+                    var cart = new Cart(req.session.cart);
+                    res.render("../views/site/page/track-your-order.ejs", {
+                        products: cart.generateArray(),
+                        totalPrice: cart.totalPrice,
+                        totalQty: cart.totalQty,
+                        title: "Tra cứu đơn hàng",
+                        ketquatim: "Không tìm thấy đơn hàng nào phù hợp !"
+                    });
+                } else {
+                    if (!req.session.cart) {
+                        return res.render(
+                            "../views/site/page/result-track-order.ejs",
+                            {
+                                products: [],
+                                totalPrice: 0,
+                                totalQty: 0,
+                                title: "Tra cứu đơn hàng",
+                                orderDetail: data.Items
+                            }
+                        );
+                    }
+                    var cart = new Cart(req.session.cart);
+                    res.render("../views/site/page/result-track-order.ejs", {
+                        products: cart.generateArray(),
+                        totalPrice: cart.totalPrice,
+                        totalQty: cart.totalQty,
+                        title: "Tra cứu đơn hàng",
+                        orderDetail: data.Items
+                    });
                 }
-                var cart = new Cart(req.session.cart);
-                res.render("../views/site/page/result-track-order.ejs", {
-                    products: cart.generateArray(),
-                    totalPrice: cart.totalPrice,
-                    totalQty: cart.totalQty,
-                    title: "Tra cứu đơn hàng",
-                    orderDetail: data.Items
-                });
             }
         }
-    });
+    );
 };
