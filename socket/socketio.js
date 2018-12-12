@@ -18,7 +18,7 @@ exports.thongBao = function(noiDung) {
 };
 exports.xoaThongBao = function(noiDung) {
     var indexNotifi = thongBao.indexOf(noiDung);
-    if(indexNotifi>-1){
-        thongBao.splice(indexNotifi,1);
+    if (indexNotifi > -1) {
+        thongBao.splice(indexNotifi, 1);
     }
 };
