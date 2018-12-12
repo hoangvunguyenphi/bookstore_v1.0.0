@@ -1,6 +1,3 @@
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-package.json
+node_modules/
+.gitignore
+.elasticbeanstalk/
