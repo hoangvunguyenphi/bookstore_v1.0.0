@@ -79,6 +79,12 @@
         "method":"get",
         "description":"Tìm kiếm order theo id",
         "input":"OrderId as Path Parameter. Exp: order/2"
+    },
+    "find_order_to_track": {
+        "url":"https://8354pwudna.execute-api.us-west-2.amazonaws.com/beta/order/track",
+        "method":"get",
+        "description":"Tìm kiếm order theo id và email",
+        "input":"Input from Form. Exp: order/track?id=xxx&email=yyy"
     }
 
 }

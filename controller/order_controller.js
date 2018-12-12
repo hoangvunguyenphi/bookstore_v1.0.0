@@ -797,25 +797,26 @@ exports.trackOrder = function(req, res) {
 exports.searchOrder = function(req, res) {
     var orderID = req.body.orderidd;
     var emaill = req.body.order_emaill;
-    var params = {
-        TableName: "DA2Order",
-        FilterExpression: "#ma = :id and #email = :em",
-        ExpressionAttributeNames: {
-            "#ma": "_orderID",
-            "#email": "email"
-        },
-        ExpressionAttributeValues: {
-            ":id": orderID,
-            ":em": emaill
-        }
-    };
-    docClient.scan(params, function(err, data) {
+    // var params = {
+    //     TableName: "DA2Order",
+    //     FilterExpression: "#ma = :id and #email = :em",
+    //     ExpressionAttributeNames: {
+    //         "#ma": "_orderID",
+    //         "#email": "email"
+    //     },
+    //     ExpressionAttributeValues: {
+    //         ":id": orderID,
+    //         ":em": emaill
+    //     }
+    // };
+    request.get(api_mapping.find_order_to_track.url + "?id="+encodeURI(orderID)+"&email="+encodeURI(emaill), { json: true }, (err, response, data) => {
         if (err) {
             console.log(
                 "Unable to query. Error:",
                 JSON.stringify(err, null, 2)
             );
         } else {
+            console.log(data)
             console.log(data.Items[0].items);
             if (data.Count == 0) {
                 if (!req.session.cart) {
@@ -867,19 +868,19 @@ exports.searchOrder = function(req, res) {
 exports.getOrderTrack = function(req, res) {
     var orderID = req.params.id;
     var emaill = req.params.mail;
-    var params = {
-        TableName: "DA2Order",
-        FilterExpression: "#ma = :id and #email = :em",
-        ExpressionAttributeNames: {
-            "#ma": "_orderID",
-            "#email": "email"
-        },
-        ExpressionAttributeValues: {
-            ":id": orderID,
-            ":em": emaill
-        }
-    };
-    docClient.scan(params, function(err, data) {
+    // var params = {
+    //     TableName: "DA2Order",
+    //     FilterExpression: "#ma = :id and #email = :em",
+    //     ExpressionAttributeNames: {
+    //         "#ma": "_orderID",
+    //         "#email": "email"
+    //     },
+    //     ExpressionAttributeValues: {
+    //         ":id": orderID,
+    //         ":em": emaill
+    //     }
+    // };
+    request.get(api_mapping.find_order_to_track.url + "?id="+encodeURI(orderID)+"&email="+encodeURI(emaill), { json: true }, (err, response, data) => {
         if (err) {
             console.log(
                 "Unable to query. Error:",
