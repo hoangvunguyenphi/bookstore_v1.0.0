@@ -7,7 +7,6 @@ var endpoint = "http://localhost:8000"
 AWS.config.update({
   accessKeyId,
   secretAccessKey,
-  endpoint,
   region
 });
 var dynamodb = new AWS.DynamoDB();

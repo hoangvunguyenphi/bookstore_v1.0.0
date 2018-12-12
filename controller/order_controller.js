@@ -8,23 +8,27 @@ var nanoid = require("nanoid");
 let date = require("date-and-time");
 
 var renameModule = require("../controller/edit_name");
-
+var awsconfig = require("../../aws-config.json");
 var sio = require("../socket/socketio");
+// const accessKeyId = awsconfig.AWS.accessKeyId;
+// const secretAccessKey = awsconfig.AWS.secretAccessKey;
+// const region = awsconfig.AWS.region;
+// var endpoint = "http://localhost:8000";
+// AWS.config.update({
+//     accessKeyId,
+//     secretAccessKey,
+//     region
+// });
 
-var awsconfig = require("../aws-config.json");
-const accessKeyId = awsconfig.AWS.accessKeyId;
-const secretAccessKey = awsconfig.AWS.secretAccessKey;
-const region = awsconfig.AWS.region;
+// var ses = new AWS.SES();
+// let docClient = new AWS.DynamoDB.DocumentClient();
 
-var endpoint = "http://localhost:8000";
-AWS.config.update({
-    accessKeyId,
-    secretAccessKey,
-    region
-});
-
-var ses = new AWS.SES();
-let docClient = new AWS.DynamoDB.DocumentClient();
+/**
+ * @author Nguyễn Thế Sơn
+ * Cập nhật module request
+ */
+let request = require('request')
+let api_mapping = require('./api-mapping.json')
 
 //===============================================================================================================================
 // Thêm mới order từ khách, gửi thông tin đơn hàng và link xác nhận sang email
@@ -106,7 +110,22 @@ exports.add_order = function(req, res, next) {
 </tr>`;
     });
     bodymail += "</table> ";
-    docClient.put(params, function(err, data) {
+
+    /**
+     * @author Nguyễn Thế Sơn
+     * Hoàn thành mapping
+     * Đã test lại
+     *
+     */
+    let option = {
+        url: api_mapping.add_order.url,
+        // url: "https://u5w3x3uko4.execute-api.us-west-2.amazonaws.com/test/test",
+        form: JSON.stringify(params)
+    }
+    console.log(params);
+    console.log(option);
+    request.post(option, (err, response, data) => {
+        // docClient.put(params, function(err, data) {
         if (err) {
             console.error(
                 "Unable to add book",
@@ -115,6 +134,9 @@ exports.add_order = function(req, res, next) {
             );
         } else {
             req.session.cart = null;
+            sio.thongBao(params.Item._orderID);
+
+            console.log(data)
             var eparam = {
                 Destination: {
                     ToAddresses: [params.Item.email]
@@ -190,17 +212,14 @@ exports.add_order = function(req, res, next) {
 exports.xacNhanOrder = function(req, res) {
     var codeDef = req.params.codeDef;
     console.log(codeDef);
-    var sparams = {
-        TableName: "DA2Order",
-        FilterExpression: "#code = :cd",
-        ExpressionAttributeValues: {
-            ":cd": codeDef
-        },
-        ExpressionAttributeNames: {
-            "#code": "codeDef"
-        }
-    };
-    docClient.scan(sparams, function(err, data) {
+
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     * Đã test lần 1. Cần test lại vs mail
+     *
+     */
+    request.put(api_mapping.confirm_order.url + codeDef, { json: true }, (err, response, data) => {
         if (err) {
             res.send("Đơn đặt hàng đã hết hạn!");
             console.error(
@@ -237,16 +256,22 @@ exports.xacNhanOrder = function(req, res) {
                         "#lstt": "lichsutinhtrang"
                     }
                 };
-                docClient.update(params, function(err, data) {
-                    if (err) {
+                let option = {
+                    url : api_mapping.update_order.url + codeDef,
+                    form : JSON.stringify(params)
+                }
+
+                request.put(option, (err2, response2, data2) => {
+                    if (err2) {
                         console.log(
                             "order - tinhtrang ::update::error - " +
-                                JSON.stringify(err, null, 2)
+                            JSON.stringify(err2, null, 2)
                         );
                     } else {
+                        data2 = JSON.parse(data2)
                         console.log(
                             "order - tinhtrang ::update::success " +
-                                JSON.stringify(data)
+                            JSON.stringify(data2)
                         );
                         res.redirect("/trackOrder/" + orderID + "/" + mail);
                     }
@@ -285,7 +310,16 @@ exports.confirmOrder = function(req, res) {
             "#lstt": "lichsutinhtrang"
         }
     };
-    docClient.update(params, function(err, data) {
+
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     */
+    let option = {
+        url: api_mapping.update_order.url + orderID,
+        form: JSON.stringify(params)
+    }
+    request.put(option, (err, response, data) => {
         if (err) {
             console.log(
                 "users::update::error - " + JSON.stringify(err, null, 2)
@@ -326,12 +360,22 @@ exports.rejectOrder = function(req, res) {
             "#lstt": "lichsutinhtrang"
         }
     };
-    docClient.update(params, function(err, data) {
+
+    /**
+     * @author Nguyễn Thế Sơn
+     * đã hoàn thành
+     */
+    let option = {
+        url: api_mapping.update_order.url + orderID,
+        form: JSON.stringify(params)
+    }
+    request.put(option, (err, response, data) => {
         if (err) {
             console.log(
                 "users::update::error - " + JSON.stringify(err, null, 2)
             );
         } else {
+            console.log('Huy order oke', data)
             sio.xoaThongBao(orderID);
             res.redirect("/admin/order/new/");
         }
@@ -352,21 +396,49 @@ exports.getAllOrder = function(req, res) {
             ":tt4": "Hoàn tất"
         }
     };
-    docClient.scan(params, onScan);
 
-    function onScan(err, data) {
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     */
+    let option = {
+        url: api_mapping.get_order_by.url,
+        // url: "https://u5w3x3uko4.execute-api.us-west-2.amazonaws.com/test/test",
+        form: JSON.stringify(params)
+    }
+
+    request.put(option, (err, response, data) => {
         if (err) {
             console.error(
-                "\nUnable to scan the table. Error JSON:",
+                "\nFrom get all order Unable to scan the table. Error JSON:",
                 JSON.stringify(err, null, 2)
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
+            console.log(data)
+            data = JSON.parse(data)
+            console.log(data)
+
             res.render("../views/admin/page/list-order.ejs", {
                 allOrder: data.Items
             });
         }
-    }
+    });
+    // docClient.scan(params, onScan);
+
+    // function onScan(err, data) {
+    //     if (err) {
+    //         console.error(
+    //             "\nUnable to scan the table. Error JSON:",
+    //             JSON.stringify(err, null, 2)
+    //         );
+    //         res.send(JSON.stringify(err, null, 2));
+    //     } else {
+    //         res.render("../views/admin/page/list-order.ejs", {
+    //             allOrder: data.Items
+    //         });
+    //     }
+    // }
 };
 
 //===============================================================================================================================
@@ -379,20 +451,43 @@ exports.getNewOrders = function(req, res) {
             ":cd": "Đã xác nhận"
         }
     };
-    docClient.scan(params, onScan);
-    function onScan(err, data) {
+
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     */
+    let option = {
+        url: api_mapping.get_order_by.url,
+        form: JSON.stringify(params)
+    }
+    request.put(option, (err, response, data) => {
         if (err) {
             console.error(
-                "\nUnable to scan the table. Error JSON:",
+                "\nFrom Da xac nhan! Unable to scan the table. Error JSON:",
                 JSON.stringify(err, null, 2)
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
+            data = JSON.parse(data)
             res.render("../views/admin/page/list-new-order.ejs", {
                 allOrder: data.Items
             });
         }
-    }
+    });
+    // docClient.scan(params, onScan);
+    // function onScan(err, data) {
+    //     if (err) {
+    //         console.error(
+    //             "\nUnable to scan the table. Error JSON:",
+    //             JSON.stringify(err, null, 2)
+    //         );
+    //         res.send(JSON.stringify(err, null, 2));
+    //     } else {
+    //         res.render("../views/admin/page/list-new-order.ejs", {
+    //             allOrder: data.Items
+    //         });
+    //     }
+    // }
 };
 
 //===============================================================================================================================
@@ -405,20 +500,45 @@ exports.getRejectOrders = function(req, res) {
             ":cd": "Bị huỷ"
         }
     };
-    docClient.scan(params, onScan);
-    function onScan(err, data) {
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     */
+    let option = {
+        url: api_mapping.get_order_by.url,
+        form: JSON.stringify(params)
+    }
+
+    request.put(option, (err, response, data) => {
         if (err) {
             console.error(
-                "\nUnable to scan the table. Error JSON:",
+                "\nFrom RejectOrder Unable to scan the table. Error JSON:",
                 JSON.stringify(err, null, 2)
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
+
+            data = JSON.parse(data)
+            console.log(data)
             res.render("../views/admin/page/list-reject-order.ejs", {
                 allOrder: data.Items
             });
         }
-    }
+    });
+    // docClient.scan(params, onScan);
+    // function onScan(err, data) {
+    //     if (err) {
+    //         console.error(
+    //             "\nUnable to scan the table. Error JSON:",
+    //             JSON.stringify(err, null, 2)
+    //         );
+    //         res.send(JSON.stringify(err, null, 2));
+    //     } else {
+    //         res.render("../views/admin/page/list-reject-order.ejs", {
+    //             allOrder: data.Items
+    //         });
+    //     }
+    // }
 };
 
 //===============================================================================================================================
@@ -431,8 +551,15 @@ exports.getUnAuthenOrders = function(req, res) {
             ":tt": "Chờ xác nhận"
         }
     };
-    docClient.scan(params, onScan);
-    function onScan(err, data) {
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     */
+    let option = {
+        url: api_mapping.get_order_by.url,
+        form: JSON.stringify(params)
+    }
+    request.put(option, (err, response, data) => {
         if (err) {
             console.error(
                 "\nUnable to scan the table. Error JSON:",
@@ -440,28 +567,49 @@ exports.getUnAuthenOrders = function(req, res) {
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
+            data = JSON.parse(data)
             res.render("../views/admin/page/list-unauthen-order.ejs", {
                 allOrder: data.Items
             });
         }
-    }
+    });
+    // docClient.scan(params, onScan);
+    // function onScan(err, data) {
+    //     if (err) {
+    //         console.error(
+    //             "\nUnable to scan the table. Error JSON:",
+    //             JSON.stringify(err, null, 2)
+    //         );
+    //         res.send(JSON.stringify(err, null, 2));
+    //     } else {
+    //         res.render("../views/admin/page/list-unauthen-order.ejs", {
+    //             allOrder: data.Items
+    //         });
+    //     }
+    // }
 };
 
 //===============================================================================================================================
 //Lấy chi tiết thông tin đơn hàng theo ID
 exports.getDetailOrder = function(req, res) {
     var orderID = req.params.id;
-    var params = {
-        TableName: "DA2Order",
-        KeyConditionExpression: "#ma = :id",
-        ExpressionAttributeNames: {
-            "#ma": "_orderID"
-        },
-        ExpressionAttributeValues: {
-            ":id": orderID
-        }
-    };
-    docClient.query(params, function(err, data) {
+    // var params = {
+    //     TableName: "DA2Order",
+    //     KeyConditionExpression: "#ma = :id",
+    //     ExpressionAttributeNames: {
+    //         "#ma": "_orderID"
+    //     },
+    //     ExpressionAttributeValues: {
+    //         ":id": orderID
+    //     }
+    // };
+
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     * Chưa test lại - Không rõ gọi khi nào nên không test được
+     */
+    request.get(api_mapping.find_order_by_id.url + orderID, { json: true }, (err, response, data) => {
         if (err) {
             console.log(
                 "Unable to query. Error:",
@@ -469,6 +617,8 @@ exports.getDetailOrder = function(req, res) {
             );
             res.send(JSON.stringify(err, null, 2));
         } else {
+            // data = JSON.parse(data)
+            // console.log(data)
             res.render("../views/admin/page/orderDetail.ejs", {
                 orderDetail: data.Items
             });
@@ -480,23 +630,32 @@ exports.getDetailOrder = function(req, res) {
 // Lấy chi tiết thông tin đơn hàng mới theo ID
 exports.getDetailOrderNew = function(req, res) {
     var orderID = req.params.id;
-    var params = {
-        TableName: "DA2Order",
-        KeyConditionExpression: "#ma = :id",
-        ExpressionAttributeNames: {
-            "#ma": "_orderID"
-        },
-        ExpressionAttributeValues: {
-            ":id": orderID
-        }
-    };
-    docClient.query(params, function(err, data) {
+    // var params = {
+    //     TableName: "DA2Order",
+    //     KeyConditionExpression: "#ma = :id",
+    //     ExpressionAttributeNames: {
+    //         "#ma": "_orderID"
+    //     },
+    //     ExpressionAttributeValues: {
+    //         ":id": orderID
+    //     }
+    // };
+    // docClient.query(params, function (err, data) {
+
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     */
+    request.get(api_mapping.find_order_by_id.url + orderID, { json: true }, (err, response, data) => {
         if (err) {
             console.log(
                 "Unable to query. Error:",
                 JSON.stringify(err, null, 2)
             );
         } else {
+            console.log(data)
+            // data = JSON.parse(data)
+            // console.log("Form new",data)
             res.render("../views/admin/page/confirmOrderDetail.ejs", {
                 orderDetail: data.Items
             });
@@ -541,12 +700,23 @@ exports.update_order = function(req, res) {
         },
         ReturnValues: "UPDATED_NEW"
     };
-    docClient.update(params, function(err, data) {
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     * Chưa test lại
+     */
+    let option = {
+        url: api_mapping.update_order.url+orderID,
+        form: encodeURI(JSON.stringify(params))
+    }
+    // docClient.update(params, function (err, data) {
+    request.put(option, { json: true }, (err, response, data) => {
         if (err) {
             console.log(
                 "users::update::error - " + JSON.stringify(err, null, 2)
             );
         } else {
+            console.log("Cập nhạt thông tin giao hàng oke")
             // console.log("users::update::success " + JSON.stringify(data));
             res.redirect("/admin/order/detail/" + orderID);
         }
@@ -582,10 +752,19 @@ exports.update_tinhtrang_order = function(req, res) {
             "#lstt": "lichsutinhtrang"
         }
     };
-    docClient.update(params, function(err, data) {
+    /**
+     * @author Nguyễn Thế Sơn
+     * Đã hoàn thành mapping
+     */
+    let option = {
+        url: api_mapping.update_order.url+orderID,
+        form: encodeURI(JSON.stringify(params))
+    }
+    // docClient.update(params, function (err, data) {
+    request.put(option, (err, response, data) => {
         if (err) {
             console.log(
-                "users::update::error - " + JSON.stringify(err, null, 2)
+                "From update_tinhtrang_order users::update::error - " + JSON.stringify(err, null, 2)
             );
         } else {
             // console.log("users::update::success " + JSON.stringify(data));

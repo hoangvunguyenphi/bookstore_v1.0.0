@@ -13,9 +13,17 @@ var endpoint = "http://localhost:8000";
 AWS.config.update({
     accessKeyId,
     secretAccessKey,
-    region
+    region,
+    endpoint
 });
 let docClient = new AWS.DynamoDB.DocumentClient();
+
+/**
+ * @author Nguyễn Thế Sơn
+ * Cập nhật module request
+ */
+let request = require('request');
+let api_mapping = require('./api-mapping.json')
 
 exports.get_all_category = function(req, res, next) {
     var params = {

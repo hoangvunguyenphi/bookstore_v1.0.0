@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^3.0.3",
@@ -24,6 +24,7 @@
     "nanoid": "^2.0.0",
     "node-fetch": "^2.3.0",
     "node-jose": "^1.1.0",
+    "request": "^2.88.0",
     "socket.io": "^2.2.0"
   }
 }
