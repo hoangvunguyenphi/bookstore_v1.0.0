@@ -5,6 +5,7 @@ var Cart = require("./cart");
 const UUID = require("uuid/v4");
 var nanoid = require("nanoid");
 
+let authen_controller = require("../controller/authentication_controller");
 let date = require("date-and-time");
 var editName = require("../controller/edit_name");
 var renameModule = require("../controller/edit_name");
@@ -249,7 +250,7 @@ exports.xacNhanOrder = function(req, res) {
                 data.Items.forEach(function(tt) {
                     var orderID = tt._orderID;
                     var mail = tt.email;
-                    var now = date.format(new Date(), "DD/MM/YYYY");
+                    var now = date.format(new Date(), "DD/MM/YYYY HH:mm:ss");
                     var tt = {
                         tentinhtrang: "Đã xác nhận",
                         thoigian: now.toString(),
@@ -274,37 +275,49 @@ exports.xacNhanOrder = function(req, res) {
                             "#lstt": "lichsutinhtrang"
                         }
                     };
-                    let option = {
-                        url: api_mapping.update_order.url + codeDef,
-                        form: JSON.stringify(params)
-                    };
+                    if (data.Items[0].tinhtranghienhanh == "Chờ xác nhận") {
+                        let option = {
+                            url: api_mapping.update_order.url + codeDef,
+                            form: JSON.stringify(params)
+                        };
 
-                    request.put(option, (err2, response2, data2) => {
-                        if (err2) {
-                            console.log(
-                                "order - tinhtrang ::update::error - " +
-                                    JSON.stringify(err2, null, 2)
-                            );
-                        } else {
-                            data2 = JSON.parse(data2);
-                            console.log(
-                                "order - tinhtrang ::update::success " +
-                                    JSON.stringify(data2)
-                            );
-                            res.redirect("/trackOrder/" + orderID + "/" + mail);
-                        }
-                    });
+                        request.put(option, (err2, response2, data2) => {
+                            if (err2) {
+                                console.log(
+                                    "order - tinhtrang ::update::error - " +
+                                        JSON.stringify(err2, null, 2)
+                                );
+                            } else {
+                                data2 = JSON.parse(data2);
+                                console.log(
+                                    "order - tinhtrang ::update::success " +
+                                        JSON.stringify(data2)
+                                );
+                                res.redirect(
+                                    "/trackOrder/" + orderID + "/" + mail
+                                );
+                            }
+                        });
+                    } else {
+                        res.redirect("/trackOrder/" + orderID + "/" + mail);
+                    }
                 });
             }
         }
     );
 };
-
 //===============================================================================================================================
 // Chấp nhận đơn hàng, cập nhật tình trạng là "Chấp nhận đơn hàng và đóng gói sản phẩm"
 exports.confirmOrder = function(req, res) {
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
     var orderID = req.params.id;
-    var now = date.format(new Date(), "DD/MM/YYYY");
+    var now = date.format(new Date(), "DD/MM/YYYY HH:mm:ss");
     var tt = {
         tentinhtrang: "Chấp nhận đơn hàng",
         thoigian: now.toString(),
@@ -354,8 +367,10 @@ exports.confirmOrder = function(req, res) {
 //===============================================================================================================================
 // Từ chối order, cập nhật tình trạng là "ĐÃ bị từ chối"
 exports.rejectOrder = function(req, res) {
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
     var orderID = req.params.id;
-    var now = date.format(new Date(), "DD/MM/YYYY");
+    var now = date.format(new Date(), "DD/MM/YYYY HH:mm:ss");
     var tt = {
         tentinhtrang: "Bị huỷ",
         thoigian: now.toString(),
@@ -404,6 +419,13 @@ exports.rejectOrder = function(req, res) {
 //===============================================================================================================================
 // Lấy tất cả các order
 exports.getAllOrder = function(req, res) {
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
     var params = {
         TableName: "DA2Order",
         FilterExpression:
@@ -463,6 +485,13 @@ exports.getAllOrder = function(req, res) {
 //===============================================================================================================================
 //Lấy tất cả các đơn hàng ĐÃ ĐƯỢC XÁC NHẬN QUA MAIL bởi khách hàng????
 exports.getNewOrders = function(req, res) {
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
     var params = {
         TableName: "DA2Order",
         FilterExpression: "tinhtranghienhanh = :cd",
@@ -512,6 +541,13 @@ exports.getNewOrders = function(req, res) {
 //===============================================================================================================================
 //Lấy tất cả các đơn hàng bị từ chối bởi admin hoặc huỷ bởi khách
 exports.getRejectOrders = function(req, res) {
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
     var params = {
         TableName: "DA2Order",
         FilterExpression: "tinhtranghienhanh = :cd",
@@ -562,6 +598,13 @@ exports.getRejectOrders = function(req, res) {
 //===============================================================================================================================
 //Lấy tất cả các đơn hàng bị từ chối bởi admin hoặc huỷ bởi khách
 exports.getUnAuthenOrders = function(req, res) {
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
     var params = {
         TableName: "DA2Order",
         FilterExpression: "tinhtranghienhanh= :tt ",
@@ -692,6 +735,13 @@ exports.getDetailOrderNew = function(req, res) {
 //===============================================================================================================================
 // Lấy cập nhật thông tin giao hàng order
 exports.update_order = function(req, res) {
+    /**
+     * @author N.T.Sơn
+     * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
+     * Nếu bị redirect thì _headerSent là true và ngược lại.
+     */
+    authen_controller.check_session_auth(req, res);
+    if (res._headerSent) return;
     var orderID = req.params.id;
     var order = {
         TableName: "DA2Order",
@@ -699,7 +749,12 @@ exports.update_order = function(req, res) {
             _orderID: orderID,
             tennguoinhan: req.body.editHoTen,
             sodienthoai: req.body.editSDT,
-            diachi: req.body.editDiaChi,
+            diachi: {
+                xa_phuong: req.body.editXa,
+                quan_huyen: req.body.editHuyen,
+                tinh_thanhpho: req.body.editTinh,
+                chitiet: req.body.editDiaChi
+            },
             ghichu: req.body.editGhichu || " "
         }
     };
@@ -736,7 +791,7 @@ exports.update_order = function(req, res) {
         form: encodeURI(JSON.stringify(params))
     };
     // docClient.update(params, function (err, data) {
-    request.put(option, { json: true }, (err, response, data) => {
+    request.put(option, (err, response, data) => {
         if (err) {
             console.log(
                 "users::update::error - " + JSON.stringify(err, null, 2)
@@ -753,7 +808,7 @@ exports.update_order = function(req, res) {
 // Lấy cập nhật thông tin giao hàng order
 exports.update_tinhtrang_order = function(req, res) {
     var orderID = req.params.id;
-    var now = date.format(new Date(), "DD/MM/YYYY");
+    var now = date.format(new Date(), "DD/MM/YYYY HH:mm:ss");
     var tt = {
         tentinhtrang: req.body.editTinhTrang,
         thoigian: now.toString(),

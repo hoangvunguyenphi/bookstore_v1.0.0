@@ -89,7 +89,7 @@
                                                 <%=b.email%>
                                             </td>
                                             <td style="width: 10%">
-                                                <%=b.tongtienthanhtoan%>
+                                                    <%=editName.formatNumber(b.tongtienthanhtoan,'.',',')%>
                                             </td>
                                             <td style="width: 14%; ">
                                                 <%
@@ -183,16 +183,16 @@
     <script src="/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="/dist/js/demo.js"></script>
-    <!-- page script -->
+ <!-- page script -->
     <script>
         $(function () {
       $('#example1').DataTable({
         'paging': true,
-        'lengthChange': false,
-        'searching': false,
+        'lengthChange': true,
+        'searching': true,
         'ordering': true,
         'info': true,
-        'autoWidth': false,
+        'autoWidth': true,
         "order": [[ 1, "desc" ]]
       })
     })

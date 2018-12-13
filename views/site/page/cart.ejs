@@ -27,11 +27,11 @@
             <div class="col-full">
                 <div class="row">
                     <nav class="woocommerce-breadcrumb">
-                        <a href="/">Home</a>
+                        <a href="/">Trang chủ</a>
                         <span class="delimiter">
                             <i class="tm tm-breadcrumbs-arrow-right"></i>
                         </span>
-                        Cart
+                        Giỏ hàng
                     </nav>
                     <!-- .woocommerce-breadcrumb -->
                     <div id="primary" class="content-area">
@@ -46,10 +46,10 @@
                                                         <tr>
                                                             <th class="product-remove">&nbsp;</th>
                                                             <th class="product-thumbnail">&nbsp;</th>
-                                                            <th class="product-name">Product</th>
-                                                            <th class="product-price">Price</th>
-                                                            <th class="product-quantity">Quantity</th>
-                                                            <th class="product-subtotal">Total</th>
+                                                            <th class="product-name">Sản phẩm</th>
+                                                            <th class="product-price">Giá</th>
+                                                            <th class="product-quantity">Số lượng</th>
+                                                            <th class="product-subtotal">Thành tiền</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -65,26 +65,25 @@
                                                                         src="<%=itc.item.hinhanh[0]%>">
                                                                 </a>
                                                             </td>
-                                                            <td data-title="Product" class="product-name">
+                                                            <td data-title="Sản phẩm" class="product-name">
                                                                 <div class="media cart-item-product-detail">
                                                                     <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
                                                                         <img width="180" height="180" alt="" class="wp-post-image"
                                                                             src="<%=itc.item.hinhanh[0]%>">
                                                                     </a>
-                                                                    <div class="media-body align-self-center">
+                                                                    <div class="media-body align-self-center" style="width: 200px;">
                                                                         <a href="/product/<%=itc.item.linkseo%>_<%=itc.item._bookID%>">
                                                                             <%=itc.item.tieude%></a>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td data-title="Price" class="product-price">
+                                                            <td data-title="Giá" class="product-price">
                                                                 <span class="woocommerce-Price-amount amount">
-                                                                    <span class="woocommerce-Price-currencySymbol"></span>
-                                                                    <%=itc.item.gia %>
-                                                                    đồng
+                                                                        <%=editName.formatNumber(itc.item.gia,'.',',')%><span
+                                                                        class="woocommerce-Price-currencySymbol">₫</span>
                                                                 </span>
                                                             </td>
-                                                            <td class="product-quantity" data-title="Quantity">
+                                                            <td class="product-quantity" data-title="Số lượng">
                                                                 <div class="quantity">
                                                                     <label for="quantity-input-1">Số lượng</label>
                                                                     <input id="quantity-input-1" type="number" name="<%=itc.item._bookID%>"
@@ -94,9 +93,8 @@
                                                             </td>
                                                             <td data-title="Total" class="product-subtotal">
                                                                 <span class="woocommerce-Price-amount amount">
-                                                                    <span class="woocommerce-Price-currencySymbol"></span>
-                                                                    <%=itc.item.gia * itc.qty%>
-                                                                    đồng
+                                                                        <%=editName.formatNumber(itc.price,'.',',')%><span
+                                                                        class="woocommerce-Price-currencySymbol"> đồng</span>
                                                                 </span>
                                                                 <a title="Remove this item" class="remove" href="/deletecart2/<%=itc.item._bookID%>">×</a>
                                                             </td>
@@ -116,16 +114,17 @@
                                             <!-- .woocommerce-cart-form -->
                                             <div class="cart-collaterals">
                                                 <div class="cart_totals">
-                                                    <h2>Cart totals</h2>
+                                                    <h2>Tổng tiền giỏ hàng</h2>
                                                     <table class="shop_table shop_table_responsive">
                                                         <tbody>
                                                             <tr class="cart-subtotal">
                                                                 <th>Tổng tiền</th>
                                                                 <td data-title="Subtotal">
                                                                     <span class="woocommerce-Price-amount amount">
-                                                                        <%=totalPrice %> <span class="woocommerce-Price-currencySymbol">
-                                                                            đồng</span>
+                                                                            <%=editName.formatNumber(totalPrice,'.',',')%><span
+                                                                            class="woocommerce-Price-currencySymbol"> đồng</span>
                                                                     </span>
+                                                                    
                                                                 </td>
                                                             </tr>
                                                         </tbody>

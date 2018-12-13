@@ -9,7 +9,6 @@ let authen_controller = require("../controller/authentication_controller");
 let accessKeyId = awsconfig.AWS.accessKeyId;
 let secretAccessKey = awsconfig.AWS.secretAccessKey;
 let region = awsconfig.AWS.region;
-let endpoint = "http://localhost:8000";
 AWS.config.update({
     accessKeyId,
     secretAccessKey,
@@ -360,6 +359,16 @@ exports.show_list_cat2 = function(req, res, next) {
 exports.search_book = function(req, res, next) {
     let q = String(req.query.q).trim();
     let cat = req.query.cat;
+    if (
+        q == undefined ||
+        q == null ||
+        q.trim() == "" ||
+        cat == undefined ||
+        cat == null ||
+        cat.trim() == ""
+    ) {
+        return res.redirect("/");
+    }
     console.log(q + "-" + cat);
     q = renameModule.editName(q);
     //1246

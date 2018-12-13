@@ -120,7 +120,14 @@
                             <label for="editDiaChi">Địa chỉ nhận hàng</label>
                             <input type="text" class="form-control" id="editDiaChi" value="<%=b.diachi.chitiet%>"
                                 name="editDiaChi"  >
+                                <input type="text"  id="editTinh" value="<%=b.diachi.tinh_thanhpho%>" hidden 
+                                name="editTinh"  >
+                                <input type="text"  id="editHuyen" value="<%=b.diachi.quan_huyen%>" hidden 
+                                name="editHuyen"  >
+                                <input type="text"  id="editXa" value="<%=b.diachi.xa_phuong%>" hidden 
+                                name="editXa"  >
                         </div>
+                       
                         <div class="form-group col-xs-12">
                             <label>Ghi chú đơn hàng</label>
                             <textarea class="form-control" rows="3" id="editGhichu" name="editGhichu"  
