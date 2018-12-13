@@ -111,60 +111,55 @@ exports.get_detail_product = function(req, res, next) {
 };
 
 exports.edit_book = function(req, res, next) {
+    ///EDIT BOOK TA ĐEM RA PRODUCT RỒI :V DÍNH CÁI S3 LÀ PHẢI MANG RA NGOÀI ĐÓ
     /**
      * @author N.T.Sơn
      * Kiểm tra session có timeout hay không? Nếu có thì redirect về trang login
      * Nếu bị redirect thì _headerSent là true và ngược lại.
      */
-    authen_controller.check_session_auth(req, res);
-    if (res._headerSent) return;
-
-    let bookid = req.params.id;
-    console.log(req.body.newTinhTrang);
-
+    // authen_controller.check_session_auth(req, res);
+    // if (res._headerSent) return;
+    // let bookid = req.params.id;
+    // console.log(req.body.newTinhTrang);
     /**
      * @author Nguyễn Thế Sơn
      * Đã hoàn thành mapping
      * Chưa test lại
      */
-    let formData = {
-        tacgia: renameModule.splitList(req.body.newTacGia),
-        tieude: req.body.newTieuDe,
-        theloai: String(req.body.newTheLoai),
-        SKU: req.body.newSKU,
-        ngayxuatban: req.body.newNgayXuatBan,
-        nhaxuatban: req.body.newNhaXuatBan,
-        kichthuoc: req.body.newKichThuoc,
-        mota: req.body.newMoTa,
-        dichgia: renameModule.splitList(req.body.newDichGia),
-        ngonngu: req.body.newNgonNgu,
-        tinhtrang: renameModule.splitList(req.body.newTinhTrang) || [],
-        danhdau: renameModule.splitList(req.body.newDanhDau) || [],
-        linkseo: req.body.newLinkSeo,
-        sotrang: parseInt(req.body.newSoTrang),
-        gia: parseFloat(req.body.newGia)
-    };
-
-    console.log(api_mapping.edit_book.url + bookid);
-    console.log(formData);
-
-    let option = {
-        url: api_mapping.edit_book.url + bookid,
-        form: encodeURI(JSON.stringify(formData))
-    };
-
-    console.log(option);
-
-    request.put(option, (err, response, data) => {
-        if (err) {
-            console.log(
-                "users::update::error - " + JSON.stringify(err, null, 2)
-            );
-        } else {
-            // console.log("users::update::success " + JSON.stringify(data));
-            res.redirect("/admin/product/detail/" + bookid);
-        }
-    });
+    // let formData = {
+    //     tacgia: renameModule.splitList(req.body.newTacGia),
+    //     tieude: req.body.newTieuDe,
+    //     theloai: String(req.body.newTheLoai),
+    //     SKU: req.body.newSKU,
+    //     ngayxuatban: req.body.newNgayXuatBan,
+    //     nhaxuatban: req.body.newNhaXuatBan,
+    //     kichthuoc: req.body.newKichThuoc,
+    //     mota: req.body.newMoTa,
+    //     dichgia: renameModule.splitList(req.body.newDichGia),
+    //     ngonngu: req.body.newNgonNgu,
+    //     tinhtrang: renameModule.splitList(req.body.newTinhTrang) || [],
+    //     danhdau: renameModule.splitList(req.body.newDanhDau) || [],
+    //     linkseo: req.body.newLinkSeo,
+    //     sotrang: parseInt(req.body.newSoTrang),
+    //     gia: parseFloat(req.body.newGia)
+    // };
+    // console.log(api_mapping.edit_book.url + bookid);
+    // console.log(formData);
+    // let option = {
+    //     url: api_mapping.edit_book.url + bookid,
+    //     form: encodeURI(JSON.stringify(formData))
+    // };
+    // console.log(option);
+    // request.put(option, (err, response, data) => {
+    //     if (err) {
+    //         console.log(
+    //             "users::update::error - " + JSON.stringify(err, null, 2)
+    //         );
+    //     } else {
+    //         // console.log("users::update::success " + JSON.stringify(data));
+    //         res.redirect("/admin/product/detail/" + bookid);
+    //     }
+    // });
 };
 
 exports.delete_book = function(req, res, next) {
@@ -363,11 +358,11 @@ exports.show_list_cat2 = function(req, res, next) {
 };
 
 exports.search_book = function(req, res, next) {
-    let q = req.query.q;
+    let q = String(req.query.q).trim();
     let cat = req.query.cat;
     console.log(q + "-" + cat);
     q = renameModule.editName(q);
-
+    //1246
     /**
      * @author Nguyễn Thế Sơn
      * Đã hoàn thành mapping theo code mới cập nhật 11/12
@@ -475,83 +470,3 @@ exports.get_detail_product2 = function(req, res) {
         }
     );
 };
-// let multer = require("multer");
-// let multerS3 = require("multer-s3");
-// let path = require("path");
-// const mime = require("mime");
-
-// let keyImgUpload = "";
-// let s3 = new AWS.S3();
-// let upload = multer({
-//   limits: {
-//     fileSize: 3 * 1024 * 1024
-//   },
-//   fileFilter: function (req, file, cb) {
-//     let filetypes = /jpeg|jpg|png|gif|bmp/;
-//     let mimetype = filetypes.test(file.mimetype);
-//     let extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-//     if (mimetype && extname) {
-//       return cb(null, true);
-//     }
-//     cb(
-//       "Error: File upload only supports the following filetypes - " + filetypes
-//     );
-//   },
-//   storage: multerS3({
-//     s3: s3,
-//     bucket: "da2-book",
-//     metadata: function (req, file, cb) {
-//       cb(null, {
-//         fieldName: file.originalname
-//       });
-//     },
-//     acl: "public-read",
-//     key: function (req, file, cb) {
-//       console.log(file);
-//       keyImgUpload = UUID() + "." + mime.getExtension(file.mimetype);
-//       console.log(keyImgUpload);
-//       cb(null, keyImgUpload);
-//     }
-//   })
-// // });
-// exports.add_new_book = upload.single("newImgUpload"),
-//   function (req, res, next) {
-//     let table = "DA2Book";
-//     let buket = "da2-book";
-//     let now = date.format(new Date(), "DD/MM/YYYY");
-//     let url =
-//       "https://" + buket + ".s3." + region + ".amazonaws.com/" + keyImgUpload;
-//     let params = {
-//       TableName: table,
-//       Item: {
-//         _bookID: UUID(),
-//         tieude: req.body.newTieuDe,
-//         theloai: req.body.newTheLoai,
-//         sotrang: req.body.newSoTrang,
-//         SKU: req.body.newSKU,
-//         ngayxuatban: req.body.newNgayXuatBan,
-//         nhaxuatban: req.body.newNhaXuatBan,
-//         kichthuoc: req.body.newKichThuoc,
-//         mota: req.body.newMoTa,
-//         dichgia: req.body.newDichGia,
-//         danhgia: " ",
-//         tinhtrang: " ",
-//         ngaythem: now.toString,
-//         danhdau: req.body.newDanhDau,
-//         danhgiasao: " ",
-//         linkseo: renameModule.editName(req.body.newTieuDe),
-//         sotrang: req.body.newSoTrang,
-//         gia: req.body.newGia,
-//         hinhanh: url
-//       }
-//     };
-//     console.log(params);
-//     res.redirect("/admin");
-// docClient.put(params, function (err, data) {
-//   if (err) {
-//     console.error("Unable to add item. Error JSON:", JSON.stringify(err));
-//   } else {
-//     res.redirect("/admin");
-//   }
-// });
-//};

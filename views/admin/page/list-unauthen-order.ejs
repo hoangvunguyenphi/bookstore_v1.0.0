@@ -98,12 +98,6 @@
                                         <tbody>
                                             <%allOrder.forEach(function(b){ %>
                                             <tr>
-                                                <th
-                                                    scope="row"
-                                                    style="width: 2%"
-                                                >
-                                                    <%=allOrder.indexOf(b)%>
-                                                </th>
                                                 <td style="width: 20%">
                                                     <%=b._orderID%>
                                                 </td>
@@ -214,17 +208,17 @@
         <!-- page script -->
         <script src="/assets/js/socket.io.js"></script>
         <script>
-            $(function() {
-                $("#example1").DataTable();
-                $("#example2").DataTable({
-                    paging: true,
-                    lengthChange: false,
-                    searching: false,
-                    ordering: true,
-                    info: true,
-                    autoWidth: false
-                });
-            });
+           $(function () {
+      $('#example1').DataTable({
+        'paging': true,
+        'lengthChange': false,
+        'searching': false,
+        'ordering': true,
+        'info': true,
+        'autoWidth': false,
+        "order": [[ 1, "desc" ]]
+      })
+    })
         </script>
     </body>
 </html>

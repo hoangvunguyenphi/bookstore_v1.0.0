@@ -10,6 +10,7 @@ var adminRouter = require("./routes/admin");
 var productRouter = require("./routes/product");
 var orderRouter = require("./routes/order");
 var categoryRouter = require("./routes/category");
+var cors = require("cors");
 var app = express();
 
 // view engine setup
@@ -20,14 +21,15 @@ app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(
     bodyParser.urlencoded({
-        extended: false
+        extended: true
     })
 );
+app.use(cors());
 
 app.use(express.json());
 app.use(
     express.urlencoded({
-        extended: false
+        extended: true
     })
 );
 app.use(cookieParser());

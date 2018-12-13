@@ -32,7 +32,9 @@
             background-color: transparent;
             border: none;
           }
-          
+          .single-product .single-product-wrapper{
+              margin-bottom: 0px
+          }
     </style>
 </head>
 
@@ -88,13 +90,13 @@
                                                 <div class="woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
                                                     data-columns="4">
                                                     <!-- <a href="#" class="woocommerce-product-gallery__trigger">🔍</a> -->
-                                                    <figure class="woocommerce-product-gallery__wrapper ">
+                                                    <figure class="woocommerce-product-gallery__wrapper " style="width: 450px; height: 450px;">
                                                         <%
                                                         item.hinhanh.forEach(function(i){
                                                             %>
                                                         <div data-thumb="<%=i%>" class="woocommerce-product-gallery__image">
                                                             <a href="<%=i%>" tabindex="0">
-                                                                <img width="600" height="600" src="<%=i%>" class="attachment-shop_single size-shop_single wp-post-image"
+                                                                <img width="80%"  src="<%=i%>" class="attachment-shop_single size-shop_single wp-post-image"
                                                                     alt="">
                                                             </a>
                                                         </div>

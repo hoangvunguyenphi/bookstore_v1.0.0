@@ -44,6 +44,87 @@
 
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <style>
+            #drop-zone {
+          width: 100%;
+          min-height: 150px;
+          border: 3px dashed rgba(0, 0, 0, .3);
+          border-radius: 5px;
+          font-family: Arial;
+          text-align: center;
+          position: relative;
+          font-size: 20px;
+          color: #7E7E7E;
+        }
+        #drop-zone input {
+          position: absolute;
+          cursor: pointer;
+          left: 0px;
+          top: 0px;
+          opacity: 0;
+        }
+        /*Important*/
+        
+        #drop-zone.mouse-over {
+          border: 3px dashed rgba(0, 0, 0, .3);
+          color: #7E7E7E;
+        }
+        /*If you dont want the button*/
+        
+        #clickHere {
+          display: inline-block;
+          cursor: pointer;
+          color: white;
+          font-size: 17px;
+          width: 150px;
+          border-radius: 4px;
+          background-color: #4679BD;
+          padding: 10px;
+        }
+        #clickHere:hover {
+          background-color: #376199;
+        }
+        #filename {
+          margin-top: 10px;
+          margin-bottom: 10px;
+          font-size: 14px;
+          line-height: 1.5em;
+        }
+        .file-preview {
+          background: #ccc;
+          border: 5px solid #fff;
+          box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+          display: inline-block;
+          width: 60px;
+          height: 60px;
+          text-align: center;
+          font-size: 14px;
+          margin-top: 5px;
+        }
+        .closeBtn:hover {
+          color: red;
+          display:inline-block;
+        }.pip {
+  display: inline-block;
+  margin: 10px 10px 0 0;
+}.removeimg {
+  display: block;
+  background: #444;
+  border: 1px solid black;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+.removeimg:hover {
+  background: white;
+  color: black;
+}.imageThumb {
+  max-height: 75px;
+  border: 2px solid;
+  padding: 1px;
+  cursor: pointer;
+}
+        </style>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -84,7 +165,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="box box-primary">
-                            <form method="POST" action="/admin/product/update/<%=sachDetail[0]._bookID%>">
+                            <form method="POST" action="/admin/product/update/<%=sachDetail[0]._bookID%>" enctype="multipart/form-data" >
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Mã sản phẩm:
                                         <b>
@@ -184,7 +265,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div style="width: 300px;height: 300px;">
+                                        <div style="width: 250px;height: 200px;">
                                             <img src="<%=sachDetail[0].hinhanh[0]%>" width="100%" />
                                         </div>
                                     </div>
@@ -262,38 +343,30 @@
                                         <input type="text" class="form-control" value="<%=sachDetail[0].gia%>" id="newGia"
                                             name="newGia" placeholder="Nhập giá bán" required>
                                     </div>
-                                    <!-- <div class="form-group col-xs-4">
-                                        <label for="newDiemDen">Điểm đến</label>
-                                        <select class="form-control " data-placeholder="Chọn điểm đến" id="newDiemDen"
-                                            disabled name="newDiemDen" style="width: 100%;">
+                                    <div class="form-group col-md-12" style="height: 150px;">
+                                            <label>Hình ảnh</label>
+                                            <input type="text" value=" " name="imageDelete" id="imageDelete" hidden>
                                             <%
-                                            var diadiem=['select','HCM','HN', 'HP','DN'];
-                                            diadiem.forEach(function(dd){
-                                            %>
-                                            <option name="<%=dd%>" value="<%=dd%>">
-                                                <%=dd%>
-                                            </option>
-                                            <%
+                                            sachDetail[0].hinhanh.forEach(function(hinh){
+                                                %>
+                                                <span class="pip">
+                                                        <img class="imageThumb" src="<%=hinh%>"><br/><span title="<%=hinh%>" class="removeimg">Remove image</span>
+                                                    </span>
+                                                <%
                                             })
                                             %>
-                                        </select>
                                     </div>
-                                    <div class="form-group col-xs-4">
-                                        <label for="newDiemDi">Điểm đi</label>
-                                        <select class="form-control " data-placeholder="Chọn điểm đến" id="newDiemDi"
-                                            name="newDiemDi" style="width: 100%;">
-                                            <%
-                                            var diadiem1=['select','HCM','HN', 'HP','DN'];
-                                            diadiem1.forEach(function(dd){
-                                            %>
-                                            <option name="<%=dd%>" value="<%=dd%>">
-                                                <%=dd%>
-                                            </option>
-                                            <%
-                                            });
-                                            %>
-                                        </select>
-                                    </div> -->
+
+                                    <div class="form-group col-md-12">
+                                            <label>Upload hình</label>
+                                            <div id="drop-zone">
+                                            <p>Kéo thả file vào...</p>
+                                            <div id="clickHere">hoặc nhấn vào đây.. <i class="fa fa-upload"></i>
+                                                    <input type="file" name="newImgUpload" value="" id="file" multiple />
+                                            </div>
+                                            <div id='filename'></div>
+                                            </div>
+                                        </div>
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer ">
@@ -397,8 +470,12 @@
                 }
             }
         }).change();
-
-
+        var listDelete=[];
+        $(".removeimg").click(function(){
+            listDelete.push($(this).attr('title'));
+            $(this).parent(".pip").remove();
+            $('#imageDelete').val(listDelete);
+        });
         // $('#newDiemDi').change(function () {
         //     if (this.value != 'select') {
         //         $('#newDiemDen').prop('disabled', false);
@@ -416,6 +493,107 @@
         //     });
         // });
     </script>
+        <script>
+                var dropZoneId = "drop-zone";
+              var buttonId = "clickHere";
+              var mouseOverClass = "mouse-over";
+            var dropZone = $("#" + dropZoneId);
+             var inputFile = dropZone.find("input");
+             var finalFiles = {};
+            $(function() {
+              
+            
+              
+              var ooleft = dropZone.offset().left;
+              var ooright = dropZone.outerWidth() + ooleft;
+              var ootop = dropZone.offset().top;
+              var oobottom = dropZone.outerHeight() + ootop;
+             
+              document.getElementById(dropZoneId).addEventListener("dragover", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.addClass(mouseOverClass);
+                var x = e.pageX;
+                var y = e.pageY;
+            
+                if (!(x < ooleft || x > ooright || y < ootop || y > oobottom)) {
+                  inputFile.offset({
+                    top: y - 15,
+                    left: x - 100
+                  });
+                } else {
+                  inputFile.offset({
+                    top: -400,
+                    left: -400
+                  });
+                }
+            
+              }, true);
+            
+              if (buttonId != "") {
+                var clickZone = $("#" + buttonId);
+            
+                var oleft = clickZone.offset().left;
+                var oright = clickZone.outerWidth() + oleft;
+                var otop = clickZone.offset().top;
+                var obottom = clickZone.outerHeight() + otop;
+            
+                $("#" + buttonId).mousemove(function(e) {
+                  var x = e.pageX;
+                  var y = e.pageY;
+                  if (!(x < oleft || x > oright || y < otop || y > obottom)) {
+                    inputFile.offset({
+                      top: y - 15,
+                      left: x - 160
+                    });
+                  } else {
+                    inputFile.offset({
+                      top: -400,
+                      left: -400
+                    });
+                  }
+                });
+              }
+            
+              document.getElementById(dropZoneId).addEventListener("drop", function(e) {
+                $("#" + dropZoneId).removeClass(mouseOverClass);
+              }, true);
+            
+            
+              inputFile.on('change', function(e) {
+                finalFiles = {};
+                $('#filename').html("");
+                var fileNum = this.files.length,
+                  initial = 0,
+                  counter = 0;
+            
+                $.each(this.files,function(idx,elm){
+                   finalFiles[idx]=elm;
+                });
+            
+                for (initial; initial < fileNum; initial++) {
+                  counter = counter + 1;
+                  $('#filename').append('<div id="file_'+ initial +'"><span class="fa-stack fa-lg"><i class="fa fa-file fa-stack-1x "></i><strong class="fa-stack-1x" style="color:#FFF; font-size:12px; margin-top:2px;">' + counter + '</strong></span> ' + this.files[initial].name + '&nbsp;&nbsp;<span class="fa fa-times-circle fa-lg closeBtn" onclick="removeLine(this)" title="remove"></span></div>');
+                }
+              });
+            
+            
+            
+            })
+            
+            function removeLine(obj)
+            {
+              inputFile.val('');
+              var jqObj = $(obj);
+              var container = jqObj.closest('div');
+              var index = container.attr("id").split('_')[1];
+              container.remove(); 
+            
+              delete finalFiles[index];
+              //console.log(finalFiles);
+            }
+          
+                </script>
 </body>
 
 </html>

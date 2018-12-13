@@ -118,7 +118,7 @@
                     </div>
                         <div class="form-group col-xs-12">
                             <label for="editDiaChi">Địa chỉ nhận hàng</label>
-                            <input type="text" class="form-control" id="editDiaChi" value="<%=b.diachi%>"
+                            <input type="text" class="form-control" id="editDiaChi" value="<%=b.diachi.chitiet%>"
                                 name="editDiaChi"  >
                         </div>
                         <div class="form-group col-xs-12">
@@ -195,7 +195,7 @@
                                         <table class="table">
                                         <tr>
                                             <th style="width:50%">Tổng tiền:</th>
-                                            <td><%=b.tongtienthanhtoan%> đồng</td>
+                                            <td><%=b.tongtien%> đồng</td>
                                         </tr>
                                         <tr>
                                             <th>Phí giao hàng:</th>
@@ -203,7 +203,7 @@
                                         </tr>
                                         <tr>
                                             <th>Tổng cộng:</th>
-                                            <td><%=b.tongtienthanhtoan + b.tienship%> đồng</td>
+                                            <td><%=b.tongtienthanhtoan%> đồng</td>
                                         </tr>
                                         </table>
                                     </div>

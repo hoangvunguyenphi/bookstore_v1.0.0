@@ -821,8 +821,8 @@ exports.trackOrder = function(req, res) {
     });
 };
 exports.searchOrder = function(req, res) {
-    var orderID = req.body.orderidd;
-    var emaill = req.body.order_emaill;
+    var orderID = String(req.body.orderidd).trim();
+    var emaill = String(req.body.order_emaill).trim();
     // var params = {
     //     TableName: "DA2Order",
     //     FilterExpression: "#ma = :id and #email = :em",
